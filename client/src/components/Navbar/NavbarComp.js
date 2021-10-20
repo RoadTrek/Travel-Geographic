@@ -48,8 +48,8 @@ const NavbarComp = () => {
             <Nav>
               <Nav.Link href="/expedition">Expeditions</Nav.Link>
               <Nav.Link href="/trek">Treks</Nav.Link>
-              <Nav.Link eventKey={2} href="/signin">
-                Sign In
+              <Nav.Link eventKey={2} href="/login">
+                Login
               </Nav.Link>
               <Nav.Link eventKey={2} href="/signup">
                 Sign Up

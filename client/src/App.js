@@ -7,7 +7,7 @@ import Home from './Pages/Home.js';
 import Expedition from './Pages/Expedition.js';
 import Trek from './Pages/Trek';
 import Gallery from './Pages/Gallery.js';
-import SignIn from './Pages/SignIn.js';
+import Login from './Pages/Login.js';
 import SignUp from './Pages/SignUp.js';
 
 function App() {
@@ -20,7 +20,7 @@ function App() {
 					<Route path='/gallery' component={Gallery} />
 					<Route path='/expedition' component={Expedition} />
 					<Route path='/trek' component={Trek} />
-					<Route path='/signin' component={SignIn} />
+					<Route path='/login' component={Login} />
 					<Route path='/signup' component={SignUp} />
 				</Switch>
 			</Router>
