@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
 // const path = require("path");
-// const cors = require("cors");
+const cors = require("cors");
 // const cookieParser = require("cookie-parser");
 // const bcrypt = require("bcrypt");
 // const jwt = require("jsonwebtoken");
@@ -12,12 +12,18 @@ const dotenv = require("dotenv");
 dotenv.config();
 // Define the PORT
 const PORT = process.env.port||8080;
-// const { PORT = 8080, LOCAL_ADDRESS = '0.0.0.0' } = process.env
+
 
 
 // express was initialized
 const app = express();
-
+app.use(function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, X-AUTHENTICATION, X-IP, Content-Type, Accept');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    next();
+  });
 // Defining the app.use parts
 app.use(express.json());
 app.use(
@@ -62,14 +68,16 @@ db.once("open", function () {
 //     app.use(express.static("client/build"));
 // }
 
-// // Requiring the models
-// const classroom = require("./models/classroomModel.js");
-// const student = require("./models/studentModel.js");
-// const teacher = require("./models/teacherModel.js");
-// const team = require("./models/teamModel.js");
+//importing routes
+// import userRoutes from './routes/user.js';
+// app.use('/', userRoutes);
 
 app.get("/", function (req, res) {
     console.log("in backend");
+})
+
+app.post("/login", function (req, res) {
+    console.log("in backend login");
 })
 
 // Listening to the port PORT.
