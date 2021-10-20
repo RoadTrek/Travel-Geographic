@@ -5,7 +5,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 const Login = () => {
 
-    const paperStyle = { padding: 20, height: '70vh', width: 280, margin: "20px auto" }
+    const paperStyle = { padding: 20, height: '55vh', width: "25vw", margin: "20px auto" }
     const avatarStyle = { backgroundColor: '#1bbd7e' }
     const btnstyle = { margin: '8px 0' }
     return (
@@ -14,11 +14,11 @@ const Login = () => {
                 <Paper elevation={10} style={paperStyle}>
                     <Grid align='center'>
                         <Avatar style={avatarStyle}><LockOutlinedIcon /></Avatar>
-                        <h2>Sign In</h2>
+                        <h2>Log In</h2>
                     </Grid>
-                    <TextField label='Username' placeholder='Enter username' fullWidth required />
-                    <TextField label='Password' placeholder='Enter password' type='password' fullWidth required />
-                    <FormControlLabel
+                    <TextField label='Username' placeholder='Enter username' type="email" fullWidth required />
+                    <TextField label='Password' placeholder='Enter password' style={{marginTop:"25px"}} type='password' fullWidth required />
+                    {/* <FormControlLabel
                         control={
                             <Checkbox
                                 name="checkedB"
@@ -26,15 +26,18 @@ const Login = () => {
                             />
                         }
                         label="Remember me"
-                    />
-                    <Button type='submit' color='primary' variant="contained" style={btnstyle} fullWidth>Sign in</Button>
-                    <Typography >
+                    /> */}
+                    <div style={{marginTop:" 25px"}}>
+                    <Button  type='submit' color='primary' variant="contained" style={btnstyle} fullWidth>LogIn</Button>
+                    </div>
+                    
+                    {/* <Typography >
                         <Link href="#" >
                             Forgot password ?
                         </Link>
-                    </Typography>
-                    <Typography > Do you have an account ?
-                        <Link href="#" >
+                    </Typography> */}
+                    <Typography style={{marginTop:"10px"}} > Do you have an account ?
+                        <Link href="/signup" >
                             Sign Up
                         </Link>
                     </Typography>
