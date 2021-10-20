@@ -1,54 +1,65 @@
-import React, { useState, useEffect } from 'react';
-import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
+import React, { useState } from "react";
+import { Navbar, Container, Nav,NavLink } from "react-bootstrap";
+import "./NavbarElements.css";
+import logo from "../../Image/LOGO.jpeg";
 
 const NavbarComp = () => {
+  const [tnavbar, setTnavbar] = useState(false);
 
-	const [tnavbar, setTnavbar] = useState(false);
+  const changeNavbar = () => {
+    if (window.scrollY >= 80) {
+      setTnavbar(true);
+    } else {
+      setTnavbar(false);
+    }
+  };
 
-	useEffect(() => {
-		// console.log()
-	}, []);
+  window.addEventListener("scroll", changeNavbar);
 
-	const changeNavbar = () => {
-		if(window.scrollY >= 80) {
-			setTnavbar(true);
-		}
-		else {
-			setTnavbar(false);
-		}
-	}
+  return (
+    <>
+      <Navbar
+        scrolling
+        dark
+        expand="md"
+        fixed="top"
+        collapseOnSelect
+        bg={tnavbar ? "dark" : "transparent"}
+        variant={tnavbar ? "dark" : "light"}
+      >
+        <Container>
+          <Navbar.Brand href="/">
+			  <img src={logo} width="80px" height="60px" margin-left="0px"/>
+			  Travel Geographic
+          </Navbar.Brand>
 
-	window.addEventListener('scroll', changeNavbar);
-
-	return (
-		<>
-			<Navbar scrolling dark expand="md" fixed="top" collapseOnSelect bg={tnavbar ? "info" : "transparent"} variant={tnavbar ? "dark" : "light"}>
-				<Container>
-					<Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
-					<Navbar.Toggle aria-controls="responsive-navbar-nav" />
-					<Navbar.Collapse id="responsive-navbar-nav">
-						<Nav className="me-auto">
-							<Nav.Link href="#features">Features</Nav.Link>
-							<Nav.Link href="#pricing">Pricing</Nav.Link>
-							<NavDropdown title="Dropdown" id="collasible-nav-dropdown">
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="me-auto">
+              <Nav.Link href="/gallery">Gallery</Nav.Link>
+              {/* <NavDropdown title="Dropdown" id="collasible-nav-dropdown">
 								<NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
 								<NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
 								<NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
 								<NavDropdown.Divider />
 								<NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
-							</NavDropdown>
-						</Nav>
-						<Nav>
-							<Nav.Link href="#deets">More deets</Nav.Link>
-							<Nav.Link eventKey={2} href="#memes">
-								Dank memes
-							</Nav.Link>
-						</Nav>
-					</Navbar.Collapse>
-				</Container>
-			</Navbar>
-		</>
-	);
+							</NavDropdown> */}
+            </Nav>
+            <Nav>
+              <Nav.Link href="/expedition">Expeditions</Nav.Link>
+              <Nav.Link href="/trek">Treks</Nav.Link>
+              <Nav.Link eventKey={2} href="/signin">
+                Sign In
+              </Nav.Link>
+              <Nav.Link eventKey={2} href="/signup">
+                Sign Up
+              </Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+    </>
+  );
 };
 
 export default NavbarComp;

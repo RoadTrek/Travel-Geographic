@@ -4,12 +4,11 @@ import './App.css';
 import NavbarComp from './components/Navbar/NavbarComp';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Home from './Pages/Home.js';
-// import About from './pages/about';
-// import Events from './pages/events';
-// import AnnualReport from './pages/annual';
-// import Teams from './pages/team';
-// import Blogs from './pages/blogs';
-// import SignUp from './pages/signup';
+import Expedition from './Pages/Expedition.js';
+import Trek from './Pages/Trek';
+import Gallery from './Pages/Gallery.js';
+import SignIn from './Pages/SignIn.js';
+import SignUp from './Pages/SignUp.js';
 
 function App() {
 	return (
@@ -18,12 +17,11 @@ function App() {
 				<NavbarComp />
 				<Switch>
 					<Route path='/' exact component={Home} />
-					{/* <Route path='/about' component={About} />
-					<Route path='/events' component={Events} />
-					<Route path='/annual' component={AnnualReport} />
-					<Route path='/team' component={Teams} />
-					<Route path='/blogs' component={Blogs} />
-					<Route path='/sign-up' component={SignUp} /> */}
+					<Route path='/gallery' component={Gallery} />
+					<Route path='/expedition' component={Expedition} />
+					<Route path='/trek' component={Trek} />
+					<Route path='/signin' component={SignIn} />
+					<Route path='/signup' component={SignUp} />
 				</Switch>
 			</Router>
 		</div>
