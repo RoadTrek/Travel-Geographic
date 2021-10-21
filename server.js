@@ -79,9 +79,8 @@ app.get("/", function (req, res) {
 })
 
 app.post("/signup", function (req, res) {
-    console.log("inside signup");
     user.findOne(
-      { username: req.body.username },
+      { email: req.body.email },
       async function (err, currentUser) {
         if (err) {
           console.log(err);
@@ -117,10 +116,9 @@ app.post("/signup", function (req, res) {
 
 app.post("/login",function(req,res){
   const enteredDetails = {
-    email: req.body.username,
+    email: req.body.email,
     password: req.body.password,
   };
-  console.log(enteredDetails.email);
   user.findOne(
     { email: enteredDetails.email },
     async function (err, foundUser) {
@@ -135,7 +133,6 @@ app.post("/login",function(req,res){
               if (result === true) {
                 const token = jwt.sign({ _id: foundUser._id }, key);
                 req.session.value = token;
-                console.log("matching password",token);
                 res.status(200).json({ username: enteredDetails.email });
               } else {
                 res.status(201).json({ msg: "Enter correct password" });

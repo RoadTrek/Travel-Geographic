@@ -1,70 +1,154 @@
-import React, {useState} from 'react'
-import axios from 'axios';
-import { Grid, Paper, Avatar, TextField, Button, Typography, Link } from '@material-ui/core'
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import React, { useState } from "react";
+import {Redirect} from "react-router-dom";
+import axios from "axios";
+import {
+  Grid,
+  Paper,
+  Avatar,
+  TextField,
+  Button,
+  Typography,
+  Link,
+} from "@material-ui/core";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 const Login = () => {
+  const paperStyle = {
+    padding: 20,
+    height: "60%",
+    width: "26%",
+    margin: "20px auto",
+  };
+  const avatarStyle = { backgroundColor: "#1bbd7e" };
+  const btnstyle = { margin: "8px 0" };
+  const [details, setDetails] = React.useState({
+    email: "",
+    password: "",
+  });
 
-    const paperStyle = { padding: 20, height: '60%', width: "26%", margin: "20px auto" }
-    const avatarStyle = { backgroundColor: '#1bbd7e' }
-    const btnstyle = { margin: '8px 0' }
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+  const[redirect,setRedirect]=useState();
+  const handleSubmit = () => {
+    console.log("inside login");
+    axios({
+      method: "POST",
+      withCredentials: true,
+      url: "http://localhost:8080/login",
+      data: {
+        ...details,
+      },
+    })
+      .then((res) => {
+          if(res.status===200){
+              setRedirect(1);
+          }
+          else{
+              setRedirect(0);
+          }
+        console.log(res.data);
+    })
+      .catch((err) => {
+          console.log(err);
+      });
+      
+  };
+  if(redirect===1){
+    return <Redirect to="/" />;
+  }
+  if(redirect===0){
+      //if user enters wrong email or password
+      return (
+          <div>
+             <h1>Enter correct details.</h1> 
+          </div>
+      )
+  }
 
-    const login = (e) => {
-        e.preventDefault();
-        console.log("inside login");
-        axios({
-            method: "POST",
-            withCredentials: true,
-            url: "http://localhost:8080/login",
-            data: {
-                username: email,
-                password: password
-            },
-        }).then((res) => {
-            console.log("login details sent");
-        })
-            .catch(err => {
-            });
+  function handleChange(event) {
+    const name = event.target.name;
+    const value = event.target.value;
+    if (name === "password") {
+      setDetails(function (prev) {
+        const newVal = {
+          ...prev,
+          [name]: value,
+        };
+        return newVal;
+      });
+    } else {
+      setDetails(function (prev) {
+        const newVal = {
+          ...prev,
+          email: value,
+        };
+        return newVal;
+      });
     }
+  }
 
-    return (
-        <div>
-            <Grid style={{ paddingBottom: "0px", background: "white", marginTop: "125px" }}>
-                <Paper elevation={10} style={paperStyle}>
-                    <Grid align='center'>
-                        <Avatar style={avatarStyle}><LockOutlinedIcon /></Avatar>
-                        <h2>Log In</h2>
-                    </Grid>
-                    <TextField onChange={(event) => setEmail(event.target.value)} label='Email' placeholder='Enter email' type="email" fullWidth required />
-                    <TextField onChange={(event) => setPassword(event.target.value)} label='Password' placeholder='Enter password' style={{ marginTop: "25px" }} type='password' fullWidth required />
-                    {/* <FormControlLabel
-                        control={
-                            <Checkbox
-                                name="checkedB"
-                                color="primary"
-                            />
-                        }
-                        label="Remember me"
-                    /> */}
-                    <div style={{ marginTop: " 25px" }}>
-                        <Button type='submit' onClick = {login} color='primary' variant="contained" style={btnstyle} fullWidth>LogIn</Button>
-                    </div>
+  return (
+    <div>
+      <Grid
+        style={{
+          paddingBottom: "0px",
+          background: "white",
+          marginTop: "125px",
+        }}
+      >
+        <Paper elevation={10} style={paperStyle}>
+          <Grid align="center">
+            <Avatar style={avatarStyle}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <h2>Log In</h2>
+          </Grid>
+          <TextField
+            value={details.email}
+            name="email"
+            onChange={handleChange}
+            label="Email"
+            placeholder="Enter email"
+            type="email"
+            fullWidth
+            required
+          />
+          <TextField
+            value={details.password}
+            name="password"
+            onChange={handleChange}
+            label="Password"
+            placeholder="Enter password"
+            style={{ marginTop: "25px" }}
+            type="password"
+            fullWidth
+            required
+          />
 
-                    {/* <Typography >
-                        <Link href="#" >
-                            Forgot password ?
-                        </Link>
-                    </Typography> */}
-                    <Typography style={{ marginTop: "10px" }} > Do you have an account ?
-                        <Link href="/signup" >
-                            Sign Up
-                        </Link>
-                    </Typography>
-                </Paper>
-            </Grid>
-        </div>
-    )
-}
+          <div style={{ marginTop: " 25px" }}>
+            <Button
+              type="submit"
+              onClick={(event) => {
+                event.preventDefault();
+                handleSubmit();
+                setDetails({
+                  email: "",
+                  password: "",
+                });
+              }}
+              color="primary"
+              variant="contained"
+              style={btnstyle}
+              fullWidth
+            >
+              LogIn
+            </Button>
+          </div>
+          <Typography style={{ marginTop: "10px" }}>
+            {" "}
+            New User ?<Link href="/signup">Sign Up</Link>
+          </Typography>
+        </Paper>
+      </Grid>
+    </div>
+  );
+};
 
-export default Login
+export default Login;
