@@ -11,7 +11,7 @@ const MongoStore = require("connect-mongo");
 const dotenv = require("dotenv");
 dotenv.config();
 // Define the PORT
-const PORT = process.env.port||8080;
+const PORT = process.env.port || 8080;
 
 //models
 
@@ -20,18 +20,24 @@ const user = require("./models/user.js");
 // express was initialized
 const app = express();
 app.use(function (req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, X-AUTHENTICATION, X-IP, Content-Type, Accept');
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    next();
-  });
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, X-AUTHENTICATION, X-IP, Content-Type, Accept"
+  );
+  res.setHeader("Access-Control-Allow-Credentials", true);
+  next();
+});
 // Defining the app.use parts
 app.use(express.json());
 app.use(
-    express.urlencoded({
-        extended: true,
-    })
+  express.urlencoded({
+    extended: true,
+  })
 );
 app.use(morgan("tiny"));
 
@@ -39,31 +45,31 @@ app.use(cookieParser());
 const CONNECTION_URL = process.env.MONGO_URI;
 // connecting to the mongoDB
 mongoose.connect(CONNECTION_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    // useCreateIndex: true,
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  // useCreateIndex: true,
 });
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", function () {
-    console.log("Database connected");
+  console.log("Database connected");
 });
 
 const key = process.env.key;
 app.use(
-    session({
-        store: MongoStore.create({
-            mongoUrl: CONNECTION_URL,
-            mongooseConnection: mongoose.connection,
-            collection: "sessions",
-            ttl: 24 * 60 * 60 * 1000,
-        }),
-        secret: key,
-        cookie: { maxAge: 24 * 60 * 60 * 1000 },
-        saveUninitialized: false,
-        resave: true,
-    })
+  session({
+    store: MongoStore.create({
+      mongoUrl: CONNECTION_URL,
+      mongooseConnection: mongoose.connection,
+      collection: "sessions",
+      ttl: 24 * 60 * 60 * 1000,
+    }),
+    secret: key,
+    cookie: { maxAge: 24 * 60 * 60 * 1000 },
+    saveUninitialized: false,
+    resave: true,
+  })
 );
 
 // if (process.env.NODE_ENV === "production") {
@@ -75,46 +81,43 @@ app.use(
 // app.use('/', userRoutes);
 
 app.get("/", function (req, res) {
-    console.log("in backend");
-})
+  console.log("in backend");
+});
 
 app.post("/signup", function (req, res) {
-    user.findOne(
-      { email: req.body.email },
-      async function (err, currentUser) {
-        if (err) {
-          console.log(err);
-        }
-        if (currentUser) {
-          res.status(201).json({ msg: "This Email has already been registered." });
-        }
-        if (!currentUser) {
-          if (req.body.password === "") {
-            res.status(201).json({ msg: "Enter a valid password." });
-          }
-          await bcrypt.hash(
-            req.body.password,
-            10,
-            async function (err, hashedPassword) {
-              if (err) {
-                console.log(err);
-              }
-              const newUser = new user({
-                name: req.body.username,
-                password: hashedPassword,
-                contactNumber: req.body.contactNumber,
-                email: req.body.email,
-              });
-              await newUser.save();
-            }
-          );
-          res.status(200).json({ username: req.body.username });
-        }
+  user.findOne({ email: req.body.email }, async function (err, currentUser) {
+    if (err) {
+      console.log(err);
+    }
+    if (currentUser) {
+      res.status(201).json({ msg: "This Email has already been registered." });
+    }
+    if (!currentUser) {
+      if (req.body.password === "") {
+        res.status(201).json({ msg: "Enter a valid password." });
       }
-    );
+      await bcrypt.hash(
+        req.body.password,
+        10,
+        async function (err, hashedPassword) {
+          if (err) {
+            console.log(err);
+          }
+          const newUser = new user({
+            name: req.body.username,
+            password: hashedPassword,
+            contactNumber: req.body.contactNumber,
+            email: req.body.email,
+          });
+          await newUser.save();
+        }
+      );
+      res.status(200).json({ username: req.body.username });
+    }
   });
+});
 
-app.post("/login",function(req,res){
+app.post("/login", function (req, res) {
   const enteredDetails = {
     email: req.body.email,
     password: req.body.password,
@@ -145,6 +148,32 @@ app.post("/login",function(req,res){
       }
     }
   );
+});
+
+app.get("/user", async (req, res) => {
+  try {
+    const cookie = req.session.value;
+    const claims = jwt.verify(cookie, key);
+
+    user.findOne({ _id: claims._id }, function (err, currentUser) {
+      if (err) {
+        console.log(err);
+      } else {
+        if (currentUser) {
+          var { _id, password, ...details } = currentUser._doc;
+          res.status(200).json(details);
+        }
+      }
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+app.post("/logout", function (req, res) {
+  req.session.value = "NA";
+  req.session.destroy();
+  console.log("Cookie deleted")
+  res.status(200).json("logout successfully" );
 });
 
 // Listening to the port PORT.

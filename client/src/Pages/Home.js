@@ -1,8 +1,10 @@
 import "./Home.css";
 import ParticleBackground from "../ParticleBackground";
 import Image from "../Image/background.jpg";
-import { useEffect } from 'react';
+import React,{ useEffect,useState } from 'react';
 import axios from 'axios';
+import NavbarAfterLogin from "../components/Navbar/NavbarAfterLogin.js";
+import NavbarComp from "../components/Navbar/NavbarComp.js";
 
 const styles = {
   container: {
@@ -10,17 +12,30 @@ const styles = {
   }
 }
 
-axios({
-  method: "GET",
-  withCredentials: true,
-  url: "http://localhost:8080/",
-}).then(() => {
-  console.log("entered")
-});
 
 function Home() {
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+const [userData, setUserData] = React.useState({});
+React.useEffect(() => {
+  axios({
+    method: "GET",
+    withCredentials: true,
+    url: "http://localhost:8080/user",
+  }).then((res) => {
+    const loadedData = res.data;
+    setUserData(loadedData);
+    console.log("Hello",res.data);
+    console.log("login mein hai",isLoggedIn);
+    setIsLoggedIn(true);
+  });
+}, [userData.length]);
   return (
     <div>
+    {isLoggedIn ? (
+                <NavbarAfterLogin data={userData}/>
+                ) : (
+                  <NavbarComp/>
+                )}
       <div style={
         {
           backgroundImage: `url(${Image})`,
