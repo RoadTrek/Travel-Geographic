@@ -1,7 +1,10 @@
 import React, { useState } from "react";
-import { Navbar, Container, Nav,NavLink } from "react-bootstrap";
+import { withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { Navbar, Container, Nav, NavLink } from "react-bootstrap";
 import "./NavbarElements.css";
 import logo from "../../Image/LOGO.jpeg";
+import axios from 'axios';
 
 const NavbarComp = () => {
   const [tnavbar, setTnavbar] = useState(false);
@@ -14,8 +17,22 @@ const NavbarComp = () => {
     }
   };
 
-  window.addEventListener("scroll", changeNavbar);
+  const handleLogout = () => {
+    axios({
+      method: "POST",
+      withCredentials: true,
+      url: "http://localhost:8080/logout"
+    }).then((res) => {
+      console.log(res);
+      localStorage.removeItem('name');
+      localStorage.removeItem('logged', false);
+      window.location.reload();
+    })
+  }
 
+  window.addEventListener("scroll", changeNavbar);
+  const isLogged = localStorage.getItem('logged');
+  const name = localStorage.getItem('name');
   return (
     <>
       <Navbar
@@ -28,15 +45,17 @@ const NavbarComp = () => {
         variant={tnavbar ? "dark" : "light"}
       >
         <Container>
-          <Navbar.Brand href="/">
-			  <img src={logo} width="80px" height="60px" margin-left="0px"/>
-			  Travel Geographic
+          <Navbar.Brand>
+            <img to="/" src={logo} width="80px" height="60px" margin-left="0px" />
+            <Link to="/">Travel Geographic</Link>
           </Navbar.Brand>
 
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link href="/gallery">Gallery</Nav.Link>
+              <Nav.Link>
+                <Link to="/gallery">Gallery</Link>
+              </Nav.Link>
               {/* <NavDropdown title="Dropdown" id="collasible-nav-dropdown">
 								<NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
 								<NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
@@ -46,14 +65,34 @@ const NavbarComp = () => {
 							</NavDropdown> */}
             </Nav>
             <Nav>
-              <Nav.Link href="/expedition">Expeditions</Nav.Link>
-              <Nav.Link href="/trek">Treks</Nav.Link>
-              <Nav.Link eventKey={2} href="/login">
-                Login
+              <Nav.Link>
+                <Link to="/expedition">Expeditions</Link>
               </Nav.Link>
-              <Nav.Link eventKey={2} href="/signup">
-                Sign Up
+              <Nav.Link>
+                <Link to="/trek">Trek</Link>
               </Nav.Link>
+              {!isLogged ? (
+                <>
+                  <Nav.Link eventKey={2}>
+                    <Link to="/login">Login</Link>
+                  </Nav.Link>
+                  <Nav.Link eventKey={2}>
+                    <Link to="/signup">Signup</Link>
+                  </Nav.Link>
+                </>
+              ) :
+                (
+                  <>
+                    <Nav.Link onClick={handleLogout}>
+                      <Link>Logout</Link>
+                    </Nav.Link>
+                    <Nav.Link eventKey={2}>
+                      Hi {name}
+                    </Nav.Link>
+                  </>
+                )
+              }
+
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -62,4 +101,4 @@ const NavbarComp = () => {
   );
 };
 
-export default NavbarComp;
+export default withRouter(NavbarComp);

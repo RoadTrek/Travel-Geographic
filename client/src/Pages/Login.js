@@ -11,7 +11,7 @@ import {
   Link,
 } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-const Login = () => {
+const Login = (props) => {
   const paperStyle = {
     padding: 20,
     height: "60%",
@@ -38,10 +38,14 @@ const Login = () => {
     })
       .then((res) => {
           if(res.status===200){
-              setRedirect(1);
+              console.log(res.data);
+              localStorage.setItem('name', res.data.name);
+              localStorage.setItem('logged', true);
+              props.history.push('/');
+              // setRedirect(1);
           }
           else{
-              setRedirect(0);
+              console.log("wrong details");
           }
         console.log(res.data);
     })
@@ -50,17 +54,17 @@ const Login = () => {
       });
       
   };
-  if(redirect===1){
-    return <Redirect to="/" />;
-  }
-  if(redirect===0){
-      //if user enters wrong email or password
-      return (
-          <div>
-             <h1>Enter correct details.</h1> 
-          </div>
-      )
-  }
+  // if(redirect===1){
+  //   return <Redirect to="/" />;
+  // }
+  // if(redirect===0){
+  //     //if user enters wrong email or password
+  //     return (
+  //         <div>
+  //            <h1>Enter correct details.</h1> 
+  //         </div>
+  //     )
+  // }
 
   function handleChange(event) {
     const name = event.target.name;

@@ -1,7 +1,8 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-// import NavbarComp from './components/Navbar/NavbarComp';
+import { withRouter } from 'react-router-dom';
+import NavbarComp from './components/Navbar/NavbarComp';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Home from './Pages/Home.js';
 import Expedition from './Pages/Expedition.js';
@@ -14,7 +15,7 @@ function App() {
 	return (
 		<div>
 			<Router>
-				{/* <NavbarComp /> */}
+				<NavbarComp />
 				<Switch>
 					<Route path='/' exact component={Home} />
 					<Route path='/gallery' component={Gallery} />
@@ -29,4 +30,4 @@ function App() {
 	);
 }
 
-export default App;
+export default withRouter(App);

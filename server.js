@@ -136,7 +136,7 @@ app.post("/login", function (req, res) {
               if (result === true) {
                 const token = jwt.sign({ _id: foundUser._id }, key);
                 req.session.value = token;
-                res.status(200).json({ username: enteredDetails.email });
+                res.status(200).json(foundUser);
               } else {
                 res.status(201).json({ msg: "Enter correct password" });
               }
