@@ -47,14 +47,14 @@ const NavbarComp = () => {
         <Container>
           <Navbar.Brand>
             <img to="/" src={logo} width="80px" height="60px" margin-left="0px" />
-            <Link to="/">Travel Geographic</Link>
+            <Link style={{ textDecoration: "none", color: "black", fontWeight: "600", fontSize: "20px", margin: "0 4px" }} to="/">Travel Geographic</Link>
           </Navbar.Brand>
 
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
               <Nav.Link>
-                <Link to="/gallery">Gallery</Link>
+                <Link style={{ textDecoration: "none", color: "black", fontWeight: "600", fontSize: "20px", margin: "0 4px" }} to="/gallery">Gallery</Link>
               </Nav.Link>
               {/* <NavDropdown title="Dropdown" id="collasible-nav-dropdown">
 								<NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
@@ -66,27 +66,27 @@ const NavbarComp = () => {
             </Nav>
             <Nav>
               <Nav.Link>
-                <Link to="/expedition">Expeditions</Link>
+                <Link style={{ textDecoration: "none", color: "black", fontWeight: "600", fontSize: "20px", margin: "0 4px" }} to="/expedition">Expeditions</Link>
               </Nav.Link>
               <Nav.Link>
-                <Link to="/trek">Trek</Link>
+                <Link style={{ textDecoration: "none", color: "black", fontWeight: "600", fontSize: "20px", margin: "0 4px" }} to="/trek">Trek</Link>
               </Nav.Link>
               {!isLogged ? (
                 <>
                   <Nav.Link eventKey={2}>
-                    <Link to="/login">Login</Link>
+                    <Link style={{ textDecoration: "none", color: "black", fontWeight: "600", fontSize: "20px", margin: "0 4px" }} to="/login">Login</Link>
                   </Nav.Link>
                   <Nav.Link eventKey={2}>
-                    <Link to="/signup">Signup</Link>
+                    <Link style={{ textDecoration: "none", color: "black", fontWeight: "600", fontSize: "20px", margin: "0 4px" }} to="/signup">Signup</Link>
                   </Nav.Link>
                 </>
               ) :
                 (
                   <>
                     <Nav.Link onClick={handleLogout}>
-                      <Link>Logout</Link>
+                      <Link style={{ textDecoration: "none", color: "black", fontWeight: "600", fontSize: "20px", margin: "0 4px" }} >Logout</Link>
                     </Nav.Link>
-                    <Nav.Link eventKey={2}>
+                    <Nav.Link style={{ textDecoration: "none", color: "black", fontWeight: "600", fontSize: "20px", margin: "0 4px" }} eventKey={2}>
                       Hi {name}
                     </Nav.Link>
                   </>

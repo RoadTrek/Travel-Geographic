@@ -16,7 +16,7 @@ const PORT = process.env.port || 8080;
 //models
 
 const user = require("./models/user.js");
-
+const gallery=require("./models/gallery.js");
 // express was initialized
 const app = express();
 app.use(function (req, res, next) {
@@ -175,6 +175,15 @@ app.post("/logout", function (req, res) {
   console.log("Cookie deleted")
   res.status(200).json("logout successfully" );
 });
+
+app.post("/gallery",async function(req,res){
+  const url=req.body.secure_url;
+  console.log(url);
+  const newImage = new gallery({
+    imageUrl: url
+  });
+  await newImage.save();
+})
 
 // Listening to the port PORT.
 app.listen(PORT, function () {
