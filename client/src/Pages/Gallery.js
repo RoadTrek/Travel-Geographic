@@ -1,4 +1,3 @@
-// import Image from "../Image/background.jpg";
 import { Image } from "cloudinary-react";
 import * as React from "react";
 import Card from "@mui/material/Card";
@@ -11,29 +10,58 @@ import axios from "axios";
 
 export default function Gallery() {
   const [imageSelected, setImageSelected] = React.useState("");
+  const data=[""];
+  
+  const [details,setDetails]=React.useState([{
+    _id:"",
+    imageUrl:""
+}]);
+  // const [boolean, setBoolean] = React.useState(false);
+  const[admin,setAdmin]=React.useState(false);
+  const formData = new FormData();
+  const tempStorage=[];
   const uploadImage = () => {
-    const formData = new FormData();
     formData.append("file", imageSelected);
     formData.append("upload_preset", process.env.REACT_APP_uploadPreset);
 
     axios
-      .post("https://api.cloudinary.com/v1_1/" + process.env.REACT_APP_cloudName + "/image/upload", formData)
+      .post(
+        "https://api.cloudinary.com/v1_1/" +
+          process.env.REACT_APP_cloudName +
+          "/image/upload",
+        formData
+      )
       .then((res) => {
-        const imageUrl=res.data;
+        const imageUrl = res.data;
         console.log(imageUrl);
         axios({
-          method:"POST",
-          withCredentials:true,
-          url:"http://localhost:8080/gallery",
-          data:imageUrl
-        }).then((respond)=>{
-          console.log("Data sent successfully"+respond.data)
-        })
+          method: "POST",
+          withCredentials: true,
+          url: "http://localhost:8080/gallery",
+          data: imageUrl,
+        }).then((respond) => {
+          console.log("Data sent successfully" + respond.data);
+        });
       });
   };
+  React.useEffect(() => {
+    axios({
+      method: "GET",
+      withCredentials: true,
+      url: "http://localhost:8080/image",
+    }).then(async (res) => {
+      // setData(res.data.image);
+      if(res.data.type===1){
+        setAdmin(true);
+      }
+      setDetails(res.data.image);
+      
+    });
+  }, []);
+  console.log(details);
   return (
     <div>
-      <Card sx={{ maxWidth: "25%", marginTop: "12%", marginLeft: "20%" }}>
+    {admin?(<Card sx={{ maxWidth: "25%", marginTop: "12%", marginLeft: "20%" }}>
         <CardContent sx={{ height: "2%" }}>
           <Typography gutterBottom variant="h5" component="div">
             Add
@@ -50,14 +78,15 @@ export default function Gallery() {
         <CardActions>
           <Button onClick={uploadImage}>Upload Image</Button>
         </CardActions>
-      </Card>
-
-      <Card sx={{ maxWidth: "25%", marginTop: "-28%", marginLeft: "55%" }}>
-        <CardMedia >
+      </Card>):(<></>)}
+      
+      {details.map(function(image){
+        return(
+        <Card sx={{ maxWidth: "50%", marginTop: "28%", marginLeft: "5%"}}>
+        <CardMedia sx={{maxHeight:"10%"}} >
           <Image
-            style={{ maxHeight: "20" }}
             cloudName={process.env.REACT_APP_cloudName}
-            publicId={"https://res.cloudinary.com/" + process.env.REACT_APP_cloudName + "/image/upload/v1635345109/spcobt4iikt6ahxlj5x9.jpg"}
+            publicId={image.imageUrl}
           ></Image>
         </CardMedia>
         <CardContent maxHeight="10px">
@@ -74,6 +103,9 @@ export default function Gallery() {
           <Button size="small">Learn More</Button>
         </CardActions>
       </Card>
+        )
+      })}
+      
     </div>
   );
 }

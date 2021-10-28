@@ -16,7 +16,7 @@ const PORT = process.env.port || 8080;
 //models
 
 const user = require("./models/user.js");
-const gallery=require("./models/gallery.js");
+const gallery = require("./models/gallery.js");
 // express was initialized
 const app = express();
 app.use(function (req, res, next) {
@@ -104,7 +104,7 @@ app.post("/signup", function (req, res) {
             console.log(err);
           }
           const newUser = new user({
-            name: req.body.username,
+            name: req.body.name,
             password: hashedPassword,
             contactNumber: req.body.contactNumber,
             email: req.body.email,
@@ -134,9 +134,15 @@ app.post("/login", function (req, res) {
             foundUser.password,
             function (err, result) {
               if (result === true) {
-                const token = jwt.sign({ _id: foundUser._id }, key);
-                req.session.value = token;
-                res.status(200).json(foundUser);
+                if (foundUser.email === "tg.official.1001@gmail.com") {
+                  const token = jwt.sign({ _id: foundUser._id, type: 1 }, key);
+                  req.session.value = token;
+                  res.status(200).json(foundUser);
+                } else {
+                  const token = jwt.sign({ _id: foundUser._id, type: 2 }, key);
+                  req.session.value = token;
+                  res.status(200).json(foundUser);
+                }
               } else {
                 res.status(201).json({ msg: "Enter correct password" });
               }
@@ -172,19 +178,58 @@ app.get("/user", async (req, res) => {
 app.post("/logout", function (req, res) {
   req.session.value = "NA";
   req.session.destroy();
-  console.log("Cookie deleted")
-  res.status(200).json("logout successfully" );
+  console.log("Cookie deleted");
+  res.status(200).json("logout successfully");
 });
 
-app.post("/gallery",async function(req,res){
-  const url=req.body.secure_url;
+app.post("/gallery", async function (req, res) {
+  const url = req.body.secure_url;
   console.log(url);
   const newImage = new gallery({
-    imageUrl: url
+    imageUrl: url,
   });
   await newImage.save();
-})
+});
 
+app.get("/image", function (req, res) {
+  try {
+    const cookie = req.session.value;
+    const claims = jwt.verify(cookie, key);
+      gallery.find({}, {}, function (err, data) {
+        res.status(200).json({ image: data,type:claims.type });
+      });
+    
+  } catch (error) {
+    console.log(error);
+  }
+  
+});
+
+app.get("/expedition", function (req, res) {
+  try {
+    const cookie = req.session.value;
+    const claims = jwt.verify(cookie, key);
+      gallery.find({}, {}, function (err, data) {
+        res.status(200).json({ image: data,type:claims.type });
+      });
+  } catch (error) {
+    console.log(error);
+  }
+  
+});
+
+app.get("/trek", function (req, res) {
+  try {
+    const cookie = req.session.value;
+    const claims = jwt.verify(cookie, key);
+      gallery.find({}, {}, function (err, data) {
+        res.status(200).json({ image: data,type:claims.type });
+      });
+  } catch (error) {
+    console.log(error);
+  }
+  
+});
 // Listening to the port PORT.
 app.listen(PORT, function () {
   console.log("Server is listening to port ", PORT);
