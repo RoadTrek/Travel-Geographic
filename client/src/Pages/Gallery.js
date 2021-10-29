@@ -55,7 +55,7 @@ export default function Gallery() {
         setAdmin(true);
       }
       setDetails(res.data.image);
-      
+      // console.log(res.data.image);
     });
   }, []);
   console.log(details);
