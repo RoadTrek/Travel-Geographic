@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Button, Backdrop, CircularProgress, Paper } from '@mui/material'
+import { Card,CardActions,CardContent,Typography,Button, Backdrop, Paper } from '@mui/material'
 import { Form, Button as Butt } from 'react-bootstrap'
 import axios from "axios";
+
 
 export default function Expedition() {
   const [admin, setAdmin] = useState(false);
@@ -16,7 +17,7 @@ export default function Expedition() {
         setAdmin(true);
       }
     });
-  }, [admin]);
+  }, []);
 
   const openBackdrop = () => {
     setOpen(true);
@@ -27,11 +28,18 @@ export default function Expedition() {
   }
 
   return (
-    <div>
+    <div style={{backgroundColor:"black"}}>
       {admin ?
         <div>
-          Add here
-          <Button onClick={openBackdrop}>Show backdrop</Button>
+        <Card sx={{ paddingTop: "50px",paddingBottom:"50px",maxWidth: "10%", marginTop: "8%", marginLeft: "20%" }}>
+        <CardContent >
+          <Typography gutterBottom variant="h6" component="div">
+          <Button onClick={openBackdrop}>Add Here<i class="fas fa-plus"></i></Button>
+          </Typography>
+        </CardContent>
+      </Card>
+          
+          
           <Backdrop
             sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
             open={open}
@@ -40,19 +48,19 @@ export default function Expedition() {
               <img style={{ float: "right", margin: "5px" }} onClick={handleClose} src={"https://img.icons8.com/" + "ios" + "/35/000000/cancel.png"} />
               <Form style={{ padding: "40px", fontSize: "30px" }}>
                 <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                  <Form.Label>Email address</Form.Label>
-                  <Form.Control type="email" placeholder="name@example.com" />
+                  <Form.Label>Name</Form.Label>
+                  <Form.Control type="email" placeholder="e.g: Shimla to Spiti" />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-                  <Form.Label>Example textarea</Form.Label>
+                  <Form.Label>Add Description</Form.Label>
                   <Form.Control as="textarea" rows={3} />
                 </Form.Group>
                 <Form.Group controlId="formFile" className="mb-3">
-                  <Form.Label>Default file input example</Form.Label>
+                  <Form.Label>Add Picture</Form.Label>
                   <Form.Control type="file" />
                 </Form.Group>
                 <Butt style = {{textAlign: "center"}} variant="dark" type = "submit">
-                  Submit
+                  Post
                 </Butt>
               </Form>
             </Paper>
