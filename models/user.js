@@ -1,7 +1,7 @@
 
 // Requiring the mongoose module
-const bcrypt = require("bcryptjs");
-const mongoose = require("mongoose");
+import bcrypt from "bcryptjs";
+import mongoose from "mongoose";
 
 // Defining the schema of students.
 const userSchema = new mongoose.Schema({
@@ -13,4 +13,4 @@ const userSchema = new mongoose.Schema({
 
 const user = mongoose.model("user", userSchema);
 //exporting the student model
-module.exports = user;
+export default user;

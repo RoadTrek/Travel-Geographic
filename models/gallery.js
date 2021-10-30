@@ -1,8 +1,8 @@
 
 
 // Requiring the mongoose module
-const bcrypt = require("bcryptjs");
-const mongoose = require("mongoose");
+import bcrypt from "bcryptjs";
+import mongoose from "mongoose";
 
 // Defining the schema of students.
 const gallerySchema = new mongoose.Schema({
@@ -11,4 +11,4 @@ const gallerySchema = new mongoose.Schema({
 
 const gallery = mongoose.model("gallery", gallerySchema);
 //exporting the student model
-module.exports = gallery;
+export default gallery;

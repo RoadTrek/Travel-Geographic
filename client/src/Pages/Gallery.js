@@ -36,7 +36,7 @@ export default function Gallery() {
         axios({
           method: "POST",
           withCredentials: true,
-          url: "http://localhost:8080/gallery",
+          url: "http://localhost:8080/gallery/uploadImage",
           data: imageUrl,
         }).then((respond) => {
           console.log("Data sent successfully" + respond.data);
@@ -47,7 +47,7 @@ export default function Gallery() {
     axios({
       method: "GET",
       withCredentials: true,
-      url: "http://localhost:8080/image",
+      url: "http://localhost:8080/gallery/getImage",
     }).then(async (res) => {
       setDetails(res.data.image);
     });
