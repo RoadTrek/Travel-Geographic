@@ -25,7 +25,8 @@ const NavbarComp = () => {
     }).then((res) => {
       console.log(res);
       localStorage.removeItem('name');
-      localStorage.removeItem('logged', false);
+      localStorage.setItem('logged', false);
+      localStorage.removeItem('email');
       window.location.reload();
     })
   }

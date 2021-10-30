@@ -15,7 +15,7 @@ import Checkbox from "@material-ui/core/Checkbox";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import axios from "axios";
-const SignUp = () => {
+const SignUp = (props) => {
   const paperStyle = {
     padding: 20,
     height: "60%",
@@ -45,11 +45,10 @@ const SignUp = () => {
     })
       .then((res) => {
         console.log(res.data);
-        if (res.status === 201) {
-          setRedirect(0);
-        } else {
-          setRedirect(1);
-        }
+        localStorage.setItem('name', res.data.name);
+        localStorage.setItem('logged', true);
+        localStorage.setItem('email', res.data.email);
+        props.history.push('/');
         setMessage(res.data.msg);
         console.log("signup details sent");
       })
@@ -57,18 +56,6 @@ const SignUp = () => {
         console.log(err);
       });
   };
-  if (redirect === 1) {
-    //after redirecting change the navbar
-    return <Redirect to="/" />;
-  } 
-  if(redirect===0){
-    //what to do if email already exists
-    return (
-      <div>
-        <h1>{message}</h1>
-      </div>
-    );
-  }
 
   function handleChange(event) {
     const name = event.target.name;

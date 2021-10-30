@@ -41,6 +41,7 @@ const Login = (props) => {
               console.log(res.data);
               localStorage.setItem('name', res.data.name);
               localStorage.setItem('logged', true);
+              localStorage.setItem('email', res.data.email);
               props.history.push('/');
               // setRedirect(1);
           }

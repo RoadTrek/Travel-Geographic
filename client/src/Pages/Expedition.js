@@ -5,19 +5,25 @@ import axios from "axios";
 
 
 export default function Expedition() {
-  const [admin, setAdmin] = useState(false);
   const [open, setOpen] = useState(false);
-  React.useEffect(() => {
-    axios({
-      method: "GET",
-      withCredentials: true,
-      url: "http://localhost:8080/expedition",
-    }).then(async (res) => {
-      if (res.data.type === 1) {
-        setAdmin(true);
-      }
+  const [details,setDetails]=useState({
+    name:"",
+    description:"",
+    imageUrl:""
+  })
+
+  function handleChange(event) {
+    const name = event.target.name;
+    const value = event.target.value;
+
+    setDetails(function (prev) {
+      const newVal = {
+        ...prev,
+        [name]: value,
+      };
+      return newVal;
     });
-  }, []);
+  }
 
   const openBackdrop = () => {
     setOpen(true);
@@ -26,10 +32,12 @@ export default function Expedition() {
   const handleClose = () => {
     setOpen(false);
   }
+  const handleSubmit=()=>{
 
+  }
   return (
     <div style={{backgroundColor:"black"}}>
-      {admin ?
+      {localStorage.getItem('email') === "tg.official.1001@gmail.com" ?
         <div>
         <Card sx={{ paddingTop: "50px",paddingBottom:"50px",maxWidth: "10%", marginTop: "8%", marginLeft: "20%" }}>
         <CardContent >
@@ -49,17 +57,17 @@ export default function Expedition() {
               <Form style={{ padding: "40px", fontSize: "30px" }}>
                 <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                   <Form.Label>Name</Form.Label>
-                  <Form.Control type="email" placeholder="e.g: Shimla to Spiti" />
+                  <Form.Control name="name" value = {details.name} onChange={handleChange} placeholder="e.g: Shimla to Spiti" />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                   <Form.Label>Add Description</Form.Label>
-                  <Form.Control as="textarea" rows={3} />
+                  <Form.Control name="description" value = {details.description} onChange={handleChange} as="textarea" rows={3} />
                 </Form.Group>
                 <Form.Group controlId="formFile" className="mb-3">
                   <Form.Label>Add Picture</Form.Label>
                   <Form.Control type="file" />
                 </Form.Group>
-                <Butt style = {{textAlign: "center"}} variant="dark" type = "submit">
+                <Butt onClick={handleSubmit} style = {{textAlign: "center"}} variant="dark" type = "submit">
                   Post
                 </Butt>
               </Form>

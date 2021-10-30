@@ -10,16 +10,15 @@ import axios from "axios";
 
 export default function Gallery() {
   const [imageSelected, setImageSelected] = React.useState("");
-  const data=[""];
-  
-  const [details,setDetails]=React.useState([{
-    _id:"",
-    imageUrl:""
-}]);
+  const data = [""];
+
+  const [details, setDetails] = React.useState([{
+    _id: "",
+    imageUrl: ""
+  }]);
   // const [boolean, setBoolean] = React.useState(false);
-  const[admin,setAdmin]=React.useState(false);
   const formData = new FormData();
-  const tempStorage=[];
+  const tempStorage = [];
   const uploadImage = () => {
     formData.append("file", imageSelected);
     formData.append("upload_preset", process.env.REACT_APP_uploadPreset);
@@ -27,8 +26,8 @@ export default function Gallery() {
     axios
       .post(
         "https://api.cloudinary.com/v1_1/" +
-          process.env.REACT_APP_cloudName +
-          "/image/upload",
+        process.env.REACT_APP_cloudName +
+        "/image/upload",
         formData
       )
       .then((res) => {
@@ -50,18 +49,12 @@ export default function Gallery() {
       withCredentials: true,
       url: "http://localhost:8080/image",
     }).then(async (res) => {
-      // setData(res.data.image);
-      if(res.data.type===1){
-        setAdmin(true);
-      }
       setDetails(res.data.image);
-      // console.log(res.data.image);
     });
   }, []);
-  console.log(details);
   return (
     <div>
-    {admin?(<Card sx={{ maxWidth: "25%", marginTop: "12%", marginLeft: "20%" }}>
+      { localStorage.getItem('email') === "tg.official.1001@gmail.com" ? (<Card sx={{ maxWidth: "25%", marginTop: "12%", marginLeft: "20%" }}>
         <CardContent sx={{ height: "2%" }}>
           <Typography gutterBottom variant="h5" component="div">
             Add
@@ -78,34 +71,34 @@ export default function Gallery() {
         <CardActions>
           <Button onClick={uploadImage}>Upload Image</Button>
         </CardActions>
-      </Card>):(<></>)}
-      
-      {details.map(function(image){
-        return(
-        <Card sx={{ maxWidth: "50%", marginTop: "28%", marginLeft: "5%"}}>
-        <CardMedia sx={{maxHeight:"10%"}} >
-          <Image
-            cloudName={process.env.REACT_APP_cloudName}
-            publicId={image.imageUrl}
-          ></Image>
-        </CardMedia>
-        <CardContent maxHeight="10px">
-          <Typography gutterBottom variant="h5" component="div">
-            Lizard
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Lizards are a widespread group of squamate reptiles, with over 6,000
-            species, ranging across all continents except Antarctica
-          </Typography>
-        </CardContent>
-        <CardActions>
-          <Button size="small">Share</Button>
-          <Button size="small">Learn More</Button>
-        </CardActions>
-      </Card>
+      </Card>) : (<></>)}
+
+      {details.map(function (image) {
+        return (
+          <Card sx={{ maxWidth: "50%", marginTop: "28%", marginLeft: "5%" }}>
+            <CardMedia sx={{ maxHeight: "10%" }} >
+              <Image
+                cloudName={process.env.REACT_APP_cloudName}
+                publicId={image.imageUrl}
+              ></Image>
+            </CardMedia>
+            <CardContent maxHeight="10px">
+              <Typography gutterBottom variant="h5" component="div">
+                Lizard
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Lizards are a widespread group of squamate reptiles, with over 6,000
+                species, ranging across all continents except Antarctica
+              </Typography>
+            </CardContent>
+            <CardActions>
+              <Button size="small">Share</Button>
+              <Button size="small">Learn More</Button>
+            </CardActions>
+          </Card>
         )
       })}
-      
+
     </div>
   );
 }

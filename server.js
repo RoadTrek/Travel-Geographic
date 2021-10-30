@@ -117,44 +117,7 @@ app.post("/signup", function (req, res) {
   });
 });
 
-app.post("/login", function (req, res) {
-  const enteredDetails = {
-    email: req.body.email,
-    password: req.body.password,
-  };
-  user.findOne(
-    { email: enteredDetails.email },
-    async function (err, foundUser) {
-      if (err) {
-        console.log(err);
-      } else {
-        if (foundUser) {
-          bcrypt.compare(
-            enteredDetails.password,
-            foundUser.password,
-            function (err, result) {
-              if (result === true) {
-                if (foundUser.email === "tg.official.1001@gmail.com") {
-                  const token = jwt.sign({ _id: foundUser._id, type: 1 }, key);
-                  req.session.value = token;
-                  res.status(200).json(foundUser);
-                } else {
-                  const token = jwt.sign({ _id: foundUser._id, type: 2 }, key);
-                  req.session.value = token;
-                  res.status(200).json(foundUser);
-                }
-              } else {
-                res.status(201).json({ msg: "Enter correct password" });
-              }
-            }
-          );
-        } else {
-          res.status(201).json({ msg: "email id does not exist" });
-        }
-      }
-    }
-  );
-});
+
 
 app.get("/user", async (req, res) => {
   try {
@@ -192,42 +155,17 @@ app.post("/gallery", async function (req, res) {
 });
 
 app.get("/image", function (req, res) {
-  try {
-    const cookie = req.session.value;
-    const claims = jwt.verify(cookie, key);
       gallery.find({}, {}, function (err, data) {
-        res.status(200).json({ image: data,type:claims.type });
+        res.status(200).json({ image: data });
       });
-    
-  } catch (error) {
-    console.log(error);
-  }
-  
 });
 
 app.get("/expedition", function (req, res) {
-  try {
-    const cookie = req.session.value;
-    const claims = jwt.verify(cookie, key);
-      gallery.find({}, {}, function (err, data) {
-        res.status(200).json({ image: data,type:claims.type });
-      });
-  } catch (error) {
-    console.log(error);
-  }
+
   
 });
 
 app.get("/trek", function (req, res) {
-  try {
-    const cookie = req.session.value;
-    const claims = jwt.verify(cookie, key);
-      gallery.find({}, {}, function (err, data) {
-        res.status(200).json({ image: data,type:claims.type });
-      });
-  } catch (error) {
-    console.log(error);
-  }
   
 });
 // Listening to the port PORT.

@@ -70,11 +70,11 @@ export default function Trek() {
               <Form style={{ padding: "40px", fontSize: "30px" }}>
                 <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                   <Form.Label>Name</Form.Label>
-                  <Form.Control onChange={handleChange} placeholder="e.g: Shimla to Spiti" />
+                  <Form.Control name="name" value = {details.name} onChange={handleChange} placeholder="e.g: Shimla to Spiti" />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                   <Form.Label>Add Description</Form.Label>
-                  <Form.Control onChange={handleChange} as="textarea" rows={3} />
+                  <Form.Control name="description" value = {details.description} onChange={handleChange} as="textarea" rows={3} />
                 </Form.Group>
                 <Form.Group controlId="formFile" className="mb-3">
                   <Form.Label>Add Picture</Form.Label>
