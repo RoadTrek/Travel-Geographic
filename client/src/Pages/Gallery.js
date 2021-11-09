@@ -96,8 +96,6 @@ export default function Gallery() {
                 />
                 <hr />
                 <Button style = {{fontSize: "1.2rem"}} onClick={uploadImage}>Upload</Button>
-                <br/>
-                <img onClick={uploadImage} style = {{width: "150px", height: "100px"}} src = "https://im2.ezgif.com/tmp/ezgif-2-0d2d5c874c99.gif" />
               </Form>
             </Paper>
           </Backdrop>
