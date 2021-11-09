@@ -11,6 +11,18 @@ export default function Expedition() {
     description:"",
     imageUrl:""
   })
+  const [expArray, setExpArray] = useState();
+
+  React.useEffect(() => {
+    axios({
+      method: "GET",
+      withCredentials: true,
+      url: "http://localhost:8080/expedition/getExpedition",
+    }).then(async (res) => {
+      res.data.image.reverse();
+      setDetails(res.data.image);
+    });
+  }, []);
 
   function handleChange(event) {
     const name = event.target.name;
