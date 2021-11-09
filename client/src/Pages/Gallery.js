@@ -1,21 +1,21 @@
-import { Image } from "cloudinary-react";
 import * as React from "react";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
+import { Form, Card, Image, Row, Col, Container } from "react-bootstrap";
+import { Button, Typography, Backdrop, Grid, Paper } from "@mui/material";
 import axios from "axios";
 
 export default function Gallery() {
+  const [imageName, setImageName] = React.useState("");
   const [imageSelected, setImageSelected] = React.useState("");
-  const data = [""];
+  const [showBackdrop, setShowBackdrop] = React.useState(false)
+  const [backdropImage, setBackdropImage] = React.useState("");
+  const [imageBackdrop, setImageBackdrop] = React.useState("");
 
   const [details, setDetails] = React.useState([{
+    name: "",
     _id: "",
     imageUrl: ""
   }]);
+
   // const [boolean, setBoolean] = React.useState(false);
   const formData = new FormData();
   const tempStorage = [];
@@ -37,68 +37,98 @@ export default function Gallery() {
           method: "POST",
           withCredentials: true,
           url: "http://localhost:8080/gallery/uploadImage",
-          data: imageUrl,
+          data: {
+            url: imageUrl,
+            name: imageName
+          },
         }).then((respond) => {
           console.log("Data sent successfully" + respond.data);
         });
+        window.location.reload();
       });
   };
+  const carouselImage = [];
   React.useEffect(() => {
     axios({
       method: "GET",
       withCredentials: true,
       url: "http://localhost:8080/gallery/getImage",
     }).then(async (res) => {
+      res.data.image.reverse();
       setDetails(res.data.image);
     });
   }, []);
+  details.map((obj) => {
+    carouselImage.push(
+      {
+        image: obj.imageUrl,
+        caption: "caption"
+      }
+    )
+  })
+
+  const toggleBackdrop = (imageUrl) => {
+    setBackdropImage(imageUrl);
+    setShowBackdrop(true);
+  }
+
   return (
     <div>
-      { localStorage.getItem('email') === "tg.official.1001@gmail.com" ? (<Card sx={{ maxWidth: "25%", marginTop: "12%", marginLeft: "20%" }}>
-        <CardContent sx={{ height: "2%" }}>
-          <Typography gutterBottom variant="h5" component="div">
-            Add
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            <input
-              type="file"
-              onChange={(event) => {
-                setImageSelected(event.target.files[0]);
-              }}
-            />
-          </Typography>
-        </CardContent>
-        <CardActions>
-          <Button onClick={uploadImage}>Upload Image</Button>
-        </CardActions>
-      </Card>) : (<></>)}
+      {localStorage.getItem('email') === "tg.official.1001@gmail.com" ? (
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+          <img onClick={() => setImageBackdrop(true)} style={{ width: "400px" }} src="https://cdn.dribbble.com/users/251321/screenshots/2807146/plus.gif" />
+          <Backdrop
+            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            open={imageBackdrop}
+          >
+            <Paper elevation={24} >
+              <img style={{ float: "right", margin: "5px" }} onClick={() => setImageBackdrop(false)} src={"https://img.icons8.com/" + "ios" + "/35/000000/cancel.png"} />
+              <Form style={{ padding: "40px", textAlign: "center" }}>
+                <Form.Group style = {{textAlign: "left"}} className="mb-3" controlId="exampleForm.ControlInput1">
+                  <Form.Label>Name</Form.Label>
+                  <Form.Control name="name" value={imageName} onChange={(event) => setImageName(event.target.value)} placeholder="e.g: Shimla to Spiti" />
+                </Form.Group>
+                <input
+                  type="file"
+                  onChange={(event) => {
+                    setImageSelected(event.target.files[0]);
+                  }}
+                />
+                <hr />
+                <Button style = {{fontSize: "1.2rem"}} onClick={uploadImage}>Upload</Button>
+                <br/>
+                <img onClick={uploadImage} style = {{width: "150px", height: "100px"}} src = "https://im2.ezgif.com/tmp/ezgif-2-0d2d5c874c99.gif" />
+              </Form>
+            </Paper>
+          </Backdrop>
+        </div>
+      ) : (<></>)}
 
-      {details.map(function (image) {
-        return (
-          <Card sx={{ maxWidth: "50%", marginTop: "28%", marginLeft: "5%" }}>
-            <CardMedia sx={{ maxHeight: "10%" }} >
-              <Image
-                cloudName={process.env.REACT_APP_cloudName}
-                publicId={image.imageUrl}
-              ></Image>
-            </CardMedia>
-            <CardContent maxHeight="10px">
-              <Typography gutterBottom variant="h5" component="div">
-                Lizard
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Lizards are a widespread group of squamate reptiles, with over 6,000
-                species, ranging across all continents except Antarctica
-              </Typography>
-            </CardContent>
-            <CardActions>
-              <Button size="small">Share</Button>
-              <Button size="small">Learn More</Button>
-            </CardActions>
-          </Card>
-        )
-      })}
-
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={showBackdrop}
+        onClick={() => setShowBackdrop(false)}
+      >
+        <span >
+          <img style={{ height: "500px" }} src={backdropImage} />
+        </span>
+      </Backdrop>
+      <Container style={{ marginTop: "30px" }}>
+        <Row>
+          {details.map(function (image) {
+            return (
+              <Col lg={12} xl={6} style={{ marginBottom: "20px" }}>
+                <Card onClick={() => toggleBackdrop(image.imageUrl)} style={{ display: "inline-block", boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px" }} className="bg-dark text-white">
+                  <Card.Img style={{ width: "500px", height: "300px" }} src={image.imageUrl} alt="Card image" />
+                  <Card.ImgOverlay>
+                    <Card.Title style={{ fontSize: "2rem", color: "black", padding: "5px", backgroundColor: "white", textAlign: "center", opacity: "0.5" }}>{image.name}</Card.Title>
+                  </Card.ImgOverlay>
+                </Card>
+              </Col>
+            )
+          })}
+        </Row>
+      </Container>
     </div>
   );
 }

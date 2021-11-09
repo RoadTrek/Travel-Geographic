@@ -74,10 +74,10 @@ const NavbarComp = () => {
               </Nav.Link>
               {!isLogged ? (
                 <>
-                  <Nav.Link eventKey={2}>
+                  <Nav.Link>
                     <Link style={{ textDecoration: "none", color: "black", fontWeight: "600", fontSize: "20px", margin: "0 4px" }} to="/login">Login</Link>
                   </Nav.Link>
-                  <Nav.Link eventKey={2}>
+                  <Nav.Link>
                     <Link style={{ textDecoration: "none", color: "black", fontWeight: "600", fontSize: "20px", margin: "0 4px" }} to="/signup">Signup</Link>
                   </Nav.Link>
                 </>
@@ -87,7 +87,7 @@ const NavbarComp = () => {
                     <Nav.Link onClick={handleLogout}>
                       <Link style={{ textDecoration: "none", color: "black", fontWeight: "600", fontSize: "20px", margin: "0 4px" }} >Logout</Link>
                     </Nav.Link>
-                    <Nav.Link style={{ textDecoration: "none", color: "black", fontWeight: "600", fontSize: "20px", margin: "0 4px" }} eventKey={2}>
+                    <Nav.Link style={{ textDecoration: "none", color: "black", fontWeight: "600", fontSize: "20px", margin: "0 4px" }}>
                       Hi {name}
                     </Nav.Link>
                   </>

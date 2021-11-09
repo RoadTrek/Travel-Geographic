@@ -1,10 +1,12 @@
 import gallery from "../models/gallery.js";
 
 export const uploadImage = (req,res,err) => {
-    const url = req.body.secure_url;
+    const url = req.body.url.secure_url;
+    const name = req.body.name
     console.log(url);
     const newImage = new gallery({
-      imageUrl: url,
+      name: name,
+      imageUrl: url
     });
     newImage.save();
 }

@@ -6,7 +6,8 @@ import mongoose from "mongoose";
 
 // Defining the schema of students.
 const gallerySchema = new mongoose.Schema({
-  imageUrl: String
+  imageUrl: String,
+  name: String
 });
 
 const gallery = mongoose.model("gallery", gallerySchema);

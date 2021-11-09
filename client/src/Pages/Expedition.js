@@ -72,7 +72,6 @@ export default function Expedition() {
                 </Butt>
               </Form>
             </Paper>
-            {/* <CircularProgress color="inherit" /> */}
           </Backdrop>
         </div>
         : <></>}
