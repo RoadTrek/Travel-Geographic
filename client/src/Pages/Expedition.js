@@ -83,6 +83,7 @@ export default function Expedition() {
   const handleClose = () => {
     setOpen(false);
   };
+
   const handleSubmit = () => {
     console.log(imageSelected);
     const formData = new FormData();
@@ -91,32 +92,28 @@ export default function Expedition() {
     axios
       .post(
         "https://api.cloudinary.com/v1_1/" +
-          process.env.REACT_APP_cloudName +
-          "/image/upload",
+        process.env.REACT_APP_cloudName +
+        "/image/upload",
         formData
       )
-      .then((res) => {
+      .then(async (res) => {
         const url = res.data.secure_url;
-        const newImageUrl=[...details.imageUrl];
+        const newImageUrl = [...details.imageUrl];
         newImageUrl.push(url);
-
-        // console.log(imageUrl);
-        setDetails((prev) => {
-          return {
-            ...prev,
-            imageUrl: newImageUrl,
-          };
+        axios({
+          method: "POST",
+          withCredentials: true,
+          url: "http://localhost:8080/expedition/uploadExpedition",
+          data: {
+            ...details,
+            imageUrl: newImageUrl
+          },
+        }).then((res) => {
+          window.location.reload();
+          console.log("Data Sent", res);
         });
-      });
-    axios({
-      method: "POST",
-      withCredentials: true,
-      url: "http://localhost:8080/expedition/uploadExpedition",
-      data: details,
-    }).then((res) => {
-      console.log("Data Sent", res);
-    });
-    window.location.reload();
+      })
+
   };
   return (
     <div style={{ backgroundColor: "black" }}>
@@ -228,7 +225,7 @@ export default function Expedition() {
                       name="name"
                       value={itemDetail.name}
                       onChange={handleItemChange}
-                      placeholder="e.g: Shimla to Spiti"
+                      placeholder="e.g Sleeping Bag"
                     />
                   </Form.Group>
                   <Form.Group>
@@ -279,7 +276,7 @@ export default function Expedition() {
                   onClick={handleSubmit}
                   style={{ textAlign: "center" }}
                   variant="dark"
-                  // type="submit"
+                // type="submit"
                 >
                   Post
                 </Butt>

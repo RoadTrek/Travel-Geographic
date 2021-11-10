@@ -4,6 +4,7 @@ export const uploadExpedition = (req,res,err) => {
     const url = req.body.imageUrl[0];
     const name = req.body.name;
     const desc=req.body.desc;
+    console.log("hello");
     console.log(req.body);
     const newExpedition = new expedition({
       name: name,
@@ -15,6 +16,7 @@ export const uploadExpedition = (req,res,err) => {
       reviews: []
     });
     newExpedition.save();
+    res.status(200).json("lessgoo");
 }
 
 export const getExpedition = (req,res,err) => {
