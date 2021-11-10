@@ -14,6 +14,6 @@ const expeditionSchema = new mongoose.Schema({
   reviews: Array
 });
 
-const gallery = mongoose.model("gallery", expeditionSchema);
+const expedition = mongoose.model("expedition", expeditionSchema);
 //exporting the student model
-export default gallery;
+export default expedition;

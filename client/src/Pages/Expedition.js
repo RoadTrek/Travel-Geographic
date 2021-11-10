@@ -1,8 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { Card, CardActions, CardContent, Typography, Button, Backdrop, Paper } from '@mui/material'
-import { Form, Button as Butt } from 'react-bootstrap'
+import React, { useState } from "react";
+import {
+  Card,
+  CardContent,
+  Typography,
+  Button,
+  Backdrop,
+  Paper,
+} from "@mui/material";
+import { Form, Button as Butt } from "react-bootstrap";
 import axios from "axios";
-
 
 export default function Expedition() {
   const [open, setOpen] = useState(false);
@@ -12,12 +18,12 @@ export default function Expedition() {
     imageUrl: [],
     customItems: [],
     basePrice: "",
-  })
-  const [expArray, setExpArray] = useState();
+  });
   const [itemDetail, setItemDetail] = useState({
     name: "",
-    price: ""
+    price: "",
   });
+  const [imageSelected, setImageSelected] = useState("");
 
   React.useEffect(() => {
     axios({
@@ -25,8 +31,8 @@ export default function Expedition() {
       withCredentials: true,
       url: "http://localhost:8080/expedition/getExpedition",
     }).then(async (res) => {
-      res.data.image.reverse();
-      setDetails(res.data.image);
+      // res.data.image.reverse();
+      // setDetails(res.data.image);
     });
   }, []);
 
@@ -52,103 +58,238 @@ export default function Expedition() {
         [key]: value,
       };
       return newVal;
-    })
-  }
+    });
+  };
 
   const handleAddItem = () => {
     const newCustomItems = [...details.customItems];
     newCustomItems.push(itemDetail);
+    setItemDetail({
+      name: "",
+      price: "",
+    });
     setDetails((prev) => {
-      return ({
+      return {
         ...prev,
-        "customItems": newCustomItems
-      })
-    })
-  }
+        customItems: newCustomItems,
+      };
+    });
+  };
 
   const openBackdrop = () => {
     setOpen(true);
-  }
+  };
 
   const handleClose = () => {
     setOpen(false);
-  }
+  };
   const handleSubmit = () => {
+    console.log(imageSelected);
+    const formData = new FormData();
+    formData.append("file", imageSelected);
+    formData.append("upload_preset", process.env.REACT_APP_uploadPreset);
+    axios
+      .post(
+        "https://api.cloudinary.com/v1_1/" +
+          process.env.REACT_APP_cloudName +
+          "/image/upload",
+        formData
+      )
+      .then((res) => {
+        const url = res.data.secure_url;
+        const newImageUrl=[...details.imageUrl];
+        newImageUrl.push(url);
 
-  }
+        // console.log(imageUrl);
+        setDetails((prev) => {
+          return {
+            ...prev,
+            imageUrl: newImageUrl,
+          };
+        });
+      });
+    axios({
+      method: "POST",
+      withCredentials: true,
+      url: "http://localhost:8080/expedition/uploadExpedition",
+      data: details,
+    }).then((res) => {
+      console.log("Data Sent", res);
+    });
+    window.location.reload();
+  };
   return (
     <div style={{ backgroundColor: "black" }}>
-      {localStorage.getItem('email') === "tg.official.1001@gmail.com" ?
+      {localStorage.getItem("email") === "tg.official.1001@gmail.com" ? (
         <div>
-          <Card sx={{ paddingTop: "50px", paddingBottom: "50px", maxWidth: "10%", marginTop: "8%", marginLeft: "20%" }}>
-            <CardContent >
+          <Card
+            sx={{
+              paddingTop: "50px",
+              paddingBottom: "50px",
+              maxWidth: "10%",
+              marginTop: "8%",
+              marginLeft: "20%",
+            }}
+          >
+            <CardContent>
               <Typography gutterBottom variant="h6" component="div">
-                <Button onClick={openBackdrop}>Add Here<i class="fas fa-plus"></i></Button>
+                <Button onClick={openBackdrop}>
+                  Add Here<i class="fas fa-plus"></i>
+                </Button>
               </Typography>
             </CardContent>
           </Card>
 
-
           <Backdrop
-            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
             open={open}
           >
-            <Paper style={{
-              "maxHeight": "700px",
-              "overflow-y": "scroll"
-            }} elevation={24} >
-              <img style={{ float: "right", margin: "5px" }} onClick={handleClose} src={"https://img.icons8.com/" + "ios" + "/35/000000/cancel.png"} />
+            <Paper
+              style={{
+                maxHeight: "700px",
+                "overflow-y": "scroll",
+              }}
+              elevation={24}
+            >
+              <img
+                style={{ float: "right", margin: "5px" }}
+                onClick={handleClose}
+                src={"https://img.icons8.com/ios/35/000000/cancel.png"}
+                alt="Please wait..."
+              />
               <Form style={{ padding: "40px", fontSize: "20px" }}>
-                <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                <Form.Group
+                  className="mb-3"
+                  controlId="exampleForm.ControlInput1"
+                >
                   <Form.Label>Name</Form.Label>
-                  <Form.Control name="name" value={details.name} onChange={handleChange} placeholder="e.g: Shimla to Spiti" />
+                  <Form.Control
+                    name="name"
+                    value={details.name}
+                    onChange={handleChange}
+                    placeholder="e.g: Shimla to Spiti"
+                  />
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+                <Form.Group
+                  className="mb-3"
+                  controlId="exampleForm.ControlTextarea1"
+                >
                   <Form.Label>Add Description</Form.Label>
-                  <Form.Control name="desc" value={details.desc} onChange={handleChange} as="textarea" rows={3} />
+                  <Form.Control
+                    name="desc"
+                    value={details.desc}
+                    onChange={handleChange}
+                    as="textarea"
+                    rows={3}
+                  />
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+                <Form.Group
+                  className="mb-3"
+                  controlId="exampleForm.ControlTextarea1"
+                >
                   <Form.Label>Base Price (₹)</Form.Label>
-                  <Form.Control style={{ width: "40%" }} name="basePrice" type="number" step="100" value={details.basePrice} onChange={handleChange} />
+                  <Form.Control
+                    style={{ width: "40%" }}
+                    name="basePrice"
+                    type="number"
+                    step="100"
+                    value={details.basePrice}
+                    onChange={handleChange}
+                  />
                 </Form.Group>
                 <Form.Group controlId="formFile" className="mb-3">
                   <Form.Label>Add Picture</Form.Label>
-                  <Form.Control type="file" />
+                  <br />
+                  <input
+                    type="file"
+                    onChange={(event) => {
+                      setImageSelected(event.target.files[0]);
+                    }}
+                  />
+                  {/* <Form.Control
+                    type="file"
+                    onChange={(event) => {
+                      setImageSelected(event.target.files[0]);
+                    }}
+                  /> */}
                 </Form.Group>
 
                 {/* customizable */}
 
                 <hr />
                 <div style={{ display: "flex", fontSize: "1rem" }}>
-                  <Form.Group style={{ marginRight: "20px", width: "35%" }} className="mb-3" controlId="exampleForm.ControlInput1">
+                  <Form.Group
+                    style={{ marginRight: "20px", width: "35%" }}
+                    className="mb-3"
+                    controlId="exampleForm.ControlInput1"
+                  >
                     <Form.Label>Item Name</Form.Label>
-                    <Form.Control name="name" value={itemDetail.name} onChange={handleItemChange} placeholder="e.g: Shimla to Spiti" />
+                    <Form.Control
+                      name="name"
+                      value={itemDetail.name}
+                      onChange={handleItemChange}
+                      placeholder="e.g: Shimla to Spiti"
+                    />
                   </Form.Group>
                   <Form.Group>
                     <Form.Label>Item Price (₹)</Form.Label>
-                    <Form.Control style={{ width: "100px", marginRight: "20px" }} name="price" type="number" step="100" value={itemDetail.price} onChange={handleItemChange} />
+                    <Form.Control
+                      style={{ width: "100px", marginRight: "20px" }}
+                      name="price"
+                      type="number"
+                      step="100"
+                      value={itemDetail.price}
+                      onChange={handleItemChange}
+                    />
                   </Form.Group>
-                  <Butt style={{ height: "50%", marginTop: "30px" }} onClick={handleAddItem} variant="secondary">Add Item</Butt>
+                  <Butt
+                    style={{ height: "50%", marginTop: "30px" }}
+                    onClick={handleAddItem}
+                    variant="secondary"
+                  >
+                    Add Item
+                  </Butt>
                 </div>
-                <div style = {{margin: "10px", marginBottom: "20px", padding: "5px", boxShadow: "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset"}}>
+                <div
+                  style={{
+                    margin: "10px",
+                    marginBottom: "20px",
+                    padding: "5px",
+                    boxShadow:
+                      "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
+                  }}
+                >
                   {details.customItems.map((item) => {
                     return (
                       <div style={{ display: "flex" }}>
-                        <pre> <img src="https://img.icons8.com/cotton/44/000000/mountain.png" /> {item.name} : ₹{item.price}</pre>
+                        <pre>
+                          {" "}
+                          <img
+                            alt="PLease wait..."
+                            src="https://img.icons8.com/cotton/44/000000/mountain.png"
+                          />{" "}
+                          {item.name} : ₹{item.price}
+                        </pre>
                       </div>
                     );
                   })}
                 </div>
 
-                <Butt onClick={handleSubmit} style={{ textAlign: "center" }} variant="dark" type="submit">
+                <Butt
+                  onClick={handleSubmit}
+                  style={{ textAlign: "center" }}
+                  variant="dark"
+                  // type="submit"
+                >
                   Post
                 </Butt>
-
               </Form>
             </Paper>
           </Backdrop>
         </div>
-        : <></>}
+      ) : (
+        <></>
+      )}
       Expedition
     </div>
   );

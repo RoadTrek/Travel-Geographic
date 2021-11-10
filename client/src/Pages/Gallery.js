@@ -18,7 +18,6 @@ export default function Gallery() {
 
   // const [boolean, setBoolean] = React.useState(false);
   const formData = new FormData();
-  const tempStorage = [];
   const uploadImage = () => {
     formData.append("file", imageSelected);
     formData.append("upload_preset", process.env.REACT_APP_uploadPreset);
