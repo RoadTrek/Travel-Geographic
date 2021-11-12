@@ -75,7 +75,7 @@ export default function Gallery() {
     <div>
       {localStorage.getItem('email') === "tg.official.1001@gmail.com" ? (
         <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-          <img onClick={() => setImageBackdrop(true)} style={{ width: "400px" }} src="https://cdn.dribbble.com/users/251321/screenshots/2807146/plus.gif" />
+          <img onClick={() => setImageBackdrop(true)} style={{ width: "200px" }} src="https://i.ibb.co/v4wxH68/add-button.gif" />
           <Backdrop
             sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
             open={imageBackdrop}

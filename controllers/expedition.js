@@ -21,6 +21,6 @@ export const uploadExpedition = (req,res,err) => {
 
 export const getExpedition = (req,res,err) => {
   expedition.find({}, {}, function (err, data) {
-    res.status(200).json({ image: data });
+    res.status(200).json(data);
   });
 }
