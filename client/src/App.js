@@ -10,6 +10,7 @@ import Trek from './Pages/Trek';
 import Gallery from './Pages/Gallery.js';
 import Login from './Pages/Login.js';
 import SignUp from './Pages/SignUp.js';
+import IndExp from './Pages/IndExp.js';
 
 function App() {
 	return (
@@ -19,10 +20,11 @@ function App() {
 				<Switch>
 					<Route path='/' exact component={Home} />
 					<Route path='/gallery' component={Gallery} />
-					<Route path='/expedition' component={Expedition} />
+					<Route exact path='/expedition' component={Expedition} />
 					<Route path='/trek' component={Trek} />
 					<Route path='/login' component={Login} />
 					<Route path='/signup' component={SignUp} />
+					<Route path = '/expedition/:id' component={IndExp} />
 				</Switch>
 			</Router>
 		</div>

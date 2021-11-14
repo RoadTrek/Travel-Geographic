@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import {Redirect} from 'react-router-dom';
 import {
   Card,
   CardMedia,
@@ -12,7 +13,7 @@ import {
 import { Form, Button as Butt, Container, Row, Col } from "react-bootstrap";
 import axios from "axios";
 
-export default function Expedition() {
+export default function Expedition(props) {
   const [expDetail, setExpDetail] = useState([]);
   const [open, setOpen] = useState(false);
   const [mouseCard, setMouseCard] = useState({ width: "100%" });
@@ -112,6 +113,13 @@ export default function Expedition() {
       })
 
   };
+
+  const viewMoreHandler = (expId) => {
+    const url = "/expedition/" + expId;
+    props.history.push({
+      pathname: url
+    })
+  }
 
   return (
     <div>
@@ -274,11 +282,10 @@ export default function Expedition() {
             return (
               <Col lg={12} xl={6} style={{ marginBottom: "50px", padding: "0px", margin: "0px", display: "flex", justifyContent: "center", alignItems: "center" }}>
                 <Card
-
                   onMouseEnter={() => setMouseCard(exp._id)}
                   onMouseLeave={() => setMouseCard(0)}
                   style={exp._id === mouseCard ? { width: "100%", boxShadow: "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px" } :
-                    { width: "100%", boxShadow: "rgba(0, 0, 0, 0.08) 0px 4px 12px"}} sx={{ maxWidth: 345 }}>
+                    { width: "100%", boxShadow: "rgba(0, 0, 0, 0.08) 0px 4px 12px" }} sx={{ maxWidth: 345 }}>
                   <CardMedia
                     component="img"
                     height="200"
@@ -291,10 +298,12 @@ export default function Expedition() {
                     <Typography variant="body2" color="text.secondary">
                       {exp.description}
                     </Typography>
+                    <Typography variant="h8" color="text.secondary">
+                      Base Price : ₹{exp.basePrice}
+                    </Typography>
                   </CardContent>
                   <CardActions>
-                    <Button size="small">Share</Button>
-                    <Button size="small">Learn More</Button>
+                      <Button onClick = {() => viewMoreHandler(exp._id)} size="small">Learn More</Button>
                   </CardActions>
                 </Card>
               </Col>
