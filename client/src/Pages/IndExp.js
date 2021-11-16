@@ -1,14 +1,15 @@
 import { React, useEffect, useState } from "react";
 import axios from "axios";
-import { Carousel, Container, Row, Col, Image } from "react-bootstrap";
+import { Carousel, Container, Row, Col, Image, Form, Button } from "react-bootstrap";
+import { Paper, Backdrop } from "@mui/material";
 import "./IndExp.css";
-
-// const getFormattedPrice = (price) => `$${price.toFixed(2)}`;
 
 const IndExp = (params) => {
     const [details, setDetails] = useState();
     const [checkArray, setCheckArray] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
+    const [imageBackdrop, setImageBackdrop] = useState("");
+    const [imageSelected, setImageSelected] = useState("");
     useEffect(() => {
         axios({
             method: "GET",
@@ -25,7 +26,7 @@ const IndExp = (params) => {
             setTotalPrice(Number(res.data.basePrice));
         });
     }, []);
-    
+
     const priceHandler = (index) => {
         const temp = [...checkArray];
         console.log(temp.length);
@@ -43,6 +44,39 @@ const IndExp = (params) => {
         }
         setCheckArray(temp);
     };
+
+    const uploadImage = () => {
+        setImageBackdrop(false);
+
+        const formData = new FormData();
+        formData.append("file", imageSelected);
+        formData.append("upload_preset", process.env.REACT_APP_uploadPreset);
+        axios
+            .post(
+                "https://api.cloudinary.com/v1_1/" +
+                process.env.REACT_APP_cloudName +
+                "/image/upload",
+                formData
+            )
+            .then((res) => {
+                const imageUrl = res.data.secure_url;
+                const tempImageUrl = [...details.imageUrl];
+                tempImageUrl.push(imageUrl);
+                axios({
+                    method: "POST",
+                    withCredentials: true,
+                    url: "http://localhost:8080/expedition/uploadExpImage",
+                    data: {
+                        ...details,
+                        imageUrl: tempImageUrl
+                    },
+                }).then((respond) => {
+                    console.log("Data sent successfully" + respond.data);
+                });
+                // window.location.reload();
+            });
+    };
+
     return (
         <>
             <Container>
@@ -54,13 +88,31 @@ const IndExp = (params) => {
                                 "tg.official.1001@gmail.com" ? (
                                 <Carousel.Item>
                                     <img
+                                        onClick={() => setImageBackdrop(true)}
                                         fluid
                                         style={{ height: "500px" }}
                                         className="d-block w-100"
                                         alt="Please Wait..."
-                                        src="https://img.icons8.com/cute-clipart/64/000000/add-image.png%22/%3E"
+                                        src="https://i.ibb.co/bRHY8Ld/add-icon.jpg"
                                     />
-                                    <Carousel.Caption></Carousel.Caption>
+                                    <Backdrop
+                                        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                                        open={imageBackdrop}
+                                    >
+                                        <Paper elevation={24} >
+                                            <img style={{ float: "right", margin: "5px" }} onClick={() => setImageBackdrop(false)} src={"https://img.icons8.com/" + "ios" + "/35/000000/cancel.png"} />
+                                            <Form style={{ padding: "40px", textAlign: "center" }}>
+                                                <input
+                                                    type="file"
+                                                    onChange={(event) => {
+                                                        setImageSelected(event.target.files[0]);
+                                                    }}
+                                                />
+                                                <hr />
+                                                <Button style={{ fontSize: "1.2rem" }} onClick={uploadImage}>Upload</Button>
+                                            </Form>
+                                        </Paper>
+                                    </Backdrop>
                                 </Carousel.Item>
                             ) : null}
                             {details

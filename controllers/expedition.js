@@ -26,16 +26,22 @@ export const getExpedition = (req, res, err) => {
 }
 
 export const getIndExp = (req, res, err) => {
-  console.log(req.params.id);
   expedition.findOne({ _id: req.params.id }, (err, data) => {
     if (err) {
       console.log(err);
     }
     else {
       if (data) {
-        console.log(data);
         res.status(200).json(data);
       }
     }
   })
+}
+
+export const uploadExpImage = (req, res, err) => {
+  console.log("hello hello");
+  // expedition.findByIdAndUpdate(res.data._id, {imageUrl : res.data.imageUrl}, (err, res) => {
+  //   console.log(res.data);
+  //   res.status(200).json("");
+  // })
 }
