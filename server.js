@@ -75,7 +75,7 @@ app.get("/", function (req, res) {
 
 import userRoutes from "./routes/user.js";
 import galleryRoutes from "./routes/gallery.js";
-import expeditionRoutes from "./routes/expedition.js"
+import expeditionRoutes from "./routes/expedition.js";
 
 app.use('/',userRoutes);
 app.use('/',galleryRoutes);

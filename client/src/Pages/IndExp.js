@@ -21,6 +21,20 @@ const IndExp = (params) => {
   const [imageSelected, setImageSelected] = useState("");
   const [modalShow, setModalShow] = useState(false);
 
+  const expRequest = (props) => {
+    props.onHide();
+    axios.post({
+      method: "POST",
+      withCredentials: true,
+      url : "http://localhost:8080/expedition/requestExp",
+      data : {
+        expId : details._id,
+        userEmail : localStorage.getItem('email'),
+        reqStatus : false
+      }
+    })
+  }
+
   function MyVerticallyCenteredModal(props) {
     return (
       <Modal
@@ -40,7 +54,7 @@ const IndExp = (params) => {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={props.onHide}>Close</Button>
-          <Button onClick={props.onHide}>Register</Button>
+          <Button onClick={() => expRequest(props)}>Register</Button>
         </Modal.Footer>
       </Modal>
     );
@@ -89,8 +103,8 @@ const IndExp = (params) => {
     axios
       .post(
         "https://api.cloudinary.com/v1_1/" +
-          process.env.REACT_APP_cloudName +
-          "/image/upload",
+        process.env.REACT_APP_cloudName +
+        "/image/upload",
         formData
       )
       .then((res) => {
@@ -120,7 +134,7 @@ const IndExp = (params) => {
           <Col sm={12} md={12} lg={10}>
             <Carousel variant="dark">
               {localStorage.getItem("email") ===
-              "tg.official.1001@gmail.com" ? (
+                "tg.official.1001@gmail.com" ? (
                 <Carousel.Item>
                   <img
                     onClick={() => setImageBackdrop(true)}
@@ -169,18 +183,18 @@ const IndExp = (params) => {
               ) : null}
               {details
                 ? details.imageUrl.map((img) => {
-                    return (
-                      <Carousel.Item>
-                        <Image
-                          fluid
-                          style={{ height: "500px" }}
-                          className="d-block w-100"
-                          src={img}
-                        />
-                        <Carousel.Caption></Carousel.Caption>
-                      </Carousel.Item>
-                    );
-                  })
+                  return (
+                    <Carousel.Item>
+                      <Image
+                        fluid
+                        style={{ height: "500px" }}
+                        className="d-block w-100"
+                        src={img}
+                      />
+                      <Carousel.Caption></Carousel.Caption>
+                    </Carousel.Item>
+                  );
+                })
                 : null}
             </Carousel>
           </Col>
@@ -201,32 +215,32 @@ const IndExp = (params) => {
       <ul className="toppings-list">
         {details
           ? details.customItems.map((currentItem, index) => {
-              return (
-                <div>
-                  <li key={index}>
-                    <div className="toppings-list-item">
-                      <div className="left-section">
-                        <input
-                          type="checkbox"
-                          id={`custom-checkbox-${index}`}
-                          name={currentItem.name}
-                          value="1"
-                          onClick={() => priceHandler(index)}
-                        />
-                        <label htmlFor={`custom-checkbox-${index}`}>
-                          {currentItem.name}
-                        </label>
-                      </div>
-                      <div className="right-section">
-                        <label htmlFor={`custom-checkbox-${index}`}>
-                          {currentItem.price}
-                        </label>
-                      </div>
+            return (
+              <div>
+                <li key={index}>
+                  <div className="toppings-list-item">
+                    <div className="left-section">
+                      <input
+                        type="checkbox"
+                        id={`custom-checkbox-${index}`}
+                        name={currentItem.name}
+                        value="1"
+                        onClick={() => priceHandler(index)}
+                      />
+                      <label htmlFor={`custom-checkbox-${index}`}>
+                        {currentItem.name}
+                      </label>
                     </div>
-                  </li>
-                </div>
-              );
-            })
+                    <div className="right-section">
+                      <label htmlFor={`custom-checkbox-${index}`}>
+                        {currentItem.price}
+                      </label>
+                    </div>
+                  </div>
+                </li>
+              </div>
+            );
+          })
           : null}
         <li>
           <div className="toppings-list-item">

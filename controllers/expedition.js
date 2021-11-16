@@ -1,4 +1,5 @@
 import expedition from "../models/expedition.js";
+import requestExp from "../models/requestExp.js";
 
 export const uploadExpedition = (req, res, err) => {
   const url = req.body.imageUrl[0];
@@ -50,4 +51,10 @@ export const uploadExpImage = (req, res, err) => {
     }
     
   })
+}
+
+export const requestAdminExp = (req,res,err) => {
+  const newRequest = new requestAdminExp(req.body);
+  newRequest.save();
+  res.status.json(200);
 }
