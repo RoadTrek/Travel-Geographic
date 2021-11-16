@@ -40,8 +40,14 @@ export const getIndExp = (req, res, err) => {
 
 export const uploadExpImage = (req, res, err) => {
   console.log("hello hello");
-  // expedition.findByIdAndUpdate(res.data._id, {imageUrl : res.data.imageUrl}, (err, res) => {
-  //   console.log(res.data);
-  //   res.status(200).json("");
-  // })
+  console.log(req.body);
+  expedition.findByIdAndUpdate(req.body._id, {imageUrl : req.body.imageUrl}, (err, docs) => {
+    // console.log(res.data);
+    if(err){
+      console.log(err);
+    }else{
+      console.log("Updated Exp:",docs);
+    }
+    
+  })
 }
