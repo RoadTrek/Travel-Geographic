@@ -11,6 +11,7 @@ import Gallery from './Pages/Gallery.js';
 import Login from './Pages/Login.js';
 import SignUp from './Pages/SignUp.js';
 import IndExp from './Pages/IndExp.js';
+import AdminApproval from './Pages/AdminApproval.js';
 
 function App() {
 	return (
@@ -24,6 +25,7 @@ function App() {
 					<Route path='/trek' component={Trek} />
 					<Route path='/login' component={Login} />
 					<Route path='/signup' component={SignUp} />
+					<Route path = '/expedition/pendingRequests' component={AdminApproval} />
 					<Route path = '/expedition/:id' component={IndExp} />
 				</Switch>
 			</Router>

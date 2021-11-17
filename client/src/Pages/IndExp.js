@@ -12,6 +12,7 @@ import {
 } from "react-bootstrap";
 import { Paper, Backdrop } from "@mui/material";
 import "./IndExp.css";
+import AdminApproval from './AdminApproval';
 
 const IndExp = (params) => {
   const [details, setDetails] = useState();
@@ -20,19 +21,20 @@ const IndExp = (params) => {
   const [imageBackdrop, setImageBackdrop] = useState("");
   const [imageSelected, setImageSelected] = useState("");
   const [modalShow, setModalShow] = useState(false);
+  const [requestBackdrop, setRequestBackdrop] = useState(false);
 
   const expRequest = () => {
-    
-    axios.post({
+
+    axios({
       method: "POST",
       withCredentials: true,
-      url : "http://localhost:8080/expedition/requestAdminExp",
-      data : {
-        expId : details._id,
-        userEmail : localStorage.getItem('email'),
-        reqStatus : false
+      url: "http://localhost:8080/expedition/requestAdminExp",
+      data: {
+        expId: details._id,
+        userEmail: localStorage.getItem('email'),
+        reqStatus: false
       }
-    }).then((res)=>{
+    }).then((res) => {
       console.log(res);
       // props.onHide();
     })
@@ -63,6 +65,7 @@ const IndExp = (params) => {
     );
   }
   useEffect(() => {
+    console.log("in use effect");
     axios({
       method: "GET",
       withCredentials: true,
@@ -252,7 +255,36 @@ const IndExp = (params) => {
           </div>
         </li>
       </ul>
-      <Button onClick={() => setModalShow(true)}>Register</Button>
+      {localStorage.getItem("email") !==
+        "tg.official.1001@gmail.com" ?
+        <Button onClick={() => setModalShow(true)}>Register</Button>
+        :
+        <>
+          <Button onClick={() => setRequestBackdrop(true)}>Pending Requests</Button>
+          <Backdrop
+            sx={{
+              color: "#fff",
+              zIndex: (theme) => theme.zIndex.drawer + 1,
+            }}
+            open={requestBackdrop}
+          >
+            <Paper elevation={24}>
+              <img
+                style={{ float: "right", margin: "5px" }}
+                onClick={() => setRequestBackdrop(false)}
+                alt="Please Wait..."
+                src={
+                  "https://img.icons8.com/" +
+                  "ios" +
+                  "/35/000000/cancel.png"
+                }
+              />
+              <AdminApproval expId={params.match.params.id} />
+            </Paper>
+          </Backdrop>
+        </>
+      }
+
       <MyVerticallyCenteredModal
         show={modalShow}
         onHide={() => setModalShow(false)}

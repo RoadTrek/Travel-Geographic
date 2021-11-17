@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 
 // Defining the schema of students.
 const requestExp = new mongoose.Schema({
-  expID: String,
+  expId: String,
   userEmail: String,
   reqStatus: Boolean
 });
