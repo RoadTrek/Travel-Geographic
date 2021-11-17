@@ -12,7 +12,7 @@ import {
 } from "react-bootstrap";
 import { Paper, Backdrop } from "@mui/material";
 import "./IndExp.css";
-import AdminApproval from './AdminApproval';
+import AdminApproval from "./AdminApproval";
 
 const IndExp = (params) => {
   const [details, setDetails] = useState();
@@ -22,23 +22,48 @@ const IndExp = (params) => {
   const [imageSelected, setImageSelected] = useState("");
   const [modalShow, setModalShow] = useState(false);
   const [requestBackdrop, setRequestBackdrop] = useState(false);
+  // const [customItemsSelected, setCustomItemsSelected] = useState([]);
 
-  const expRequest = () => {
-
+  const expRequest = (props) => {
+    const tempSelectedItems=[] ;
+    console.log(checkArray);
+    for (let i = 0; i < checkArray.length; i++) {
+      console.log(checkArray[i]);
+      if (checkArray[i] === true) {
+        console.log("here");
+        tempSelectedItems.push({
+          name: details.customItems[i].name,
+          price: details.customItems[i].price,
+        });
+      }
+    }
+    console.log(tempSelectedItems);
+    // setCustomItemsSelected(tempSelectedItems);
+    // console.log(customItemsSelected);
+    axios({
+      method: "POST",
+      withCredentials: true,
+      url: "http://localhost:8080/expedition/registerUser",
+      data: {
+        expId: details._id,
+        userEmail: localStorage.getItem("email"),
+        customItemsSelected: tempSelectedItems,
+      },
+    });
     axios({
       method: "POST",
       withCredentials: true,
       url: "http://localhost:8080/expedition/requestAdminExp",
       data: {
         expId: details._id,
-        userEmail: localStorage.getItem('email'),
-        reqStatus: false
-      }
+        userEmail: localStorage.getItem("email"),
+        reqStatus: false,
+      },
     }).then((res) => {
       console.log(res);
-      // props.onHide();
-    })
-  }
+      props.onHide();
+    });
+  };
 
   function MyVerticallyCenteredModal(props) {
     return (
@@ -58,8 +83,10 @@ const IndExp = (params) => {
           <p>Are you surely want to register</p>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={props.onHide}>Close</Button>
-          <Button onClick={() => expRequest()}>Register</Button>
+          <Button variant="secondary" onClick={props.onHide}>
+            Close
+          </Button>
+          <Button onClick={() => expRequest(props)}>Register</Button>
         </Modal.Footer>
       </Modal>
     );
@@ -84,10 +111,8 @@ const IndExp = (params) => {
 
   const priceHandler = (index) => {
     const temp = [...checkArray];
-    console.log(temp.length);
     let tempPrice = 0;
     tempPrice = totalPrice;
-    console.log(temp[index]);
     if (temp[index] === false) {
       temp[index] = true;
       tempPrice += Number(details.customItems[index].price);
@@ -109,8 +134,8 @@ const IndExp = (params) => {
     axios
       .post(
         "https://api.cloudinary.com/v1_1/" +
-        process.env.REACT_APP_cloudName +
-        "/image/upload",
+          process.env.REACT_APP_cloudName +
+          "/image/upload",
         formData
       )
       .then((res) => {
@@ -140,7 +165,7 @@ const IndExp = (params) => {
           <Col sm={12} md={12} lg={10}>
             <Carousel variant="dark">
               {localStorage.getItem("email") ===
-                "tg.official.1001@gmail.com" ? (
+              "tg.official.1001@gmail.com" ? (
                 <Carousel.Item>
                   <img
                     onClick={() => setImageBackdrop(true)}
@@ -189,18 +214,18 @@ const IndExp = (params) => {
               ) : null}
               {details
                 ? details.imageUrl.map((img) => {
-                  return (
-                    <Carousel.Item>
-                      <Image
-                        fluid
-                        style={{ height: "500px" }}
-                        className="d-block w-100"
-                        src={img}
-                      />
-                      <Carousel.Caption></Carousel.Caption>
-                    </Carousel.Item>
-                  );
-                })
+                    return (
+                      <Carousel.Item>
+                        <Image
+                          fluid
+                          style={{ height: "500px" }}
+                          className="d-block w-100"
+                          src={img}
+                        />
+                        <Carousel.Caption></Carousel.Caption>
+                      </Carousel.Item>
+                    );
+                  })
                 : null}
             </Carousel>
           </Col>
@@ -221,32 +246,32 @@ const IndExp = (params) => {
       <ul className="toppings-list">
         {details
           ? details.customItems.map((currentItem, index) => {
-            return (
-              <div>
-                <li key={index}>
-                  <div className="toppings-list-item">
-                    <div className="left-section">
-                      <input
-                        type="checkbox"
-                        id={`custom-checkbox-${index}`}
-                        name={currentItem.name}
-                        value="1"
-                        onClick={() => priceHandler(index)}
-                      />
-                      <label htmlFor={`custom-checkbox-${index}`}>
-                        {currentItem.name}
-                      </label>
+              return (
+                <div>
+                  <li key={index}>
+                    <div className="toppings-list-item">
+                      <div className="left-section">
+                        <input
+                          type="checkbox"
+                          id={`custom-checkbox-${index}`}
+                          name={currentItem.name}
+                          value="1"
+                          onClick={() => priceHandler(index)}
+                        />
+                        <label htmlFor={`custom-checkbox-${index}`}>
+                          {currentItem.name}
+                        </label>
+                      </div>
+                      <div className="right-section">
+                        <label htmlFor={`custom-checkbox-${index}`}>
+                          {currentItem.price}
+                        </label>
+                      </div>
                     </div>
-                    <div className="right-section">
-                      <label htmlFor={`custom-checkbox-${index}`}>
-                        {currentItem.price}
-                      </label>
-                    </div>
-                  </div>
-                </li>
-              </div>
-            );
-          })
+                  </li>
+                </div>
+              );
+            })
           : null}
         <li>
           <div className="toppings-list-item">
@@ -255,12 +280,13 @@ const IndExp = (params) => {
           </div>
         </li>
       </ul>
-      {localStorage.getItem("email") !==
-        "tg.official.1001@gmail.com" ?
+      {localStorage.getItem("email") !== "tg.official.1001@gmail.com" ? (
         <Button onClick={() => setModalShow(true)}>Register</Button>
-        :
+      ) : (
         <>
-          <Button onClick={() => setRequestBackdrop(true)}>Pending Requests</Button>
+          <Button onClick={() => setRequestBackdrop(true)}>
+            Pending Requests
+          </Button>
           <Backdrop
             sx={{
               color: "#fff",
@@ -268,22 +294,20 @@ const IndExp = (params) => {
             }}
             open={requestBackdrop}
           >
-            <Paper elevation={24} style = {{width: "55%"}}>
+            <Paper elevation={24} style={{ width: "55%" }}>
               <img
-                style={{ float: "right", margin: "5px"}}
+                style={{ float: "right", margin: "5px" }}
                 onClick={() => setRequestBackdrop(false)}
                 alt="Please Wait..."
                 src={
-                  "https://img.icons8.com/" +
-                  "ios" +
-                  "/35/000000/cancel.png"
+                  "https://img.icons8.com/" + "ios" + "/35/000000/cancel.png"
                 }
               />
               <AdminApproval style expId={params.match.params.id} />
             </Paper>
           </Backdrop>
         </>
-      }
+      )}
 
       <MyVerticallyCenteredModal
         show={modalShow}

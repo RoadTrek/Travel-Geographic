@@ -76,6 +76,7 @@ export const signupUser = (req, res, err) => {
                         password: hashedPassword,
                         contactNumber: req.body.contactNumber,
                         email: req.body.email,
+                        expeditionEnrolled:[],
                     });
                     await newUser.save();
                 }

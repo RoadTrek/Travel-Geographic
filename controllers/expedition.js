@@ -69,3 +69,7 @@ export const getPendingRequests = (req,res,err) => {
     res.status(200).json(data);
   })
 }
+
+export const registerUser=(req,res,err)=>{
+  console.log(req.body);
+}
