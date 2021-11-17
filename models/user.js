@@ -9,7 +9,8 @@ const userSchema = new mongoose.Schema({
   email:String,
   contactNumber: String,
   password: String,
-  expeditionEnrolled:Array
+  expeditionEnrolled:Array,
+  approveId:Array,
 });
 
 const user = mongoose.model("user", userSchema);

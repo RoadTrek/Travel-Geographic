@@ -5,7 +5,9 @@ import mongoose from "mongoose";
 const requestExp = new mongoose.Schema({
   expId: String,
   userEmail: String,
-  reqStatus: Boolean
+  reqStatus: Boolean,
+  customItemSelected:Array,
+  name:String,
 });
 
 const reqExp = mongoose.model("reqExp", requestExp);

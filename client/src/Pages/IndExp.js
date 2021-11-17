@@ -22,13 +22,11 @@ const IndExp = (params) => {
   const [imageSelected, setImageSelected] = useState("");
   const [modalShow, setModalShow] = useState(false);
   const [requestBackdrop, setRequestBackdrop] = useState(false);
-  // const [customItemsSelected, setCustomItemsSelected] = useState([]);
+  const [approveRequest,setApproveRequest] = useState([]);
 
   const expRequest = (props) => {
     const tempSelectedItems=[] ;
-    console.log(checkArray);
     for (let i = 0; i < checkArray.length; i++) {
-      console.log(checkArray[i]);
       if (checkArray[i] === true) {
         console.log("here");
         tempSelectedItems.push({
@@ -37,19 +35,7 @@ const IndExp = (params) => {
         });
       }
     }
-    console.log(tempSelectedItems);
-    // setCustomItemsSelected(tempSelectedItems);
-    // console.log(customItemsSelected);
-    axios({
-      method: "POST",
-      withCredentials: true,
-      url: "http://localhost:8080/expedition/registerUser",
-      data: {
-        expId: details._id,
-        userEmail: localStorage.getItem("email"),
-        customItemsSelected: tempSelectedItems,
-      },
-    });
+    
     axios({
       method: "POST",
       withCredentials: true,
@@ -58,10 +44,22 @@ const IndExp = (params) => {
         expId: details._id,
         userEmail: localStorage.getItem("email"),
         reqStatus: false,
+        customItemsSelected:tempSelectedItems,
+        name:details.name,
       },
     }).then((res) => {
-      console.log(res);
+      console.log(details);
       props.onHide();
+      axios({
+        method: "POST",
+        withCredentials: true,
+        url: "http://localhost:8080/expedition/registerUser",
+        data: {
+          expId:details._id,
+          approveId: res.data._id,
+          userEmail: localStorage.getItem("email"),
+        },
+      });
     });
   };
 

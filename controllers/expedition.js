@@ -57,11 +57,18 @@ export const requestAdminExp = (req,res,err) => {
   const newRequest = new requestExp({
     expId:req.body.expId,
     userEmail:req.body.userEmail,
-    reqStatus:req.body.reqStatus
+    reqStatus:req.body.reqStatus,
+    customItemSelected:req.body.customItemsSelected,
+    name:req.body.name,
   });
   
-  newRequest.save();
-  res.status(200).json();
+  newRequest.save((err,result)=>{
+    if(err){
+      console.log(err);
+    }else{
+      res.status(200).json(result);
+    }
+  });
 }
 
 export const getPendingRequests = (req,res,err) => {
@@ -71,5 +78,14 @@ export const getPendingRequests = (req,res,err) => {
 }
 
 export const registerUser=(req,res,err)=>{
+  
   console.log(req.body);
+  const appId=req.body.approveId;
+  expedition.findByIdAndUpdate(req.body.expId,{$push:{registeredUsers:appId}},(err,docs)=>{
+    if(err){
+      console.log(err);
+    }else{
+      console.log(docs);
+    }
+  })
 }
