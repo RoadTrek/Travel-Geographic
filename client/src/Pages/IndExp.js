@@ -268,9 +268,9 @@ const IndExp = (params) => {
             }}
             open={requestBackdrop}
           >
-            <Paper elevation={24}>
+            <Paper elevation={24} style = {{width: "55%"}}>
               <img
-                style={{ float: "right", margin: "5px" }}
+                style={{ float: "right", margin: "5px"}}
                 onClick={() => setRequestBackdrop(false)}
                 alt="Please Wait..."
                 src={
@@ -279,7 +279,7 @@ const IndExp = (params) => {
                   "/35/000000/cancel.png"
                 }
               />
-              <AdminApproval expId={params.match.params.id} />
+              <AdminApproval style expId={params.match.params.id} />
             </Paper>
           </Backdrop>
         </>

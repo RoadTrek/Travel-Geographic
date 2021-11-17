@@ -65,8 +65,7 @@ export const requestAdminExp = (req,res,err) => {
 }
 
 export const getPendingRequests = (req,res,err) => {
-  console.log("in here")
-  requestExp.find({_id: req.params.id}, {}, (err,data) => {
+  requestExp.find({expId: req.params.id, reqStatus: false}, (err,data) => {
     res.status(200).json(data);
   })
 }
