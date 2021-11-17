@@ -21,17 +21,20 @@ const IndExp = (params) => {
   const [imageSelected, setImageSelected] = useState("");
   const [modalShow, setModalShow] = useState(false);
 
-  const expRequest = (props) => {
-    props.onHide();
+  const expRequest = () => {
+    
     axios.post({
       method: "POST",
       withCredentials: true,
-      url : "http://localhost:8080/expedition/requestExp",
+      url : "http://localhost:8080/expedition/requestAdminExp",
       data : {
         expId : details._id,
         userEmail : localStorage.getItem('email'),
         reqStatus : false
       }
+    }).then((res)=>{
+      console.log(res);
+      // props.onHide();
     })
   }
 
@@ -54,7 +57,7 @@ const IndExp = (params) => {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={props.onHide}>Close</Button>
-          <Button onClick={() => expRequest(props)}>Register</Button>
+          <Button onClick={() => expRequest()}>Register</Button>
         </Modal.Footer>
       </Modal>
     );
