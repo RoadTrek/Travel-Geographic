@@ -168,6 +168,7 @@ const IndExp = (params) => {
 
   return (
     <div style={{ paddingBottom: "50px", overflowX: "hidden" }}>
+      <h1 style={{ paddingBottom: "0px", textAlign: "center", fontFamily: 'Helvetica Neue', color: "#111", fontSize: "4rem" }}>{details ? details.name : null}</h1>
       <Container>
         <Row>
           <Col md={0} lg={1}></Col>
@@ -179,7 +180,7 @@ const IndExp = (params) => {
                   <img
                     onClick={() => setImageBackdrop(true)}
                     fluid
-                    style={{ height: "500px" }}
+                    style={{ height: "450px" }}
                     className="d-block w-100"
                     alt="Please Wait..."
                     src="https://i.ibb.co/bRHY8Ld/add-icon.jpg"
@@ -227,7 +228,7 @@ const IndExp = (params) => {
                     <Carousel.Item>
                       <Image
                         fluid
-                        style={{ height: "500px" }}
+                        style={{ height: "450px" }}
                         className="d-block w-100"
                         src={img}
                       />
@@ -244,115 +245,114 @@ const IndExp = (params) => {
       <hr />
       <Row style={{ display: "flex", justifyContent: "center" }}>
         <Col lg={7} style={{ textAlign: "center", padding: "10px", margin: "10px", boxShadow: "rgba(0, 0, 0, 0.15) 0px 5px 15px 0px" }}>
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <h1>
-              <p>About</p>
-              {details ? details.description : null}
+          <div style={{ fontSize: "1.4rem", textAlign: "left" }}>
+            <p><span style={{ fontWeight: "500" }} >Description:</span>
               <br />
-              <p>BasePrice</p>
-              {details ? details.basePrice : null}
-            </h1>
-          </div>
-          <h3>Customizable</h3>
-          <ul className="toppings-list">
-            {details
-              ? details.customItems.map((currentItem, index) => {
-                return (
-                  <div>
-                    <li key={index}>
-                      <div className="toppings-list-item">
-                        <div className="left-section">
-                          <input
-                            type="checkbox"
-                            id={`custom-checkbox-${index}`}
-                            name={currentItem.name}
-                            value="1"
-                            onClick={() => priceHandler(index)}
-                          />
-                          <label htmlFor={`custom-checkbox-${index}`}>
-                            {currentItem.name}
-                          </label>
-                        </div>
-                        <div className="right-section">
-                          <label htmlFor={`custom-checkbox-${index}`}>
-                            {currentItem.price}
-                          </label>
-                        </div>
+              <span style={{ fontSize: "1.2rem", color: "#595c5a" }}>{details ? details.description : null}</span>
+            </p>
+            <p style = {{ fontWeight: "500" }}>BasePrice: {details ? details.basePrice : null}</p>
+        </div>
+        <hr />
+        <h3>Customizable Items</h3>
+        <ul className="toppings-list">
+          {details
+            ? details.customItems.map((currentItem, index) => {
+              return (
+                <div>
+                  <li key={index}>
+                    <div className="toppings-list-item">
+                      <div className="left-section">
+                        <input
+                          type="checkbox"
+                          id={`custom-checkbox-${index}`}
+                          name={currentItem.name}
+                          value="1"
+                          onClick={() => priceHandler(index)}
+                        />
+                        <label htmlFor={`custom-checkbox-${index}`}>
+                          {currentItem.name}
+                        </label>
                       </div>
-                    </li>
-                  </div>
-                );
-              })
-              : null}
-            <li>
-              <div className="toppings-list-item">
-                <div className="left-section">Total:</div>
-                <div className="right-section">{totalPrice}</div>
-              </div>
-            </li>
-          </ul>
-          {localStorage.getItem("email") !== "tg.official.1001@gmail.com" ? (
-            <Button onClick={() => setModalShow(true)}>Register</Button>
-          ) : (
-            <>
-              <Button onClick={() => setRequestBackdrop(true)}>
-                Pending Requests
-              </Button>
+                      <div className="right-section">
+                        <label htmlFor={`custom-checkbox-${index}`}>
+                          {currentItem.price}
+                        </label>
+                      </div>
+                    </div>
+                  </li>
+                </div>
+              );
+            })
+            : null}
+          <li>
+            <div className="toppings-list-item">
+              <div className="left-section">Total:</div>
+              <div className="right-section">{totalPrice}</div>
+            </div>
+          </li>
+        </ul>
+        {localStorage.getItem("email") !== "tg.official.1001@gmail.com" ? (
+          <Button onClick={() => setModalShow(true)}>Register</Button>
+        ) : (
+          <>
+            <Button onClick={() => setRequestBackdrop(true)}>
+              Pending Requests
+            </Button>
 
-              <Backdrop
-                sx={{
-                  color: "#fff",
-                  zIndex: (theme) => theme.zIndex.drawer + 1,
-                }}
-                open={requestBackdrop}
-              >
-                <Paper elevation={24} style={{ width: "55%" }}>
-                  <img
-                    style={{ float: "right", margin: "5px" }}
-                    onClick={() => setRequestBackdrop(false)}
-                    alt="Please Wait..."
-                    src={
-                      "https://img.icons8.com/" + "ios" + "/35/000000/cancel.png"
-                    }
-                  />
-                  <AdminApproval expId={params.match.params.id} />
-                </Paper>
-              </Backdrop>
-              <Backdrop
-                sx={{
-                  color: "#fff",
-                  zIndex: (theme) => theme.zIndex.drawer + 1,
-                }}
-                open={reviewBackdrop}
-              >
-                <Paper elevation={24} style={{ width: "55%" }}>
-                  <img
-                    style={{ float: "right", margin: "5px" }}
-                    onClick={() => setReviewBackdrop(false)}
-                    alt="Please Wait..."
-                    src={
-                      "https://img.icons8.com/" + "ios" + "/35/000000/cancel.png"
-                    }
-                  />
-                  <ExpReviews reviewHandler = {newReviewHandler} reviewBackdrop={() => reviewBackdropHandler()} expId={params.match.params.id} />
-                </Paper>
-              </Backdrop>
-            </>
-          )}
+            <Backdrop
+              sx={{
+                color: "#fff",
+                zIndex: (theme) => theme.zIndex.drawer + 1,
+              }}
+              open={requestBackdrop}
+            >
+              <Paper elevation={24} style={{ width: "55%" }}>
+                <img
+                  style={{ float: "right", margin: "5px" }}
+                  onClick={() => setRequestBackdrop(false)}
+                  alt="Please Wait..."
+                  src={
+                    "https://img.icons8.com/" + "ios" + "/35/000000/cancel.png"
+                  }
+                />
+                <AdminApproval expId={params.match.params.id} />
+              </Paper>
+            </Backdrop>
+            <Backdrop
+              sx={{
+                color: "#fff",
+                zIndex: (theme) => theme.zIndex.drawer + 1,
+              }}
+              open={reviewBackdrop}
+            >
+              <Paper elevation={24} style={{ width: "55%" }}>
+                <img
+                  style={{ float: "right", margin: "5px" }}
+                  onClick={() => setReviewBackdrop(false)}
+                  alt="Please Wait..."
+                  src={
+                    "https://img.icons8.com/" + "ios" + "/35/000000/cancel.png"
+                  }
+                />
+                <ExpReviews reviewHandler={newReviewHandler} reviewBackdrop={() => reviewBackdropHandler()} expId={params.match.params.id} />
+              </Paper>
+            </Backdrop>
+          </>
+        )}
 
-          <MyVerticallyCenteredModal
-            show={modalShow}
-            onHide={() => setModalShow(false)}
-          />
-        </Col>
-        <Col lg={4} style={{ textAlign: "center", padding: "10px", margin: "10px", boxShadow: "rgba(0, 0, 0, 0.15) 0px 5px 15px 0px" }}>
-          <ShowReviews newReview = {newReview} expId={params.match.params.id} />
-          <Button onClick={() => setReviewBackdrop(true)}>
-            Add Review
-          </Button>
-        </Col>
-      </Row>
-    </div>
+        <MyVerticallyCenteredModal
+          show={modalShow}
+          onHide={() => setModalShow(false)}
+        />
+      </Col>
+      <Col lg={4} style={{ textAlign: "center", padding: "10px", margin: "10px", boxShadow: "rgba(0, 0, 0, 0.15) 0px 5px 15px 0px" }}>
+        <ShowReviews newReview={newReview} expId={params.match.params.id} />
+        <Button onClick={() => setReviewBackdrop(true)}>
+          Add Review
+        </Button>
+      </Col>
+    </Row>
+    </div >
   );
 };
 
