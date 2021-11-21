@@ -17,7 +17,7 @@ function App() {
 	return (
 		<div>
 			<Router>
-				<div style = {{padding: "60px"}}><NavbarComp /></div>
+				<div style = {{paddingBottom: "105px"}}><NavbarComp /></div>
 				<Switch>
 					<Route path='/' exact component={Home} />
 					<Route path='/gallery' component={Gallery} />

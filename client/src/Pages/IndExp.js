@@ -13,6 +13,9 @@ import {
 import { Paper, Backdrop } from "@mui/material";
 import "./IndExp.css";
 import AdminApproval from "./AdminApproval";
+import ExpReviews from "./ExpReviews";
+import showReviews from "../components/Reviews/showReviews";
+import ShowReviews from "../components/Reviews/showReviews";
 
 const IndExp = (params) => {
   const [details, setDetails] = useState();
@@ -22,10 +25,10 @@ const IndExp = (params) => {
   const [imageSelected, setImageSelected] = useState("");
   const [modalShow, setModalShow] = useState(false);
   const [requestBackdrop, setRequestBackdrop] = useState(false);
-  const [approveRequest,setApproveRequest] = useState([]);
+  const [reviewBackdrop, setReviewBackdrop] = useState(false);
 
   const expRequest = (props) => {
-    const tempSelectedItems=[] ;
+    const tempSelectedItems = [];
     for (let i = 0; i < checkArray.length; i++) {
       if (checkArray[i] === true) {
         console.log("here");
@@ -35,7 +38,7 @@ const IndExp = (params) => {
         });
       }
     }
-    
+
     axios({
       method: "POST",
       withCredentials: true,
@@ -44,8 +47,8 @@ const IndExp = (params) => {
         expId: details._id,
         userEmail: localStorage.getItem("email"),
         reqStatus: false,
-        customItemsSelected:tempSelectedItems,
-        name:details.name,
+        customItemsSelected: tempSelectedItems,
+        name: details.name,
       },
     }).then((res) => {
       console.log(details);
@@ -55,7 +58,7 @@ const IndExp = (params) => {
         withCredentials: true,
         url: "http://localhost:8080/expedition/registerUser",
         data: {
-          expId:details._id,
+          expId: details._id,
           approveId: res.data._id,
           userEmail: localStorage.getItem("email"),
         },
@@ -132,8 +135,8 @@ const IndExp = (params) => {
     axios
       .post(
         "https://api.cloudinary.com/v1_1/" +
-          process.env.REACT_APP_cloudName +
-          "/image/upload",
+        process.env.REACT_APP_cloudName +
+        "/image/upload",
         formData
       )
       .then((res) => {
@@ -155,15 +158,23 @@ const IndExp = (params) => {
       });
   };
 
+  const reviewBackdropHandler = () => {
+    setReviewBackdrop(false);
+  }
+  const [newReview, setNewReview] = useState();
+  const newReviewHandler = (review) => {
+    setNewReview(review);
+  }
+
   return (
-    <>
+    <div style={{ paddingBottom: "50px", overflowX: "hidden" }}>
       <Container>
         <Row>
           <Col md={0} lg={1}></Col>
           <Col sm={12} md={12} lg={10}>
             <Carousel variant="dark">
               {localStorage.getItem("email") ===
-              "tg.official.1001@gmail.com" ? (
+                "tg.official.1001@gmail.com" ? (
                 <Carousel.Item>
                   <img
                     onClick={() => setImageBackdrop(true)}
@@ -212,106 +223,136 @@ const IndExp = (params) => {
               ) : null}
               {details
                 ? details.imageUrl.map((img) => {
-                    return (
-                      <Carousel.Item>
-                        <Image
-                          fluid
-                          style={{ height: "500px" }}
-                          className="d-block w-100"
-                          src={img}
-                        />
-                        <Carousel.Caption></Carousel.Caption>
-                      </Carousel.Item>
-                    );
-                  })
+                  return (
+                    <Carousel.Item>
+                      <Image
+                        fluid
+                        style={{ height: "500px" }}
+                        className="d-block w-100"
+                        src={img}
+                      />
+                      <Carousel.Caption></Carousel.Caption>
+                    </Carousel.Item>
+                  );
+                })
                 : null}
             </Carousel>
           </Col>
           <Col md={0} lg={1}></Col>
         </Row>
       </Container>
-
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <h1>
-          <p>About</p>
-          {details ? details.description : null}
-          <br />
-          <p>BasePrice</p>
-          {details ? details.basePrice : null}
-        </h1>
-      </div>
-      <h3>Customizable</h3>
-      <ul className="toppings-list">
-        {details
-          ? details.customItems.map((currentItem, index) => {
-              return (
-                <div>
-                  <li key={index}>
-                    <div className="toppings-list-item">
-                      <div className="left-section">
-                        <input
-                          type="checkbox"
-                          id={`custom-checkbox-${index}`}
-                          name={currentItem.name}
-                          value="1"
-                          onClick={() => priceHandler(index)}
-                        />
-                        <label htmlFor={`custom-checkbox-${index}`}>
-                          {currentItem.name}
-                        </label>
-                      </div>
-                      <div className="right-section">
-                        <label htmlFor={`custom-checkbox-${index}`}>
-                          {currentItem.price}
-                        </label>
-                      </div>
-                    </div>
-                  </li>
-                </div>
-              );
-            })
-          : null}
-        <li>
-          <div className="toppings-list-item">
-            <div className="left-section">Total:</div>
-            <div className="right-section">{totalPrice}</div>
+      <hr />
+      <Row style={{ display: "flex", justifyContent: "center" }}>
+        <Col lg={7} style={{ textAlign: "center", padding: "10px", margin: "10px", boxShadow: "rgba(0, 0, 0, 0.15) 0px 5px 15px 0px" }}>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <h1>
+              <p>About</p>
+              {details ? details.description : null}
+              <br />
+              <p>BasePrice</p>
+              {details ? details.basePrice : null}
+            </h1>
           </div>
-        </li>
-      </ul>
-      {localStorage.getItem("email") !== "tg.official.1001@gmail.com" ? (
-        <Button onClick={() => setModalShow(true)}>Register</Button>
-      ) : (
-        <>
-          <Button onClick={() => setRequestBackdrop(true)}>
-            Pending Requests
-          </Button>
-          <Backdrop
-            sx={{
-              color: "#fff",
-              zIndex: (theme) => theme.zIndex.drawer + 1,
-            }}
-            open={requestBackdrop}
-          >
-            <Paper elevation={24} style={{ width: "55%" }}>
-              <img
-                style={{ float: "right", margin: "5px" }}
-                onClick={() => setRequestBackdrop(false)}
-                alt="Please Wait..."
-                src={
-                  "https://img.icons8.com/" + "ios" + "/35/000000/cancel.png"
-                }
-              />
-              <AdminApproval style expId={params.match.params.id} />
-            </Paper>
-          </Backdrop>
-        </>
-      )}
+          <h3>Customizable</h3>
+          <ul className="toppings-list">
+            {details
+              ? details.customItems.map((currentItem, index) => {
+                return (
+                  <div>
+                    <li key={index}>
+                      <div className="toppings-list-item">
+                        <div className="left-section">
+                          <input
+                            type="checkbox"
+                            id={`custom-checkbox-${index}`}
+                            name={currentItem.name}
+                            value="1"
+                            onClick={() => priceHandler(index)}
+                          />
+                          <label htmlFor={`custom-checkbox-${index}`}>
+                            {currentItem.name}
+                          </label>
+                        </div>
+                        <div className="right-section">
+                          <label htmlFor={`custom-checkbox-${index}`}>
+                            {currentItem.price}
+                          </label>
+                        </div>
+                      </div>
+                    </li>
+                  </div>
+                );
+              })
+              : null}
+            <li>
+              <div className="toppings-list-item">
+                <div className="left-section">Total:</div>
+                <div className="right-section">{totalPrice}</div>
+              </div>
+            </li>
+          </ul>
+          {localStorage.getItem("email") !== "tg.official.1001@gmail.com" ? (
+            <Button onClick={() => setModalShow(true)}>Register</Button>
+          ) : (
+            <>
+              <Button onClick={() => setRequestBackdrop(true)}>
+                Pending Requests
+              </Button>
 
-      <MyVerticallyCenteredModal
-        show={modalShow}
-        onHide={() => setModalShow(false)}
-      />
-    </>
+              <Backdrop
+                sx={{
+                  color: "#fff",
+                  zIndex: (theme) => theme.zIndex.drawer + 1,
+                }}
+                open={requestBackdrop}
+              >
+                <Paper elevation={24} style={{ width: "55%" }}>
+                  <img
+                    style={{ float: "right", margin: "5px" }}
+                    onClick={() => setRequestBackdrop(false)}
+                    alt="Please Wait..."
+                    src={
+                      "https://img.icons8.com/" + "ios" + "/35/000000/cancel.png"
+                    }
+                  />
+                  <AdminApproval expId={params.match.params.id} />
+                </Paper>
+              </Backdrop>
+              <Backdrop
+                sx={{
+                  color: "#fff",
+                  zIndex: (theme) => theme.zIndex.drawer + 1,
+                }}
+                open={reviewBackdrop}
+              >
+                <Paper elevation={24} style={{ width: "55%" }}>
+                  <img
+                    style={{ float: "right", margin: "5px" }}
+                    onClick={() => setReviewBackdrop(false)}
+                    alt="Please Wait..."
+                    src={
+                      "https://img.icons8.com/" + "ios" + "/35/000000/cancel.png"
+                    }
+                  />
+                  <ExpReviews reviewHandler = {newReviewHandler} reviewBackdrop={() => reviewBackdropHandler()} expId={params.match.params.id} />
+                </Paper>
+              </Backdrop>
+            </>
+          )}
+
+          <MyVerticallyCenteredModal
+            show={modalShow}
+            onHide={() => setModalShow(false)}
+          />
+        </Col>
+        <Col lg={4} style={{ textAlign: "center", padding: "10px", margin: "10px", boxShadow: "rgba(0, 0, 0, 0.15) 0px 5px 15px 0px" }}>
+          <ShowReviews newReview = {newReview} expId={params.match.params.id} />
+          <Button onClick={() => setReviewBackdrop(true)}>
+            Add Review
+          </Button>
+        </Col>
+      </Row>
+    </div>
   );
 };
 

@@ -1,11 +1,10 @@
 import axios from "axios";
 import { React, useEffect, useState } from "react";
-import { Accordion,Button } from "react-bootstrap";
+import { Accordion, Button } from "react-bootstrap";
 
 const AdminApproval = (params) => {
   const [details, setDetails] = useState();
   useEffect(() => {
-    console.log("in admin use");
     const url =
       "http://localhost:8080/expedition/PendingRequests/" + params.expId;
     axios({
@@ -13,11 +12,39 @@ const AdminApproval = (params) => {
       withCredentials: true,
       url: url,
     }).then((res) => {
-      console.log(res);
       setDetails(res.data);
-      console.log(details);
     });
   }, []);
+
+  const approveRequest = (request, index) => {
+    const url =
+      "http://localhost:8080/expedition/approveRequest/" + request._id;
+    axios({
+      method: "POST",
+      withCredentials: true,
+      url: url,
+    }).then((res) => {
+      console.log(res.data);
+      const tempDetails = [...details];
+      tempDetails.splice(index, 1);
+      setDetails(tempDetails);
+    });
+  }
+
+  const declineRequest = (request, index) => {
+    const url =
+      "http://localhost:8080/expedition/declineRequest/" + request._id;
+    axios({
+      method: "POST",
+      withCredentials: true,
+      url: url,
+    }).then((res) => {
+      console.log(res.data);
+      const tempDetails = [...details];
+      tempDetails.splice(index, 1);
+      setDetails(tempDetails);
+    });
+  }
 
   return (
     <div
@@ -28,39 +55,40 @@ const AdminApproval = (params) => {
       }}
     >
       {details
-        ? details.map((request) => {
-            return (
-              <div
-                style={{
-                  width: "75%",
-                  margin: "auto",
-                }}
+        ? details.map((request, index) => {
+          return (
+            <div
+              style={{
+                width: "75%",
+                margin: "auto",
+              }}
+            >
+              <Accordion
+                style={{ marginBottom: "10px" }}
+                defaultActiveKey="0"
               >
-                <Accordion
-                  style={{ marginBottom: "10px" }}
-                  defaultActiveKey="0"
-                >
-                  <Accordion.Item eventKey="0">
-                    <Accordion.Header>{request.userEmail}</Accordion.Header>
-                    {request
-                      ? request.customItemSelected.map((item) => {
-                          return (
-                            <>
-                              <Accordion.Body>
-                                {item.name}:{item.price}
-                              </Accordion.Body>
-                            </>
-                          );
-                        })
-                      : null}
-                  </Accordion.Item>
-                  <Accordion.Item>
-                      <Button style={{marginLeft:"79%"}} variant='primary'>Approve</Button>
-                  </Accordion.Item>
-                </Accordion>
-              </div>
-            );
-          })
+                <Accordion.Item eventKey="0">
+                  <Accordion.Header>{request.userEmail}</Accordion.Header>
+                  {request
+                    ? request.customItemSelected.map((item) => {
+                      return (
+                        <>
+                          <Accordion.Body>
+                            {item.name}:{item.price}
+                          </Accordion.Body>
+                        </>
+                      );
+                    })
+                    : null}
+                </Accordion.Item>
+                <Accordion.Item style={{ display: "flex" }}>
+                  <Button onClick={() => approveRequest(request, index)} style={{ marginLeft: "60%" }} variant='primary'>Approve</Button>
+                  <Button onClick={() => declineRequest(request, index)} variant='primary'>Decline</Button>
+                </Accordion.Item>
+              </Accordion>
+            </div>
+          );
+        })
         : null}
     </div>
   );
