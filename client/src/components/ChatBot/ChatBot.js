@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 import gif from "../../Image/micListening.gif";
+import ChatBot from 'react-simple-chatbot';
+import { ThemeProvider } from 'styled-components';
 
 const SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -10,10 +12,36 @@ mic.continuous = true;
 mic.interimResults = true;
 mic.lang = "en-US";
 
-function ChatBot() {
+function ChatBotComp() {
   const [chat, setChat] = useState([]);
   const [isListening, setIsListening] = useState(false);
   const [note, setNote] = useState(null);
+
+  const theme = {
+    background: '#f5f8fb',
+    fontFamily: 'Helvetica Neue',
+    headerBgColor: '#EF6C00',
+    headerFontColor: '#fff',
+    headerFontSize: '15px',
+    botBubbleColor: '#EF6C00',
+    botFontColor: '#fff',
+    userBubbleColor: '#fff',
+    userFontColor: '#4a4a4a',
+  };
+
+  const steps = [
+    {
+      id: '1',
+      message: 'Hello World',
+      end: true,
+    },
+  ];
+
+  const ThemedExample = () => (
+    <ThemeProvider theme={theme}>
+      <ChatBot steps={steps} />;
+    </ThemeProvider>
+  );
 
   const socketRef = useRef();
 
@@ -86,6 +114,15 @@ function ChatBot() {
   const renderChat = () => {
     return chat.map(({ note }, index) => (
       <>
+        <ChatBot
+          steps={[
+            {
+              id: 'hello-world',
+              message: 'Hello World!',
+              end: true,
+            },
+          ]}
+        />
         <div key={index}>
           <h3>
             <span>{note}</span>
@@ -100,6 +137,15 @@ function ChatBot() {
   };
   return (
     <>
+      <ChatBot
+        steps={[
+          {
+            id: 'hello-world',
+            message: 'Hello World!',
+            end: true,
+          },
+        ]}
+      />
       <div className="card">
         <h1>Voice Notes</h1>
         <div className="container">
@@ -147,4 +193,4 @@ function ChatBot() {
   );
 }
 
-export default ChatBot;
+export default ChatBotComp;

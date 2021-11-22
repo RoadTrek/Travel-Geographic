@@ -7,7 +7,7 @@ import MongoStore from "connect-mongo";
 import dotenv from "dotenv";
 import { Server } from 'socket.io';
 import { createServer } from 'http';
-import {v4 as uuid} from "uuid";
+import { v4 as uuid } from "uuid";
 import dialogflow from '@google-cloud/dialogflow';
 
 const app = express();
@@ -51,7 +51,7 @@ io.on('connection', socket => {
         const sessionClient = new dialogflow.SessionsClient({
           keyFilename: "./tg-ai-bot-1095671727d8.json",
         });
-        console.log(projectId,sessionId);
+        console.log(projectId, sessionId);
         const sessionPath = sessionClient.projectAgentSessionPath(
           projectId,
           sessionId
@@ -69,7 +69,7 @@ io.on('connection', socket => {
 
         console.log("Detected intent");
         const result = responses[0].queryResult.fulfillmentText;
-        io.emit("message", {note: result});
+        io.emit("message", { note: result });
         console.log(result);
         if (result.intent) {
           console.log(`  Intent: ${result.intent.displayName}`);
