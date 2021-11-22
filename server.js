@@ -41,9 +41,9 @@ const io = new Server(http, {
 });
 
 io.on('connection', socket => {
-  socket.on('message', ({ name, message }) => {
-    console.log(message);
-    io.emit('message', { name, message })
+  socket.on('message', ({ note }) => {
+    console.log(note);
+    io.emit('message', {note })
   })
 })
 // Defining the app.use parts
