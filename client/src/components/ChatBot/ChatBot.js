@@ -3,6 +3,7 @@ import io from "socket.io-client";
 import gif from "../../Image/micListening.gif";
 import ChatBot from 'react-simple-chatbot';
 import { ThemeProvider } from 'styled-components';
+import { InputGroup, Form, Button, Alert } from 'react-bootstrap';
 
 const SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -31,17 +32,16 @@ function ChatBotComp() {
 
   const steps = [
     {
+      id: '0',
+      message: 'Welcome to react chatbot!',
+      trigger: '1',
+    },
+    {
       id: '1',
-      message: 'Hello World',
+      message: 'Bye!',
       end: true,
     },
   ];
-
-  const ThemedExample = () => (
-    <ThemeProvider theme={theme}>
-      <ChatBot steps={steps} />;
-    </ThemeProvider>
-  );
 
   const socketRef = useRef();
 
@@ -114,15 +114,6 @@ function ChatBotComp() {
   const renderChat = () => {
     return chat.map(({ note }, index) => (
       <>
-        <ChatBot
-          steps={[
-            {
-              id: 'hello-world',
-              message: 'Hello World!',
-              end: true,
-            },
-          ]}
-        />
         <div key={index}>
           <h3>
             <span>{note}</span>
@@ -135,17 +126,57 @@ function ChatBotComp() {
   const deleteMessage = () => {
     setNote("");
   };
+
+  const chatMessages = [
+    "U: Hi",
+    "B: Yo!",
+    "U: everything going right",
+    "B: Yes, human all good!"
+  ]
+
   return (
     <>
-      <ChatBot
-        steps={[
-          {
-            id: 'hello-world',
-            message: 'Hello World!',
-            end: true,
-          },
-        ]}
-      />
+      <div style={{
+        borderRadius: "15px 50px 30px",
+        backgroundImage: "url('https://static.vecteezy.com/system/resources/thumbnails/000/625/887/small_2x/Abstract_Grey_transparent_geometric_background_with_triangles.jpg')",
+        backgroundPosition: 'center',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        padding: "20px",
+        bottom: 0,
+        right: 0,
+        position: "fixed",
+        width: "400px",
+        height: "60%",
+        zIndex: 1000,
+        opacity: 1,
+        outline: "none",
+        boxShadow: "rgb(204, 219, 232) 6px 6px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset"
+      }}>
+        {chatMessages.map(item => {
+          if (item[0] === 'U') {
+            return (<div>
+              <Alert style={{ textAlign: "right", margin: "10px", width: "fit-content" }} variant="primary">
+                {item}
+              </Alert>
+            </div>);
+          } else {
+            return (<Alert style={{ margin: "10px", width: "fit-content" }} variant="primary">
+              {item}
+            </Alert>);
+          }
+        }
+        )}
+        <InputGroup style={{ bottom: 0, position: "fixed", width: "300px", marginBottom: "14px" }}>
+          <Form.Control
+            placeholder="Recipient's username"
+            aria-label="Recipient's username with two button addons"
+          />
+          <Button variant="outline-secondary">S</Button>
+          <Button variant="outline-secondary">M</Button>
+        </InputGroup>
+      </div>
+
       <div className="card">
         <h1>Voice Notes</h1>
         <div className="container">
