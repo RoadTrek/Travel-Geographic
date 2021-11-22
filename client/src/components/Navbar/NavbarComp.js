@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { Navbar, Container, Nav, NavLink } from "react-bootstrap";
+import { Navbar, Container, Nav } from "react-bootstrap";
 import "./NavbarElements.css";
 import logo from "../../Image/LOGO.jpeg";
 import axios from 'axios';
@@ -47,7 +47,7 @@ const NavbarComp = () => {
       >
         <Container>
           <Navbar.Brand>
-            <img to="/" src={logo} width="80px" height="60px" margin-left="0px" />
+            <img to="/" alt ="logo" src={logo} width="80px" height="60px" margin-left="0px" />
             <Link style={{ textDecoration: "none", color: "black", fontWeight: "600", fontSize: "20px", margin: "0 4px" }} to="/">Travel Geographic</Link>
           </Navbar.Brand>
 
@@ -62,9 +62,9 @@ const NavbarComp = () => {
               <Nav.Link>
                 <Link style={{ textDecoration: "none", color: "black", fontWeight: "600", fontSize: "20px", margin: "0 4px" }} to="/expedition">Expeditions</Link>
               </Nav.Link>
-              <Nav.Link>
+              {/* <Nav.Link>
                 <Link style={{ textDecoration: "none", color: "black", fontWeight: "600", fontSize: "20px", margin: "0 4px" }} to="/trek">Trek</Link>
-              </Nav.Link>
+              </Nav.Link> */}
               {!isLogged ? (
                 <>
                   <Nav.Link>

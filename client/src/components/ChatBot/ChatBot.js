@@ -27,7 +27,17 @@ function ChatBot() {
   useEffect(() => {
     socketRef.current = socket.connect("http://localhost:8080");
     socketRef.current.on("message", ({ note }) => {
-      console.log("hellohgh");
+      const temp = note.substring(8);
+      console.log(temp);
+      if (
+        temp === "login" ||
+        temp === "signup" ||
+        temp === "gallery" ||
+        temp === "expedition" ||
+        temp === "logout"
+      ) {
+        window.location.href = "http://localhost:3000/" + temp;
+      }
       setChat([...chat, { note }]);
     });
     return () => socketRef.current.disconnect();
@@ -75,11 +85,13 @@ function ChatBot() {
 
   const renderChat = () => {
     return chat.map(({ note }, index) => (
-      <div key={index}>
-        <h3>
-          <span>{note}</span>
-        </h3>
-      </div>
+      <>
+        <div key={index}>
+          <h3>
+            <span>{note}</span>
+          </h3>
+        </div>
+      </>
     ));
   };
 
