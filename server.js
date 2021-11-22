@@ -5,13 +5,16 @@ import cookieParser from "cookie-parser";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import dotenv from "dotenv";
+import { Server } from 'socket.io';
+import { createServer } from 'http';
+
+const app = express(); 
 
 dotenv.config();
 // Define the PORT
 const PORT = process.env.port || 8080;
 
 // express was initialized
-const app = express();
 app.use(function (req, res, next) {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   res.setHeader(
@@ -25,6 +28,24 @@ app.use(function (req, res, next) {
   res.setHeader("Access-Control-Allow-Credentials", true);
   next();
 });
+
+const http = createServer(app); 
+// const io = new Server(http);
+const io = new Server(http, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+    allowedHeaders: ["my-custom-header"],
+    credentials: true
+  }
+});
+
+io.on('connection', socket => {
+  socket.on('message', ({ name, message }) => {
+    console.log(message);
+    io.emit('message', { name, message })
+  })
+})
 // Defining the app.use parts
 app.use(express.json());
 app.use(
@@ -81,6 +102,9 @@ app.use('/',userRoutes);
 app.use('/',galleryRoutes);
 app.use('/',expeditionRoutes);
 
-app.listen(PORT, function () {
+// app.listen(4000,function(){
+//   console.log(4000);
+// })
+http.listen(PORT, function () {
   console.log("Server is listening to port ", PORT);
 });

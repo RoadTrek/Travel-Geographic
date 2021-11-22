@@ -3,6 +3,7 @@ const outputme = document.querySelector(".output-you");
 const outputbot = document.querySelector(".output-bot");
 const socket = io();
 
+
 const SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition;
 

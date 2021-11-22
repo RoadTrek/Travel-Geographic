@@ -1,6 +1,90 @@
-import React, { useState, useEffect } from 'react'
-import './ChatBot.css'
+// import React, { useState,useRef, useEffect } from 'react'
+// import './ChatBot.css'
+// import io from 'socket.io-client';
+// import TextField from '@material-ui/core/TextField';
+// // import Form from '@material-ui/core/Form';
+// // const socket=io.connect("http://localhost:4000");
 
+// const socket=io.connect("http://localhost:8080");
+
+// function ChatBot() {
+
+//   const [ state, setState ] = useState({ message: "", name: "" })
+// 	const [ chat, setChat ] = useState([])
+
+
+// 	useEffect(
+// 		() => {
+// 			socket.on("message", ({ name, message }) => {
+// 				setChat([ ...chat, { name, message } ])
+// 			})
+// 			// return () => socket.current.disconnect()
+// 		},
+// 		// [ chat ]
+// 	)
+
+// 	const onTextChange = (e) => {
+// 		setState({ ...state, [e.target.name]: e.target.value })
+// 	}
+
+// 	const onMessageSubmit = (e) => {
+// 		e.preventDefault();
+//     const { name, message } = state
+//     console.log(message);
+// 		socket.emit("message", { name, message })
+// 		setState({ message: "", name })
+// 	}
+
+// 	const renderChat = () => {
+// 		return chat.map(({ name, message }, index) => (
+// 			<div key={index}>
+// 				<h3>
+// 					{name}: <span>{message}</span>
+// 				</h3>
+// 			</div>
+// 		))
+// 	}
+  
+
+  
+
+//   return (
+//     <>
+//     <div className="card">
+// 			<form onSubmit={onMessageSubmit}>
+// 				<h1>Messenger</h1>
+// 				<div className="name-field">
+// 					<TextField name="name" onChange={(e) => onTextChange(e)} value={state.name} label="Name" />
+// 				</div>
+// 				<div>
+// 					<TextField
+// 						name="message"
+// 						onChange={(e) => onTextChange(e)}
+// 						value={state.message}
+// 						id="outlined-multiline-static"
+// 						variant="outlined"
+// 						label="Message"
+// 					/>
+// 				</div>
+// 				<button>Send Message</button>
+// 			</form>
+// 			<div className="render-chat">
+// 				<h1>Chat Log</h1>
+// 				{renderChat()}
+// 			</div>
+// 		</div>
+//     </>
+//   )
+// }
+
+// export default ChatBot;
+
+
+
+
+import TextField from "@material-ui/core/TextField"
+import React, { useEffect, useRef, useState } from "react"
+import io from "socket.io-client";
 const SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition
 const mic = new SpeechRecognition()
@@ -10,10 +94,31 @@ mic.interimResults = true
 mic.lang = 'en-US'
 
 function ChatBot() {
+	const [ state, setState ] = useState({ message: "", name: "" })
+	const [ chat, setChat ] = useState([])
   const [isListening, setIsListening] = useState(false)
   const [note, setNote] = useState(null)
   const [savedNotes, setSavedNotes] = useState([])
 
+	const socketRef = useRef()
+  
+const socket = io("http://localhost:8080", {
+  withCredentials: true,
+  extraHeaders: {
+    "my-custom-header": "abcd"
+  }
+});
+
+	useEffect(
+		() => {
+			socketRef.current = socket.connect("http://localhost:8080")
+			socketRef.current.on("message", ({ name, message }) => {
+				setChat([ ...chat, { name, message } ])
+			})
+			return () => socketRef.current.disconnect()
+		},
+    [chat]
+	)
   useEffect(() => {
     handleListen()
   }, [isListening])
@@ -47,15 +152,36 @@ function ChatBot() {
       }
     }
   }
-
   const handleSaveNote = () => {
     setSavedNotes([...savedNotes, note])
     setNote('')
   }
 
-  return (
+	const onTextChange = (e) => {
+		setState({ ...state, [e.target.name]: e.target.value })
+	}
+
+	const onMessageSubmit = (e) => {
+		const { name, message } = state
+		socketRef.current.emit("message", { name, message })
+		e.preventDefault()
+		setState({ message: "", name })
+	}
+
+	const renderChat = () => {
+		return chat.map(({ name, message }, index) => (
+			<div key={index}>
+				<h3>
+					{name}: <span>{message}</span>
+				</h3>
+			</div>
+		))
+	}
+
+	return (
     <>
-      <h1>Voice Notes</h1>
+		<div className="card">
+    <h1>Voice Notes</h1>
       <div className="container">
         <div className="box">
           <h2>Current Note</h2>
@@ -75,8 +201,30 @@ function ChatBot() {
           ))}
         </div>
       </div>
+			<form onSubmit={onMessageSubmit}>
+				<h1>Messenger</h1>
+				<div className="name-field">
+					<TextField name="name" onChange={(e) => onTextChange(e)} value={state.name} label="Name" />
+				</div>
+				<div>
+					<TextField
+						name="message"
+						onChange={(e) => onTextChange(e)}
+						value={state.message}
+						id="outlined-multiline-static"
+						variant="outlined"
+						label="Message"
+					/>
+				</div>
+				<button>Send Message</button>
+			</form>
+			<div className="render-chat">
+				<h1>Chat Log</h1>
+				{renderChat()}
+			</div>
+		</div>
     </>
-  )
+	)
 }
 
-export default ChatBot;
+export default ChatBot
