@@ -27,6 +27,7 @@ function ChatBot() {
   useEffect(() => {
     socketRef.current = socket.connect("http://localhost:8080");
     socketRef.current.on("message", ({ note }) => {
+      console.log("hellohgh");
       setChat([...chat, { note }]);
     });
     return () => socketRef.current.disconnect();

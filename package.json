@@ -20,6 +20,7 @@
   "homepage": "https://github.com/RoadTrek/Travel-Geographic#readme",
   "dependencies": {
     "@google-cloud/dialogflow": "^4.5.0",
+    "@google-cloud/dialogflow-cx": "^2.14.0",
     "axios": "^0.23.0",
     "bcrypt": "^5.0.1",
     "bcryptjs": "^2.4.3",

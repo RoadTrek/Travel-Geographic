@@ -7,8 +7,10 @@ import MongoStore from "connect-mongo";
 import dotenv from "dotenv";
 import { Server } from 'socket.io';
 import { createServer } from 'http';
+import {v4 as uuid} from "uuid";
+import dialogflow from '@google-cloud/dialogflow';
 
-const app = express(); 
+const app = express();
 
 dotenv.config();
 // Define the PORT
@@ -29,7 +31,7 @@ app.use(function (req, res, next) {
   next();
 });
 
-const http = createServer(app); 
+const http = createServer(app);
 // const io = new Server(http);
 const io = new Server(http, {
   cors: {
@@ -43,7 +45,44 @@ const io = new Server(http, {
 io.on('connection', socket => {
   socket.on('message', ({ note }) => {
     console.log(note);
-    io.emit('message', {note })
+    const callapibot = async (projectId = process.env.PROJECT_ID) => {
+      try {
+        const sessionId = uuid();
+        const sessionClient = new dialogflow.SessionsClient({
+          keyFilename: "./tg-ai-bot-1095671727d8.json",
+        });
+        console.log(projectId,sessionId);
+        const sessionPath = sessionClient.projectAgentSessionPath(
+          projectId,
+          sessionId
+        );
+        const request = {
+          session: sessionPath,
+          queryInput: {
+            text: {
+              text: note,
+              languageCode: "en-US",
+            },
+          },
+        };
+        const responses = await sessionClient.detectIntent(request);
+
+        console.log("Detected intent");
+        const result = responses[0].queryResult.fulfillmentText;
+        io.emit("message", {note: result});
+        console.log(result);
+        if (result.intent) {
+          console.log(`  Intent: ${result.intent.displayName}`);
+        } else {
+          console.log(`  No intent matched.`);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    callapibot();
+    // io.emit('note', { note: "hello avni" })
   })
 })
 // Defining the app.use parts
@@ -98,9 +137,9 @@ import userRoutes from "./routes/user.js";
 import galleryRoutes from "./routes/gallery.js";
 import expeditionRoutes from "./routes/expedition.js";
 
-app.use('/',userRoutes);
-app.use('/',galleryRoutes);
-app.use('/',expeditionRoutes);
+app.use('/', userRoutes);
+app.use('/', galleryRoutes);
+app.use('/', expeditionRoutes);
 
 // app.listen(4000,function(){
 //   console.log(4000);
