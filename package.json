@@ -19,9 +19,11 @@
   },
   "homepage": "https://github.com/RoadTrek/Travel-Geographic#readme",
   "dependencies": {
+    "@google-cloud/dialogflow": "^4.5.0",
     "axios": "^0.23.0",
     "bcrypt": "^5.0.1",
     "bcryptjs": "^2.4.3",
+    "colors": "^1.4.0",
     "concurrently": "^6.3.0",
     "connect-mongo": "^4.6.0",
     "cookie-parser": "^1.4.5",
@@ -33,7 +35,9 @@
     "mongoose": "^6.0.11",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.14",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "socket.io": "^4.4.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
