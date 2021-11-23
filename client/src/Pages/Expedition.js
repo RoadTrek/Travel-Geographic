@@ -296,7 +296,7 @@ export default function Expedition(props) {
                       {exp.name}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      {exp.description}
+                      {exp.description.substring(0,199)}
                     </Typography>
                     <Typography variant="h8" color="text.secondary">
                       Base Price : ₹{exp.basePrice}

@@ -168,7 +168,7 @@ const IndExp = (params) => {
 
   return (
     <div style={{ paddingBottom: "50px", overflowX: "hidden" }}>
-      <h1 style={{ paddingBottom: "0px", textAlign: "center", fontFamily: 'Helvetica Neue', color: "#111", fontSize: "4rem" }}>{details ? details.name : null}</h1>
+      <h1 style={{ paddingBottom: "0px", textAlign: "center", fontFamily: 'Helvetica Neue', color: "#111", fontSize: "3rem" }}>{details ? details.name : null}</h1>
       <Container>
         <Row>
           <Col md={0} lg={1}></Col>
@@ -245,7 +245,7 @@ const IndExp = (params) => {
       <hr />
       <Row style={{ display: "flex", justifyContent: "center" }}>
         <Col lg={7} style={{ textAlign: "center", padding: "10px", margin: "10px", boxShadow: "rgba(0, 0, 0, 0.15) 0px 5px 15px 0px" }}>
-          <div style={{ fontSize: "1.4rem", textAlign: "left" }}>
+          <div style={{ fontSize: "1.4rem",justifyContent:"center" ,width:"100%"}}>
             <p><span style={{ fontWeight: "500" }} >Description:</span>
               <br />
               <span style={{ fontSize: "1.2rem", color: "#595c5a" }}>{details ? details.description : null}</span>
