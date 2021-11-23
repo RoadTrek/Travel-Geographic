@@ -43,8 +43,8 @@ const io = new Server(http, {
 });
 
 io.on('connection', socket => {
-  socket.on('message', ({ note }) => {
-    console.log(note);
+  socket.on('message', ({ userMessage }) => {
+    console.log(userMessage);
     const callapibot = async (projectId = process.env.PROJECT_ID) => {
       try {
         const sessionId = uuid();
@@ -60,7 +60,7 @@ io.on('connection', socket => {
           session: sessionPath,
           queryInput: {
             text: {
-              text: note,
+              text: userMessage,
               languageCode: "en-US",
             },
           },
