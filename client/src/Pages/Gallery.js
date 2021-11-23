@@ -21,7 +21,6 @@ export default function Gallery() {
   const uploadImage = () => {
     formData.append("file", imageSelected);
     formData.append("upload_preset", process.env.REACT_APP_uploadPreset);
-
     axios
       .post(
         "https://api.cloudinary.com/v1_1/" +
