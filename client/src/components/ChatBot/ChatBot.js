@@ -156,12 +156,12 @@ function ChatBotComp() {
             onChange={(event) => setUserMessage(event.target.value)}
             aria-label="Recipient's username with two button addons"
           />
-          <Button style={{ border: "1px solid black", marginLeft: "4px" }} onClick={chatSubmitHandler} variant="outline-secondary">S</Button>
+          <img style={{ border: "1px solid #464f4f", marginLeft: "4px" }} onClick={chatSubmitHandler} src="https://img.icons8.com/external-kmg-design-flat-kmg-design/30/000000/external-send-user-interface-kmg-design-flat-kmg-design.png"/>
           <span onClick={() => setIsListening((prevState) => !prevState)}>
             {isListening ?
-              <img style={{ border: "1px solid black", marginLeft: "4px" }} src="https://img.icons8.com/emoji/37/000000/red-circle-emoji.png" />
+              <img style={{ border: "1px solid #464f4f", marginLeft: "4px" }} src="https://img.icons8.com/emoji/37/000000/red-circle-emoji.png" />
               :
-              <img style={{ border: "1px solid black", marginLeft: "4px" }} src="https://img.icons8.com/small/37/000000/microphone.png" />
+              <img style={{ border: "1px solid #464f4f", marginLeft: "4px" }} src="https://img.icons8.com/small/37/000000/microphone.png" />
             }
           </span>
         </InputGroup>

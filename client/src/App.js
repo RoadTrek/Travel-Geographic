@@ -29,7 +29,6 @@ function App() {
 					<Route path='/trek' component={Trek} />
 					<Route path='/login' component={Login} />
 					<Route path='/signup' component={SignUp} />
-					<Route path ="/chatbot" component = {ChatBot} />
 					<Route path = '/expedition/pendingRequests' component={AdminApproval} />
 					<Route path = '/expedition/:id' component={IndExp} />
 				</Switch>
