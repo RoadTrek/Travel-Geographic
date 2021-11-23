@@ -19,6 +19,7 @@ import ChatBot from "./components/ChatBot/ChatBot";
 function App() {
 	return (
 		<div>
+			<ChatBot style = {{zIndex: "300000", position: "relative"}} />
 			<Router>
 				<div style = {{paddingBottom: "80px"}}><NavbarComp /></div>
 				<Switch>

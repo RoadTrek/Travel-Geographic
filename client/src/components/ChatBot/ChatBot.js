@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 import gif from "../../Image/micListening.gif";
-import ChatBot from 'react-simple-chatbot';
-import { ThemeProvider } from 'styled-components';
 import { InputGroup, Form, Button, Alert } from 'react-bootstrap';
+import ScrollToBottom from 'react-scroll-to-bottom';
+import { css } from '@emotion/css'
 
 const SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -14,34 +14,10 @@ mic.interimResults = true;
 mic.lang = "en-US";
 
 function ChatBotComp() {
-  const [chat, setChat] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
   const [isListening, setIsListening] = useState(false);
-  const [note, setNote] = useState(null);
-
-  const theme = {
-    background: '#f5f8fb',
-    fontFamily: 'Helvetica Neue',
-    headerBgColor: '#EF6C00',
-    headerFontColor: '#fff',
-    headerFontSize: '15px',
-    botBubbleColor: '#EF6C00',
-    botFontColor: '#fff',
-    userBubbleColor: '#fff',
-    userFontColor: '#4a4a4a',
-  };
-
-  const steps = [
-    {
-      id: '0',
-      message: 'Welcome to react chatbot!',
-      trigger: '1',
-    },
-    {
-      id: '1',
-      message: 'Bye!',
-      end: true,
-    },
-  ];
+  const [chatMessages, setChatMessages] = useState([]);
+  const [userMessage, setUserMessage] = useState("");
 
   const socketRef = useRef();
 
@@ -55,6 +31,7 @@ function ChatBotComp() {
   useEffect(() => {
     socketRef.current = socket.connect("http://localhost:8080");
     socketRef.current.on("message", ({ note }) => {
+      console.log("inside");
       const temp = note.substring(8);
       console.log(temp);
       if (
@@ -66,10 +43,10 @@ function ChatBotComp() {
       ) {
         window.location.href = "http://localhost:3000/" + temp;
       }
-      setChat([...chat, { note }]);
+      setChatMessages([...chatMessages, "B: " + note]);
     });
     return () => socketRef.current.disconnect();
-  }, [chat]);
+  }, [chatMessages]);
   useEffect(() => {
     handleListen();
   }, [isListening]);
@@ -97,45 +74,37 @@ function ChatBotComp() {
         .map((result) => result.transcript)
         .join("");
       console.log(transcript);
-      setNote(transcript);
+      setUserMessage(transcript);
       mic.onerror = (event) => {
         console.log(event.error);
       };
     };
   };
 
-  const onMessageSubmit = (e) => {
-    console.log(note);
-    socketRef.current.emit("message", { note });
+  const chatSubmitHandler = (e) => {
+    const tempChat = [...chatMessages];
+    tempChat.push("U: " + userMessage);
+    setChatMessages(tempChat);
+    console.log(userMessage);
+    socketRef.current.emit("message", { userMessage });
+    setUserMessage('');
     e.preventDefault();
-    setNote("");
-  };
+  }
 
-  const renderChat = () => {
-    return chat.map(({ note }, index) => (
-      <>
-        <div key={index}>
-          <h3>
-            <span>{note}</span>
-          </h3>
-        </div>
-      </>
-    ));
-  };
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      chatSubmitHandler(event);
+    }
+  }
 
-  const deleteMessage = () => {
-    setNote("");
-  };
+  const ROOT_CSS = css({
+    height: 330,
+  });
 
-  const chatMessages = [
-    "U: Hi",
-    "B: Yo!",
-    "U: everything going right",
-    "B: Yes, human all good!"
-  ]
+  let renderThis;
 
-  return (
-    <>
+  if (isOpen) {
+    renderThis = (
       <div style={{
         borderRadius: "15px 50px 30px",
         backgroundImage: "url('https://static.vecteezy.com/system/resources/thumbnails/000/625/887/small_2x/Abstract_Grey_transparent_geometric_background_with_triangles.jpg')",
@@ -146,80 +115,74 @@ function ChatBotComp() {
         bottom: 0,
         right: 0,
         position: "fixed",
-        width: "400px",
-        height: "60%",
+        width: "350px",
+        height: "70%",
         zIndex: 1000,
         opacity: 1,
         outline: "none",
         boxShadow: "rgb(204, 219, 232) 6px 6px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset"
       }}>
-        {chatMessages.map(item => {
-          if (item[0] === 'U') {
-            return (<div>
-              <Alert style={{ textAlign: "right", margin: "10px", width: "fit-content" }} variant="primary">
-                {item}
-              </Alert>
-            </div>);
-          } else {
-            return (<Alert style={{ margin: "10px", width: "fit-content" }} variant="primary">
-              {item}
-            </Alert>);
-          }
-        }
-        )}
+        <div>
+          <img
+            style={{ float: "right", margin: "5px", marginBottom: "5px", zIndex: "20000", position: "relative" }}
+            onClick={() => setIsOpen(false)}
+            src={"https://img.icons8.com/ios/35/000000/cancel.png"}
+          />
+        </div>
+        <div>
+          <ScrollToBottom className={ROOT_CSS}>
+            {chatMessages.map(item => {
+              if (item[0] === 'U') {
+                return (<div>
+                  <Alert style={{ textAlign: "right", margin: "10px", width: "fit-content" }} variant="primary">
+                    {item}
+                  </Alert>
+                </div>);
+              } else {
+                return (<Alert style={{ margin: "10px", width: "fit-content" }} variant="primary">
+                  {item}
+                </Alert>);
+              }
+            }
+            )}
+          </ScrollToBottom>
+        </div>
+
+
         <InputGroup style={{ bottom: 0, position: "fixed", width: "300px", marginBottom: "14px" }}>
           <Form.Control
-            placeholder="Recipient's username"
+            onKeyPress={handleKeyPress}
+            value={userMessage}
+            onChange={(event) => setUserMessage(event.target.value)}
             aria-label="Recipient's username with two button addons"
           />
-          <Button variant="outline-secondary">S</Button>
-          <Button variant="outline-secondary">M</Button>
+          <Button style={{ border: "1px solid black", marginLeft: "4px" }} onClick={chatSubmitHandler} variant="outline-secondary">S</Button>
+          <span onClick={() => setIsListening((prevState) => !prevState)}>
+            {isListening ?
+              <img style={{ border: "1px solid black", marginLeft: "4px" }} src="https://img.icons8.com/emoji/37/000000/red-circle-emoji.png" />
+              :
+              <img style={{ border: "1px solid black", marginLeft: "4px" }} src="https://img.icons8.com/small/37/000000/microphone.png" />
+            }
+          </span>
         </InputGroup>
       </div>
+    )
+  }
+  else {
+    renderThis = (
+      <Button style={{
+        bottom: 0,
+        right: 0,
+        position: "fixed",
+      }} onClick={() => setIsOpen(true)} variant="primary" size="lg">
+        Open ChatBot
+      </Button>
+    )
+  }
 
-      <div className="card">
-        <h1>Voice Notes</h1>
-        <div className="container">
-          <div className="box">
-            <h2>Current Note</h2>
-            {isListening ? (
-              <span>Listening...</span>
-            ) : (
-              <span>Press to speak</span>
-            )}
-            <button onClick={() => setIsListening((prevState) => !prevState)}>
-              {isListening ? (
-                <div>
-                  <img src={gif} alt="mic" />
-                </div>
-              ) : (
-                <img
-                  src="https://img.icons8.com/external-icongeek26-linear-colour-icongeek26/64/000000/external-mic-essentials-icongeek26-linear-colour-icongeek26.png"
-                  alt="mic"
-                />
-              )}
-            </button>
-            <button onClick={onMessageSubmit}>
-              <img
-                src="https://img.icons8.com/external-kmg-design-outline-color-kmg-design/32/000000/external-send-user-interface-kmg-design-outline-color-kmg-design.png"
-                alt="Send"
-              />
-            </button>
-            <button onClick={deleteMessage}>
-              <img
-                src="https://img.icons8.com/external-kiranshastry-lineal-kiranshastry/64/000000/external-delete-miscellaneous-kiranshastry-lineal-kiranshastry.png"
-                alt="delete"
-              />
-            </button>
-            <p>{note}</p>
-          </div>
-          <div className="box"></div>
-        </div>
-        <div className="render-chat">
-          <h1>Chat Log</h1>
-          {renderChat()}
-        </div>
-      </div>
+  return (
+    <>
+      {renderThis}
     </>
   );
 }
