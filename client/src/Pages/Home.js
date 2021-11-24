@@ -14,8 +14,8 @@ const styles = {
 function Home() {
   //temp
   return (
-    <div>
-      <div style={{ marginTop: "526px" }}>
+    <>
+      <div style={{ marginTop: "484px" }}>
         <video
           autoPlay
           loop
@@ -25,8 +25,8 @@ function Home() {
             opacity: "0.9",
             width: "100%",
             left: "50%",
-            top: "50%",
             height: "80%",
+            top: "50%",
             objectFit: "cover",
             transform: "translate(-50%, -50%)",
             zIndex: -0,
@@ -73,7 +73,6 @@ function Home() {
       </div>
       <div
         style={{
-          marginTop: "100px",
           backgroundColor: "black",
           width: "100vw",
           height: "16vh",
@@ -149,7 +148,7 @@ function Home() {
           Copyright©2021 TravelGeographic
         </span>
       </div>
-    </div>
+    </>
   );
 }
 

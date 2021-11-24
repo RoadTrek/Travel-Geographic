@@ -110,7 +110,7 @@ function ChatBotComp() {
 
   if (isOpen) {
     renderThis = (
-      <div
+      <span
         style={{
           opacity: 1,
           marginRight: "20px",
@@ -255,7 +255,7 @@ function ChatBotComp() {
             )}
           </span>
         </InputGroup>
-      </div>
+      </span>
     );
   } else {
     renderThis = (
