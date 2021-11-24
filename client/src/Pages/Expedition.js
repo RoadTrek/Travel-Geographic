@@ -292,13 +292,15 @@ export default function Expedition(props) {
                     image={exp.imageUrl[0]}
                   />
                   <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
+                    <Typography style={{textAlign:"center",fontWeight:"700"}}gutterBottom variant="h5" component="div">
                       {exp.name}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      {exp.description.substring(0,199)}
+                      {exp.description.substring(0,150)+"..."}
+                      <Button onClick = {() => viewMoreHandler(exp._id)} size="small">Read More</Button>
                     </Typography>
-                    <Typography variant="h8" color="text.secondary">
+                    <br/>
+                    <Typography variant="h5" color="text.secondary">
                       Base Price : ₹{exp.basePrice}
                     </Typography>
                   </CardContent>
