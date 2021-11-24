@@ -11,7 +11,8 @@ const expeditionSchema = new mongoose.Schema({
   imageUrl: Array,
   customItems: Array,
   registeredUsers: Array,
-  reviews: Array
+  reviews: Array,
+  endingDate:Date,
 });
 
 const expedition = mongoose.model("expedition", expeditionSchema);

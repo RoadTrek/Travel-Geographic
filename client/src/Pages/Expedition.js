@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState } from "react";
 import {
   Card,
   CardMedia,
@@ -12,6 +12,8 @@ import {
 import { Form, Button as Butt, Container, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import sachin from "../Image/sachin2021.mp4";
+import DatePicker from "react-date-picker";
+
 export default function Expedition(props) {
   const [expDetail, setExpDetail] = useState([]);
   const [open, setOpen] = useState(false);
@@ -27,8 +29,12 @@ export default function Expedition(props) {
     name: "",
     price: "",
   });
+  console.log(new Date());
+  // const current = new Date();
+  // const date = current.getDate();
+  // console.log(date);
   const [imageSelected, setImageSelected] = useState("");
-
+  const [endingDate, setEndingDate] = useState(new Date());
   React.useEffect(() => {
     axios({
       method: "GET",
@@ -45,7 +51,7 @@ export default function Expedition(props) {
     const name = event.target.name;
     const value = event.target.value;
 
-    setDetails(function (prev) {
+    setDetails(function(prev) {
       const newVal = {
         ...prev,
         [name]: value,
@@ -89,8 +95,8 @@ export default function Expedition(props) {
     axios
       .post(
         "https://api.cloudinary.com/v1_1/" +
-        process.env.REACT_APP_cloudName +
-        "/image/upload",
+          process.env.REACT_APP_cloudName +
+          "/image/upload",
         formData
       )
       .then(async (res) => {
@@ -103,27 +109,27 @@ export default function Expedition(props) {
           url: "http://localhost:8080/expedition/uploadExpedition",
           data: {
             ...details,
-            imageUrl: newImageUrl
+            endingDate: endingDate,
+            imageUrl: newImageUrl,
           },
         }).then((res) => {
           window.location.reload();
           console.log("Data Sent", res);
         });
-      })
-
+      });
   };
 
   const viewMoreHandler = (expId) => {
     const url = "/expedition/" + expId;
     props.history.push({
-      pathname: url
-    })
-  }
+      pathname: url,
+    });
+  };
 
   return (
     <>
-       <div>
-    <video
+      <div>
+        <video
           autoPlay
           loop
           muted
@@ -141,8 +147,8 @@ export default function Expedition(props) {
         >
           <source src={sachin} type="video/webm" />
         </video>
-        </div>
-        <div id="text_div center_all">
+      </div>
+      <div id="text_div center_all">
         <div className="center_all">
           <h1
             style={{
@@ -167,192 +173,342 @@ export default function Expedition(props) {
           ></div>
         </div>
       </div>
-    <div style={{marginTop:"580px"}}>
-      {localStorage.getItem("email") === "tg.official.1001@gmail.com" ? (
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-          <img alt="" onClick={() => setOpen(true)} style={{ width: "200px" }} src="https://i.ibb.co/v4wxH68/add-button.gif" />
-          <Backdrop
-            sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-            open={open}
+      <div style={{ marginTop: "580px" }}>
+        {localStorage.getItem("email") === "tg.official.1001@gmail.com" ? (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
           >
-            <Paper
-              style={{
-                maxHeight: "600px",
-                "overflow-y": "scroll",
-              }}
-              elevation={24}
+            <img
+              alt=""
+              onClick={() => setOpen(true)}
+              style={{ width: "200px" }}
+              src="https://i.ibb.co/v4wxH68/add-button.gif"
+            />
+            <Backdrop
+              sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+              open={open}
             >
-              <img
-                style={{ float: "right", margin: "5px" }}
-                onClick={() => setOpen(false)}
-                src={"https://img.icons8.com/ios/35/000000/cancel.png"}
-                alt="Please wait..."
-              />
-              <Form style={{ padding: "40px", fontSize: "20px" }}>
-                <Form.Group
-                  className="mb-3"
-                  controlId="exampleForm.ControlInput1"
-                >
-                  <Form.Label>Name</Form.Label>
-                  <Form.Control
-                    name="name"
-                    value={details.name}
-                    onChange={handleChange}
-                    placeholder="e.g: Shimla to Spiti"
-                  />
-                </Form.Group>
-                <Form.Group
-                  className="mb-3"
-                  controlId="exampleForm.ControlTextarea1"
-                >
-                  <Form.Label>Add Description</Form.Label>
-                  <Form.Control
-                    name="desc"
-                    value={details.desc}
-                    onChange={handleChange}
-                    as="textarea"
-                    rows={3}
-                  />
-                </Form.Group>
-                <Form.Group
-                  className="mb-3"
-                  controlId="exampleForm.ControlTextarea1"
-                >
-                  <Form.Label>Base Price (₹)</Form.Label>
-                  <Form.Control
-                    style={{ width: "40%" }}
-                    name="basePrice"
-                    type="number"
-                    step="100"
-                    value={details.basePrice}
-                    onChange={handleChange}
-                  />
-                </Form.Group>
-                <Form.Group controlId="formFile" className="mb-3">
-                  <Form.Label>Add Picture</Form.Label>
-                  <br />
-                  <input
-                    type="file"
-                    onChange={(event) => {
-                      setImageSelected(event.target.files[0]);
-                    }}
-                  />
-                </Form.Group>
-
-                {/* customizable */}
-
-                <hr />
-                <div style={{ display: "flex", fontSize: "1rem" }}>
+              <Paper
+                style={{
+                  maxHeight: "600px",
+                  "overflow-y": "scroll",
+                }}
+                elevation={24}
+              >
+                <img
+                  style={{ float: "right", margin: "5px" }}
+                  onClick={() => setOpen(false)}
+                  src={"https://img.icons8.com/ios/35/000000/cancel.png"}
+                  alt="Please wait..."
+                />
+                <Form style={{ padding: "40px", fontSize: "20px" }}>
                   <Form.Group
-                    style={{ marginRight: "20px", width: "35%" }}
                     className="mb-3"
                     controlId="exampleForm.ControlInput1"
                   >
-                    <Form.Label>Item Name</Form.Label>
+                    <Form.Label>Name</Form.Label>
                     <Form.Control
                       name="name"
-                      value={itemDetail.name}
-                      onChange={handleItemChange}
-                      placeholder="e.g Sleeping Bag"
+                      value={details.name}
+                      onChange={handleChange}
+                      placeholder="e.g: Shimla to Spiti"
                     />
                   </Form.Group>
-                  <Form.Group>
-                    <Form.Label>Item Price (₹)</Form.Label>
+                  <Form.Group
+                    className="mb-3"
+                    controlId="exampleForm.ControlTextarea1"
+                  >
+                    <Form.Label>Add Description</Form.Label>
                     <Form.Control
-                      style={{ width: "100px", marginRight: "20px" }}
-                      name="price"
+                      name="desc"
+                      value={details.desc}
+                      onChange={handleChange}
+                      as="textarea"
+                      rows={3}
+                    />
+                  </Form.Group>
+                  <Form.Group
+                    className="mb-3"
+                    controlId="exampleForm.ControlTextarea1"
+                  >
+                    <Form.Label>Base Price (₹)</Form.Label>
+                    <Form.Control
+                      style={{ width: "40%" }}
+                      name="basePrice"
                       type="number"
                       step="100"
-                      value={itemDetail.price}
-                      onChange={handleItemChange}
+                      value={details.basePrice}
+                      onChange={handleChange}
+                    />
+                    <Form.Label>Registration Ending Date:</Form.Label>
+                    <br />
+                    <DatePicker
+                      minDate={new Date()}
+                      name="endingDate"
+                      value={endingDate}
+                      onChange={setEndingDate}
+                    ></DatePicker>
+                    {/* <Form.Control
+                      style={{ width: "50%" }}
+                      name="endingDate"
+                      type="number"
+                    /> */}
+                  </Form.Group>
+                  <Form.Group controlId="formFile" className="mb-3">
+                    <Form.Label>Add Picture</Form.Label>
+                    <br />
+                    <input
+                      type="file"
+                      onChange={(event) => {
+                        setImageSelected(event.target.files[0]);
+                      }}
                     />
                   </Form.Group>
-                  <Butt
-                    style={{ height: "50%", marginTop: "30px" }}
-                    onClick={handleAddItem}
-                    variant="secondary"
-                  >
-                    Add Item
-                  </Butt>
-                </div>
-                <div
-                  style={{
-                    margin: "10px",
-                    marginBottom: "20px",
-                    padding: "5px",
-                    boxShadow:
-                      "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
-                  }}
-                >
-                  {details.customItems.map((item) => {
-                    return (
-                      <div style={{ display: "flex" }}>
-                        <pre>
-                          {" "}
-                          <img
-                            alt="PLease wait..."
-                            src="https://img.icons8.com/cotton/44/000000/mountain.png"
-                          />{" "}
-                          {item.name} : ₹{item.price}
-                        </pre>
-                      </div>
-                    );
-                  })}
-                </div>
 
-                <Butt
-                  onClick={handleSubmit}
-                  style={{ textAlign: "center" }}
-                  variant="dark"
-                // type="submit"
-                >
-                  Post
-                </Butt>
-              </Form>
-            </Paper>
-          </Backdrop>
-        </div>
-      ) : (
-        <></>
-      )}
-      <Container style={{ marginTop: "30px" }}>
-        <Row>
-          {expDetail.map((exp) => {
-            return (
-              <Col lg={12} xl={6} style={{ marginBottom: "50px", padding: "0px", margin: "0px", display: "flex", justifyContent: "center", alignItems: "center" }}>
-                <Card
-                  onMouseEnter={() => setMouseCard(exp._id)}
-                  onMouseLeave={() => setMouseCard(0)}
-                  style={exp._id === mouseCard ? { width: "100%", boxShadow: "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px" } :
-                    { width: "100%", boxShadow: "rgba(0, 0, 0, 0.08) 0px 4px 12px" }} sx={{ maxWidth: 345 }}>
-                  <CardMedia
-                    component="img"
-                    height="200"
-                    image={exp.imageUrl[0]}
-                  />
-                  <CardContent>
-                    <Typography style={{textAlign:"center",fontWeight:"700"}}gutterBottom variant="h5" component="div">
-                      {exp.name}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {exp.description.substring(0,150)+"..."}
-                      <Button onClick = {() => viewMoreHandler(exp._id)} size="small">Read More</Button>
-                    </Typography>
-                    <br/>
-                    <Typography variant="h5" color="text.secondary">
-                      Base Price : ₹{exp.basePrice}
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                      <Button onClick = {() => viewMoreHandler(exp._id)} size="small">Learn More</Button>
-                  </CardActions>
-                </Card>
-              </Col>
-            );
-          })}
-        </Row>
-      </Container>
-    </div>
+                  {/* customizable */}
+
+                  <hr />
+                  <div style={{ display: "flex", fontSize: "1rem" }}>
+                    <Form.Group
+                      style={{ marginRight: "20px", width: "35%" }}
+                      className="mb-3"
+                      controlId="exampleForm.ControlInput1"
+                    >
+                      <Form.Label>Item Name</Form.Label>
+                      <Form.Control
+                        name="name"
+                        value={itemDetail.name}
+                        onChange={handleItemChange}
+                        placeholder="e.g Sleeping Bag"
+                      />
+                    </Form.Group>
+                    <Form.Group>
+                      <Form.Label>Item Price (₹)</Form.Label>
+                      <Form.Control
+                        style={{ width: "100px", marginRight: "20px" }}
+                        name="price"
+                        type="number"
+                        step="100"
+                        value={itemDetail.price}
+                        onChange={handleItemChange}
+                      />
+                    </Form.Group>
+                    <Butt
+                      style={{ height: "50%", marginTop: "30px" }}
+                      onClick={handleAddItem}
+                      variant="secondary"
+                    >
+                      Add Item
+                    </Butt>
+                  </div>
+                  <div
+                    style={{
+                      margin: "10px",
+                      marginBottom: "20px",
+                      padding: "5px",
+                      boxShadow:
+                        "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
+                    }}
+                  >
+                    {details.customItems.map((item) => {
+                      return (
+                        <div style={{ display: "flex" }}>
+                          <pre>
+                            {" "}
+                            <img
+                              alt="PLease wait..."
+                              src="https://img.icons8.com/cotton/44/000000/mountain.png"
+                            />{" "}
+                            {item.name} : ₹{item.price}
+                          </pre>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  <Butt
+                    onClick={handleSubmit}
+                    style={{ textAlign: "center" }}
+                    variant="dark"
+                    // type="submit"
+                  >
+                    Post
+                  </Butt>
+                </Form>
+              </Paper>
+            </Backdrop>
+          </div>
+        ) : (
+          <></>
+        )}
+
+        <Container style={{ marginTop: "30px" }}>
+          <div>
+          <Row>
+            <h1>Past</h1>
+            {expDetail.map((exp) => {
+              return new Date(exp.endingDate) < new Date() ? (
+                <>
+                    <Col
+                      lg={12}
+                      xl={6}
+                      style={{
+                        marginBottom: "50px",
+                        padding: "0px",
+                        margin: "0px",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Card
+                        onMouseEnter={() => setMouseCard(exp._id)}
+                        onMouseLeave={() => setMouseCard(0)}
+                        style={
+                          exp._id === mouseCard
+                            ? {
+                                width: "100%",
+                                boxShadow:
+                                  "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px",
+                              }
+                            : {
+                                width: "100%",
+                                boxShadow: "rgba(0, 0, 0, 0.08) 0px 4px 12px",
+                              }
+                        }
+                        sx={{ maxWidth: 345 }}
+                      >
+                        <CardMedia
+                          component="img"
+                          height="200"
+                          image={exp.imageUrl[0]}
+                        />
+                        <CardContent>
+                          <Typography
+                            style={{ textAlign: "center", fontWeight: "700" }}
+                            gutterBottom
+                            variant="h5"
+                            component="div"
+                          >
+                            {exp.name}
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            {exp.description.substring(0, 150) + "..."}
+                            <Button
+                              onClick={() => viewMoreHandler(exp._id)}
+                              size="small"
+                            >
+                              Read More
+                            </Button>
+                          </Typography>
+                          <br />
+                          <Typography variant="h5" color="text.secondary">
+                            Base Price : ₹{exp.basePrice}
+                          </Typography>
+                        </CardContent>
+                        <CardActions>
+                          <Button
+                            onClick={() => viewMoreHandler(exp._id)}
+                            size="small"
+                          >
+                            Learn More
+                          </Button>
+                        </CardActions>
+                      </Card>
+                    </Col>
+                </>
+              ) : (
+                <></>
+              );
+            })}
+            </Row>
+          </div>
+          <div>
+            <h1>Upcoming</h1>
+            <Row>
+            {expDetail.map((exp) => {
+              return new Date(exp.endingDate) < new Date() ? (
+                <></>
+              ) : (
+                
+                  <Col
+                    lg={12}
+                    xl={6}
+                    style={{
+                      marginBottom: "50px",
+                      padding: "0px",
+                      margin: "0px",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Card
+                      onMouseEnter={() => setMouseCard(exp._id)}
+                      onMouseLeave={() => setMouseCard(0)}
+                      style={
+                        exp._id === mouseCard
+                          ? {
+                              width: "100%",
+                              boxShadow:
+                                "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px",
+                            }
+                          : {
+                              width: "100%",
+                              boxShadow: "rgba(0, 0, 0, 0.08) 0px 4px 12px",
+                            }
+                      }
+                      sx={{ maxWidth: 345 }}
+                    >
+                      <CardMedia
+                        component="img"
+                        height="200"
+                        image={exp.imageUrl[0]}
+                      />
+                      <CardContent>
+                        <Typography
+                          style={{ textAlign: "center", fontWeight: "700" }}
+                          gutterBottom
+                          variant="h5"
+                          component="div"
+                        >
+                          {exp.name}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          {exp.description.substring(0, 150) + "..."}
+                          <Button
+                            onClick={() => viewMoreHandler(exp._id)}
+                            size="small"
+                          >
+                            Read More
+                          </Button>
+                        </Typography>
+                        <br />
+                        <Typography variant="h5" color="text.secondary">
+                          Base Price : ₹{exp.basePrice}
+                        </Typography>
+                      </CardContent>
+                      <CardActions>
+                        <Button
+                          onClick={() => viewMoreHandler(exp._id)}
+                          size="small"
+                        >
+                          Learn More
+                        </Button>
+                      </CardActions>
+                    </Card>
+                  </Col>
+                
+              );
+            })}
+            </Row>
+          </div>
+        </Container>
+      </div>
     </>
   );
 }

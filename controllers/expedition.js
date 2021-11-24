@@ -16,6 +16,7 @@ export const uploadExpedition = (req, res, err) => {
     imageUrl: url,
     customItems: req.body.customItems,
     registeredUsers: [],
+    endingDate:req.body.endingDate,
     reviews: []
   });
   newExpedition.save();
