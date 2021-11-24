@@ -1,7 +1,19 @@
 .navbar-brand {
-	display: flex;
-	align-items: center;
-  }
-  .navbar-brand>img {
-	padding: 7px 14px;
-  }
+  display: flex;
+  align-items: center;
+}
+.navbar-brand > img {
+  padding: 7px 14px;
+}
+
+.link {
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: 350;
+  font-size: 19px;
+  margin: 0 4px;
+  font-family: " Montserrat", sans-serif;
+}
+.link:hover {
+  color: #fb2056;
+}

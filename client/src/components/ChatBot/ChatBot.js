@@ -6,7 +6,7 @@ import ScrollToBottom from "react-scroll-to-bottom";
 import { css } from "@emotion/css";
 import userIcon from "../../Image/usericon.png";
 import botIcon from "../../Image/bot.png";
-
+import micImage from "../../Image/microphone.png";
 const SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition;
 const mic = new SpeechRecognition();
@@ -90,7 +90,9 @@ function ChatBotComp() {
     console.log(userMessage);
     socketRef.current.emit("message", { userMessage });
     setUserMessage("");
-    setIsListening((prevState) => !prevState);
+    if (isListening === true) {
+      setIsListening((prevState) => !prevState);
+    }
     e.preventDefault();
   };
 
@@ -111,7 +113,8 @@ function ChatBotComp() {
       <div
         style={{
           opacity: 1,
-          borderRadius: "15px 50px 30px",
+          marginRight: "20px",
+          borderRadius: "20px ",
           backgroundImage:
             "url('https://i.pinimg.com/originals/90/de/6a/90de6a722188fc9a9c0835db1f0e5500.jpg')",
           backgroundPosition: "center",
@@ -134,7 +137,7 @@ function ChatBotComp() {
             alt=""
             style={{
               float: "right",
-              margin: "5px",
+              margin: "1px",
               marginBottom: "5px",
               zIndex: "20000",
               position: "relative",
@@ -190,45 +193,68 @@ function ChatBotComp() {
             })}
           </ScrollToBottom>
         </div>
-        {/* <div style={{  borderBottomRightRadius: "50px !important" }}> */}
-          <InputGroup
+        <InputGroup
+          style={{
+            bottom: 0,
+            position: "fixed",
+            width: "400px",
+            marginBottom: "10px",
+          }}
+        >
+          <input
             style={{
-              bottom: 0,
-              position: "fixed",
-              width: "300px",
-              marginBottom: "14px",
+              height: "50px",
+              width: "220px",
+              borderRadius: "30px",
+              border: "3px solid #464f4f",
             }}
-          >
-            <Form.Control
-            style={{borderRadius:"20px"}}
-              onKeyPress={handleKeyPress}
-              value={userMessage}
-              onChange={(event) => setUserMessage(event.target.value)}
-              aria-label="Recipient's username with two button addons"
-            />
-            <img
-              alt=""
-              style={{ border: "1px solid #464f4f", marginLeft: "4px" }}
-              onClick={chatSubmitHandler}
-              src="https://img.icons8.com/external-kmg-design-flat-kmg-design/30/000000/external-send-user-interface-kmg-design-flat-kmg-design.png"
-            />
-            <span onClick={() => setIsListening((prevState) => !prevState)}>
-              {isListening ? (
-                <img
-                  alt=""
-                  style={{ border: "1px solid #464f4f", marginLeft: "4px" }}
-                  src="https://img.icons8.com/emoji/37/000000/red-circle-emoji.png"
-                />
-              ) : (
-                <img
-                  alt=""
-                  style={{ border: "1px solid #464f4f", marginLeft: "4px" }}
-                  src="https://img.icons8.com/small/37/000000/microphone.png"
-                />
-              )}
-            </span>
-          </InputGroup>
-        {/* </div> */}
+            onKeyPress={handleKeyPress}
+            value={userMessage}
+            onChange={(event) => setUserMessage(event.target.value)}
+            aria-label="Recipient's username with two button addons"
+          ></input>
+          <img
+            style={{
+              borderRadius: "40%",
+              border: "3px solid #464f4f",
+              marginLeft: "4px",
+              height: "50px",
+              width: "50px",
+              // backgroundColor: "#A9A9A9",
+            }}
+            onClick={chatSubmitHandler}
+            alt=""
+            src="https://img.icons8.com/external-flatart-icons-outline-flatarticons/64/000000/external-send-basic-ui-elements-flatart-icons-outline-flatarticons.png"
+          />
+
+          <span onClick={() => setIsListening((prevState) => !prevState)}>
+            {isListening ? (
+              <img
+                alt=""
+                style={{
+                  borderRadius: "50%",
+                  border: "3px solid #464f4f",
+                  marginLeft: "4px",
+                  height: "50px",
+                  width: "50px",
+                }}
+                src="https://img.icons8.com/emoji/37/000000/red-circle-emoji.png"
+              />
+            ) : (
+              <img
+                alt=""
+                style={{
+                  borderRadius: "50%",
+                  border: "3px solid #464f4f",
+                  marginLeft: "4px",
+                  height: "50px",
+                  width: "50px",
+                }}
+                src="https://img.icons8.com/fluency/48/000000/microphone.png"
+              />
+            )}
+          </span>
+        </InputGroup>
       </div>
     );
   } else {
