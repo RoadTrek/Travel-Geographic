@@ -122,7 +122,8 @@ export default function Gallery() {
       <div
         style={{
           width: "100vw",
-          alignItems: "center",
+          // display:"flex",
+          // justifyContent: "center",
           top: "50%",
           height: "25vh",
           backgroundColor: "#f7f7f7",
@@ -144,11 +145,11 @@ export default function Gallery() {
         </h3>
         <div
           style={{
-            top: "50%",
+            top: "40%",
             position: "relative",
             marginBottom: "15px",
             borderRadius: "100px",
-            marginLeft: "640px",
+            marginLeft: "540px",
             width: "200px",
             height: "5px",
             backgroundColor: "#fb2056",

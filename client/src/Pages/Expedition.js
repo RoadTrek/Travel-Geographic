@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import {Redirect} from 'react-router-dom';
+import React, { useState } from "react"
 import {
   Card,
   CardMedia,
@@ -12,7 +11,7 @@ import {
 } from "@mui/material";
 import { Form, Button as Butt, Container, Row, Col } from "react-bootstrap";
 import axios from "axios";
-
+import sachin from "../Image/sachin2021.mp4";
 export default function Expedition(props) {
   const [expDetail, setExpDetail] = useState([]);
   const [open, setOpen] = useState(false);
@@ -122,10 +121,56 @@ export default function Expedition(props) {
   }
 
   return (
-    <div>
+    <>
+       <div>
+    <video
+          autoPlay
+          loop
+          muted
+          style={{
+            position: "absolute",
+            opacity: "0.9",
+            width: "100%",
+            left: "50%",
+            height: "80%",
+            top: "50%",
+            objectFit: "cover",
+            transform: "translate(-50%, -50%)",
+            zIndex: -0,
+          }}
+        >
+          <source src={sachin} type="video/webm" />
+        </video>
+        </div>
+        <div id="text_div center_all">
+        <div className="center_all">
+          <h1
+            style={{
+              fontSize: "50px",
+              fontWeight: "700",
+              color: "white",
+              fontFamily: "'Montserrat',sans-serif",
+            }}
+            className="custom-subTitle"
+          >
+            Expedition
+          </h1>
+          <div
+            style={{
+              marginTop: "5px",
+              marginBottom: "15px",
+              borderRadius: "100px",
+              width: "100px",
+              height: "5px",
+              backgroundColor: "#fb2056",
+            }}
+          ></div>
+        </div>
+      </div>
+    <div style={{marginTop:"580px"}}>
       {localStorage.getItem("email") === "tg.official.1001@gmail.com" ? (
         <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-          <img onClick={() => setOpen(true)} style={{ width: "200px" }} src="https://i.ibb.co/v4wxH68/add-button.gif" />
+          <img alt="" onClick={() => setOpen(true)} style={{ width: "200px" }} src="https://i.ibb.co/v4wxH68/add-button.gif" />
           <Backdrop
             sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
             open={open}
@@ -192,12 +237,6 @@ export default function Expedition(props) {
                       setImageSelected(event.target.files[0]);
                     }}
                   />
-                  {/* <Form.Control
-                    type="file"
-                    onChange={(event) => {
-                      setImageSelected(event.target.files[0]);
-                    }}
-                  /> */}
                 </Form.Group>
 
                 {/* customizable */}
@@ -314,5 +353,6 @@ export default function Expedition(props) {
         </Row>
       </Container>
     </div>
+    </>
   );
 }
