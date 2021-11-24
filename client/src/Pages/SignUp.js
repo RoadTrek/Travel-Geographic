@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Redirect } from "react-router-dom";
 import {
   Grid,
   Paper,
@@ -10,8 +9,6 @@ import {
   Link,
 } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import axios from "axios";
@@ -24,7 +21,6 @@ const SignUp = (props) => {
   };
   const avatarStyle = { backgroundColor: "#1bbd7e" };
   const btnstyle = { margin: "8px 0" };
-  var [redirect, setRedirect] = useState();
   const [details, setDetails] = useState({
     email: "",
     password: "",
@@ -45,10 +41,11 @@ const SignUp = (props) => {
     })
       .then((res) => {
         console.log(res.data);
-        localStorage.setItem('name', res.data.name);
-        localStorage.setItem('logged', true);
-        localStorage.setItem('email', res.data.email);
-        props.history.push('/');
+        localStorage.setItem("name", res.data.name);
+        localStorage.setItem("logged", true);
+        localStorage.setItem("email", res.data.email);
+        localStorage.setItem("contactNumber", res.data.contactNumber);
+        props.history.push("/");
         setMessage(res.data.msg);
         console.log("signup details sent");
       })
@@ -61,7 +58,7 @@ const SignUp = (props) => {
     const name = event.target.name;
     const value = event.target.value;
 
-    setDetails(function (prev) {
+    setDetails(function(prev) {
       const newVal = {
         ...prev,
         [name]: value,
@@ -77,7 +74,6 @@ const SignUp = (props) => {
           paddingBottom: "0px",
           background: "white",
           marginTop: "110px",
-          paddingBottom: "",
         }}
       >
         <Paper elevation={10} style={paperStyle}>
@@ -118,12 +114,15 @@ const SignUp = (props) => {
             fullWidth
             required
           />
-          <PhoneInput
-            style={{ marginTop: "25px", marginBottom: "15px" }}
+          <TextField
+            type="number"
+            style={{ marginTop: "20px", marginBottom: "15px" }}
             placeholder="Enter phone number"
-            value={contactNumber}
-            // name="contactNumber"
-            onChange={setContactNumber}
+            value={details.contactNumber}
+            name="contactNumber"
+            onChange={handleChange}
+            fullWidth
+            required
           />
           <Button
             onClick={(event) => {
