@@ -114,7 +114,9 @@ const NavbarComp = () => {
                       fontFamily: "'Montserrat',sans-serif",
                     }}
                   >
-                    Hi {name}
+                    <Link className="link" to="/profile">
+                      Hi {name}
+                    </Link>
                   </Nav.Link>
                 </>
               )}

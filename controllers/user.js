@@ -1,4 +1,5 @@
 import user from "../models/user.js";
+import requestExp from "../models/requestExp.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
@@ -84,4 +85,14 @@ export const signupUser = (req, res, err) => {
             res.status(200).json(req.body);
         }
     });
+}
+
+export const profile = (req,res,err) => {
+    requestExp.find({userEmail: req.body.email}, (err,data) => {
+        if(err) {
+            console.log(err);
+        } else {
+            res.status(200).json(data);
+        }
+    })
 }

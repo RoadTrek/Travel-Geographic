@@ -13,8 +13,7 @@ import SignUp from './Pages/SignUp.js';
 import IndExp from './Pages/IndExp.js';
 import AdminApproval from './Pages/AdminApproval.js';
 import ChatBot from "./components/ChatBot/ChatBot";
-
-
+import Profile from './Pages/Profile';
 
 function App() {
 	return (
@@ -29,6 +28,7 @@ function App() {
 					<Route path='/trek' component={Trek} />
 					<Route path='/login' component={Login} />
 					<Route path='/signup' component={SignUp} />
+					<Route path='/profile' component={Profile} />
 					<Route path = '/expedition/pendingRequests' component={AdminApproval} />
 					<Route path = '/expedition/:id' component={IndExp} />
 				</Switch>

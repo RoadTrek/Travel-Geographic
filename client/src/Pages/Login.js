@@ -38,7 +38,6 @@ const Login = (props) => {
     })
       .then((res) => {
           if(res.status===200){
-              console.log(res.data);
               localStorage.setItem('name', res.data.name);
               localStorage.setItem('logged', true);
               localStorage.setItem('email', res.data.email);
