@@ -74,7 +74,7 @@ function Home() {
           </h1>
         </div>
       </div>
-      <div style={{ position: "absolute", marginTop: "545px" }}>
+      <div style={{ position: "absolute", marginTop: "480px" }}>
         <div
           style={{
             position: "relative",
