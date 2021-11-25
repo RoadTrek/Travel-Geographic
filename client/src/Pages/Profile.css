@@ -4,3 +4,17 @@
     font-weight:600;
     font-family: 'Open Sans', sans-serif;
 }
+
+.card{
+    margin-top:50px;
+    width:20rem;
+    height:22rem;
+    border-radius: 10px;
+    border:1px solid;
+    box-shadow:5px 5px black;
+}
+
+.textstyle{
+    font-family: 'Open Sans', sans-serif;
+    font-size:1.1rem;
+}

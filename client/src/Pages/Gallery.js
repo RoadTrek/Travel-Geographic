@@ -2,13 +2,11 @@ import * as React from "react";
 import {
   Form,
   Card,
-  Image,
   Row,
   Col,
   Container,
-  CardImg,
 } from "react-bootstrap";
-import { Button, Typography, Backdrop, Grid, Paper } from "@mui/material";
+import { Button, Backdrop,Paper } from "@mui/material";
 import axios from "axios";
 import sachin from "../Image/sachin2021.mp4";
 import "./Home.css";
@@ -122,8 +120,6 @@ export default function Gallery() {
       <div
         style={{
           width: "100vw",
-          // display:"flex",
-          // justifyContent: "center",
           top: "50%",
           height: "25vh",
           backgroundColor: "#f7f7f7",
