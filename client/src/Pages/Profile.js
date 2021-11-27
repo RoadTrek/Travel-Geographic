@@ -3,14 +3,16 @@ import { Image } from "react-bootstrap";
 import axios from "axios";
 import "./Profile.css";
 import "../index.css";
-import { Button, Card, ListGroup } from "react-bootstrap";
-
+import { Button, Card, ListGroup, Form } from "react-bootstrap";
+import { Backdrop,Paper } from "@mui/material";
 import ScrollArea from "react-scrollbar";
 
 const Profile = () => {
-  const [expAcc, setExpAcc] = useState([]);
-  const [expRej, setExpRej] = useState([]);
+  const [expCur, setExpCur] = useState([]);
   const [expPast, setExpPast] = useState([]);
+  const [dpBackdrop, setDpBackdrop] = useState(false);
+  const [imageSelected, setImageSelected] = useState();
+
   useEffect(() => {
     const url = "http://localhost:8080/profile";
     axios({
@@ -22,26 +24,28 @@ const Profile = () => {
         reqStatus: "true"
       },
     }).then((res) => {
-      setExpAcc(res.data);
-      console.log("accepted: ", res.data);
-    });
-    axios({
-      method: "POST",
-      withCredentials: true,
-      url: url,
-      data: {
-        email: localStorage.getItem("email"),
-        reqStatus: "false"
-      },
-    }).then((res) => {
-      setExpRej(res.data);
-      console.log("rejected: ", res.data);
+      const newExpCur = [];
+      const newExpPast = [];
+      res.data.map((item) => {
+        if (new Date(item.endingDate) >= new Date())
+          newExpCur.push(item);
+        else
+          newExpPast.push(item);
+      })
+      setExpCur(newExpCur);
+      setExpPast(newExpPast);
     });
   }, []);
+
   const [state, setState] = useState({
     isPaneOpenPast: false,
     isPaneOpenUpcoming: false,
   });
+
+  const uploadImage = () => {
+    // axios
+  }
+
   return (
     <>
       <div
@@ -50,11 +54,45 @@ const Profile = () => {
           justifyContent: "center",
         }}
       >
+        <Backdrop
+          sx={{
+            color: "#fff",
+            zIndex: (theme) => theme.zIndex.drawer + 1,
+          }}
+          open={dpBackdrop}
+        >
+          <Paper elevation={24}>
+            <img
+              alt=""
+              style={{ float: "right", margin: "5px" }}
+              onClick={() => setDpBackdrop(false)}
+              src={
+                "https://img.icons8.com/" +
+                "ios" +
+                "/35/000000/cancel.png"
+              }
+            />
+            <Form style={{ padding: "40px", textAlign: "center" }}>
+              <input
+                type="file"
+                onChange={(event) => {
+                  setImageSelected(event.target.files[0]);
+                }}
+              />
+              <hr />
+              <Button
+                style={{ fontSize: "1.2rem" }}
+                onClick={uploadImage}
+              >
+                Upload
+              </Button>
+            </Form>
+          </Paper>
+        </Backdrop>
         <div
           style={{
-            margin: "130px 100px 0 0",
+            margin: "20px 100px 0 0",
             fontFamily: "'Josefin Sans', sans-serif",
-            marginBottom: "20px",
             height: "50px",
             fontSize: "2rem",
             fontWeight: "400",
@@ -109,7 +147,13 @@ const Profile = () => {
                   verticalScrollbarStyle={{ borderRadius: "500px" }}
                 >
                   <ListGroup className="textstyle" variant="flush">
-                    <ListGroup.Item>Cras justo odio</ListGroup.Item>
+                    {expPast.length === 0 ? <p>No past Expedition found</p> :
+                      expPast.map((exp) => {
+                        return (
+                          <ListGroup.Item>{exp.name}</ListGroup.Item>
+                        );
+                      })
+                    }
                   </ListGroup>
                 </ScrollArea>
               </Card>
@@ -126,7 +170,13 @@ const Profile = () => {
                   horizontal={false}
                 >
                   <ListGroup className="textstyle" variant="flush">
-                    <ListGroup.Item>Cras justo odio</ListGroup.Item>
+                    {expCur.length === 0 ? <p>No Upcoming Expedition found</p> :
+                      expCur.map((exp) => {
+                        return (
+                          <ListGroup.Item>{exp.name}</ListGroup.Item>
+                        );
+                      })
+                    }
                   </ListGroup>
                 </ScrollArea>
               </Card>
@@ -145,11 +195,12 @@ const Profile = () => {
             Profile
           </h1>
           <Image
+            onClick={() => setDpBackdrop(true)}
             style={{
               position: "absolute",
               height: "239px",
               width: "239px",
-              marginTop: "150px",
+              marginTop: "40px",
               display: "inline-block",
               border: "3px ridge"
             }}
@@ -159,7 +210,7 @@ const Profile = () => {
         </div>
         <div
           style={{
-            margin: "130px 0 0 300px",
+            margin: "20px 0 0 300px",
             display: "inline-block",
           }}
         >
