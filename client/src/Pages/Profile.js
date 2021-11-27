@@ -8,6 +8,9 @@ import { Button, Card, ListGroup } from "react-bootstrap";
 import ScrollArea from "react-scrollbar";
 
 const Profile = () => {
+  const [expAcc, setExpAcc] = useState([]);
+  const [expRej, setExpRej] = useState([]);
+  const [expPast, setExpPast] = useState([]);
   useEffect(() => {
     const url = "http://localhost:8080/profile";
     axios({
@@ -16,9 +19,23 @@ const Profile = () => {
       url: url,
       data: {
         email: localStorage.getItem("email"),
+        reqStatus: "true"
       },
     }).then((res) => {
-      console.log(res.data);
+      setExpAcc(res.data);
+      console.log("accepted: ", res.data);
+    });
+    axios({
+      method: "POST",
+      withCredentials: true,
+      url: url,
+      data: {
+        email: localStorage.getItem("email"),
+        reqStatus: "false"
+      },
+    }).then((res) => {
+      setExpRej(res.data);
+      console.log("rejected: ", res.data);
     });
   }, []);
   const [state, setState] = useState({
@@ -56,7 +73,7 @@ const Profile = () => {
                 fontSize: "1.2rem",
                 color: "black",
                 border: "1px groove",
-                borderRadius:"10%"
+                borderRadius: "10%"
               }}
             >
               Past
@@ -74,7 +91,7 @@ const Profile = () => {
                 color: "black",
                 fontSize: "1.2rem",
                 border: "1px groove",
-                borderRadius:"10%"
+                borderRadius: "10%"
               }}
             >
               Upcoming
@@ -83,7 +100,7 @@ const Profile = () => {
           {state.isPaneOpenPast === true ? (
             <div>
               <Card className="card">
-                <Card.Header style={{fontSize:"1.5rem",fontWeight:"550"}}>Past Expeditions</Card.Header>
+                <Card.Header style={{ fontSize: "1.5rem", fontWeight: "550" }}>Past Expeditions</Card.Header>
                 <ScrollArea
                   speed={0.5}
                   className="area"
@@ -100,7 +117,7 @@ const Profile = () => {
           ) : (
             <div>
               <Card className="card">
-                <Card.Header style={{fontSize:"1.5rem",fontWeight:"550"}}>Upcoming Expeditions</Card.Header>
+                <Card.Header style={{ fontSize: "1.5rem", fontWeight: "550" }}>Upcoming Expeditions</Card.Header>
                 <ScrollArea
                   verticalScrollbarStyle={{ borderRadius: "500px" }}
                   speed={0.5}
@@ -122,7 +139,7 @@ const Profile = () => {
               fontFamily: "'Josefin Sans', sans-serif",
               marginTop: "50px",
               marginLeft: "40px",
-              fontSize:"3rem"
+              fontSize: "3rem"
             }}
           >
             Profile
@@ -134,7 +151,7 @@ const Profile = () => {
               width: "239px",
               marginTop: "150px",
               display: "inline-block",
-              border:"3px ridge"
+              border: "3px ridge"
             }}
             src="https://static.thenounproject.com/png/204868-200.png"
             roundedCircle

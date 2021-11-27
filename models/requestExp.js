@@ -8,6 +8,7 @@ const requestExp = new mongoose.Schema({
   reqStatus: Boolean,
   customItemSelected:Array,
   name:String,
+  endingDate:Date
 });
 
 const reqExp = mongoose.model("reqExp", requestExp);

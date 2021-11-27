@@ -38,7 +38,7 @@ const IndExp = (params) => {
         });
       }
     }
-
+    console.log(details);
     axios({
       method: "POST",
       withCredentials: true,
@@ -49,6 +49,7 @@ const IndExp = (params) => {
         reqStatus: false,
         customItemsSelected: tempSelectedItems,
         name: details.name,
+        endingDate: details.endingDate
       },
     }).then((res) => {
       console.log(details);

@@ -89,7 +89,7 @@ export const signupUser = (req, res, err) => {
 };
 
 export const profile = (req, res, err) => {
-  requestExp.find({ userEmail: req.body.email }, (err, data) => {
+  requestExp.find({ userEmail: req.body.email, reqStatus: req.body.reqStatus }, (err, data) => {
     if (err) {
       console.log(err);
     } else {

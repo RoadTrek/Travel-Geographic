@@ -55,13 +55,7 @@ export const uploadExpImage = (req, res, err) => {
 }
 
 export const requestAdminExp = (req, res, err) => {
-  const newRequest = new requestExp({
-    expId: req.body.expId,
-    userEmail: req.body.userEmail,
-    reqStatus: req.body.reqStatus,
-    customItemSelected: req.body.customItemsSelected,
-    name: req.body.name,
-  });
+  const newRequest = new requestExp(req.body);
 
   newRequest.save((err, result) => {
     if (err) {
