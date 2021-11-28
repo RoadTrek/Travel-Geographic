@@ -97,3 +97,24 @@ export const profile = (req, res, err) => {
     }
   });
 };
+
+export const uploadImage = (req,res,err) => {
+  const url = req.body.url.secure_url;
+  console.log(url);
+  user.findOneAndUpdate({email:req.body.email},{imageUrl:url},(err,docs)=>{
+    if(err){
+      console.log(err);
+    }else{
+      res.status(200).json(docs);
+      console.log(docs);
+    }
+  })
+}
+
+export const getData=(req,res,err)=>{
+  console.log(req.params);
+  user.find({email:req.params.id}, function (err, data) {
+    console.log(data);
+    res.status(200).json({ image: data });
+  });
+}

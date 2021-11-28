@@ -4,7 +4,7 @@ import axios from "axios";
 import "./Profile.css";
 import "../index.css";
 import { Button, Card, ListGroup, Form } from "react-bootstrap";
-import { Backdrop,Paper } from "@mui/material";
+import { Backdrop, Paper } from "@mui/material";
 import ScrollArea from "react-scrollbar";
 
 const Profile = () => {
@@ -21,17 +21,15 @@ const Profile = () => {
       url: url,
       data: {
         email: localStorage.getItem("email"),
-        reqStatus: "true"
+        reqStatus: "true",
       },
     }).then((res) => {
       const newExpCur = [];
       const newExpPast = [];
       res.data.map((item) => {
-        if (new Date(item.endingDate) >= new Date())
-          newExpCur.push(item);
-        else
-          newExpPast.push(item);
-      })
+        if (new Date(item.endingDate) >= new Date()) newExpCur.push(item);
+        else newExpPast.push(item);
+      });
       setExpCur(newExpCur);
       setExpPast(newExpPast);
     });
@@ -42,9 +40,51 @@ const Profile = () => {
     isPaneOpenUpcoming: false,
   });
 
+  const formData = new FormData();
+  const [details, setDetails] = useState();
+
   const uploadImage = () => {
-    // axios
-  }
+    formData.append("file", imageSelected);
+    formData.append("upload_preset", process.env.REACT_APP_uploadPreset);
+    axios
+      .post(
+        "https://api.cloudinary.com/v1_1/" +
+          process.env.REACT_APP_cloudName +
+          "/image/upload",
+        formData
+      )
+      .then((res) => {
+        const imageUrl = res.data;
+        console.log(imageUrl);
+        axios({
+          method: "POST",
+          withCredentials: true,
+          url: "http://localhost:8080/user/uploadImage",
+          data: {
+            url: imageUrl,
+            email: localStorage.getItem("email"),
+          },
+        }).then((respond) => {
+          console.log("Data sent successfully" + respond.data);
+
+          setDetails(respond.data.image);
+        });
+        window.location.reload();
+      });
+  };
+  useEffect(() => {
+    axios({
+      method: "GET",
+      withCredentials: true,
+      url:
+        "http://localhost:8080/user/getData/" + localStorage.getItem("email"),
+    }).then(async (res) => {
+      console.log(res.data.image);
+
+      setDetails(res.data.image);
+      console.log(details);
+    });
+  }, []);
 
   return (
     <>
@@ -66,11 +106,7 @@ const Profile = () => {
               alt=""
               style={{ float: "right", margin: "5px" }}
               onClick={() => setDpBackdrop(false)}
-              src={
-                "https://img.icons8.com/" +
-                "ios" +
-                "/35/000000/cancel.png"
-              }
+              src={"https://img.icons8.com/" + "ios" + "/35/000000/cancel.png"}
             />
             <Form style={{ padding: "40px", textAlign: "center" }}>
               <input
@@ -80,10 +116,7 @@ const Profile = () => {
                 }}
               />
               <hr />
-              <Button
-                style={{ fontSize: "1.2rem" }}
-                onClick={uploadImage}
-              >
+              <Button style={{ fontSize: "1.2rem" }} onClick={uploadImage}>
                 Upload
               </Button>
             </Form>
@@ -111,7 +144,7 @@ const Profile = () => {
                 fontSize: "1.2rem",
                 color: "black",
                 border: "1px groove",
-                borderRadius: "10%"
+                borderRadius: "10%",
               }}
             >
               Past
@@ -129,7 +162,7 @@ const Profile = () => {
                 color: "black",
                 fontSize: "1.2rem",
                 border: "1px groove",
-                borderRadius: "10%"
+                borderRadius: "10%",
               }}
             >
               Upcoming
@@ -138,7 +171,9 @@ const Profile = () => {
           {state.isPaneOpenPast === true ? (
             <div>
               <Card className="card">
-                <Card.Header style={{ fontSize: "1.5rem", fontWeight: "550" }}>Past Expeditions</Card.Header>
+                <Card.Header style={{fontFamily:"'Josefin Sans', sans-serif",fontSize: "1.5rem", fontWeight: "550" }}>
+                  Past Expeditions
+                </Card.Header>
                 <ScrollArea
                   speed={0.5}
                   className="area"
@@ -147,13 +182,13 @@ const Profile = () => {
                   verticalScrollbarStyle={{ borderRadius: "500px" }}
                 >
                   <ListGroup className="textstyle" variant="flush">
-                    {expPast.length === 0 ? <p>No past Expedition found</p> :
+                    {expPast.length === 0 ? (
+                      <ListGroup.Item style={{fontFamily:"'Josefin Sans', sans-serif"}}>No past Expedition found</ListGroup.Item>
+                    ) : (
                       expPast.map((exp) => {
-                        return (
-                          <ListGroup.Item>{exp.name}</ListGroup.Item>
-                        );
+                        return <ListGroup.Item style={{fontFamily:"'Josefin Sans', sans-serif"}}>{exp.name}</ListGroup.Item>;
                       })
-                    }
+                    )}
                   </ListGroup>
                 </ScrollArea>
               </Card>
@@ -161,7 +196,9 @@ const Profile = () => {
           ) : (
             <div>
               <Card className="card">
-                <Card.Header style={{ fontSize: "1.5rem", fontWeight: "550" }}>Upcoming Expeditions</Card.Header>
+                <Card.Header style={{fontFamily:"'Josefin Sans', sans-serif",fontSize: "1.5rem", fontWeight: "550" }}>
+                  Upcoming Expeditions
+                </Card.Header>
                 <ScrollArea
                   verticalScrollbarStyle={{ borderRadius: "500px" }}
                   speed={0.5}
@@ -170,13 +207,13 @@ const Profile = () => {
                   horizontal={false}
                 >
                   <ListGroup className="textstyle" variant="flush">
-                    {expCur.length === 0 ? <p>No Upcoming Expedition found</p> :
+                    {expCur.length === 0 ? (
+                      <ListGroup.Item  style={{fontFamily:"'Josefin Sans', sans-serif"}}>No Upcoming Expedition found</ListGroup.Item>
+                    ) : (
                       expCur.map((exp) => {
-                        return (
-                          <ListGroup.Item>{exp.name}</ListGroup.Item>
-                        );
+                        return <ListGroup.Item style={{fontFamily:"'Josefin Sans', sans-serif"}}>{exp.name}</ListGroup.Item>;
                       })
-                    }
+                    )}
                   </ListGroup>
                 </ScrollArea>
               </Card>
@@ -189,7 +226,7 @@ const Profile = () => {
               fontFamily: "'Josefin Sans', sans-serif",
               marginTop: "50px",
               marginLeft: "40px",
-              fontSize: "3rem"
+              fontSize: "3rem",
             }}
           >
             Profile
@@ -202,9 +239,9 @@ const Profile = () => {
               width: "239px",
               marginTop: "40px",
               display: "inline-block",
-              border: "3px ridge"
+              border: "3px ridge",
             }}
-            src="https://static.thenounproject.com/png/204868-200.png"
+            src={details?details.imageUrl:<p>hello</p>}
             roundedCircle
           />
         </div>
@@ -260,9 +297,6 @@ const Profile = () => {
             {localStorage.getItem("contactNumber")}
           </div>
         </div>
-        {/* </Col>
-          </Row>
-        </Container> */}
       </div>
     </>
   );

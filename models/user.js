@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema({
   password: String,
   expeditionEnrolled:Array,
   approveId:Array,
+  imageUrl:String,
 });
 
 const user = mongoose.model("user", userSchema);
