@@ -31,7 +31,7 @@ function Home() {
             top: "50%",
             objectFit: "cover",
             transform: "translate(-50%, -50%)",
-            zIndex: -0,
+            zIndex: 0,
           }}
         >
           <source src={sachin} type="video/mp4" />

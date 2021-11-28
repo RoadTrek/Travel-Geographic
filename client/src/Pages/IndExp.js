@@ -282,6 +282,9 @@ const IndExp = (params) => {
             <pre style={{ fontSize:"30px",fontWeight: "700" }}>
               BasePrice: 
             </pre>
+            <pre style={{ fontSize:"30px",fontWeight: "700" }}>
+              Date: 25th December 2021
+            </pre>
             <pre style={{fontSize:"40px", color: "#595c5a"}}>
             ₹ {details ? details.basePrice : null}
             </pre>
