@@ -26,6 +26,22 @@ const IndExp = (params) => {
   const [modalShow, setModalShow] = useState(false);
   const [requestBackdrop, setRequestBackdrop] = useState(false);
   const [reviewBackdrop, setReviewBackdrop] = useState(false);
+  const [isRegistered, setIsRegistered] = useState(false);
+
+  useEffect(() => {
+    axios({
+      method: "POST",
+      withCredentials: true,
+      url: "http://localhost:8080/expedition/isRegistered",
+      data: {
+        userEmail: localStorage.getItem('email'),
+        expId: params.match.params.id
+      }
+    }).then((res) => {
+      if (res.data.length > 0 && res.data[0].reqStatus)
+        setIsRegistered(true);
+    });
+  }, [])
 
   const expRequest = (props) => {
     const tempSelectedItems = [];
@@ -38,7 +54,6 @@ const IndExp = (params) => {
         });
       }
     }
-    console.log(details);
     axios({
       method: "POST",
       withCredentials: true,
@@ -47,9 +62,11 @@ const IndExp = (params) => {
         expId: details._id,
         userEmail: localStorage.getItem("email"),
         reqStatus: false,
-        customItemsSelected: tempSelectedItems,
+        customItemSelected: tempSelectedItems,
         name: details.name,
-        endingDate: details.endingDate
+        endingDate: details.endingDate,
+        totalPrice: totalPrice,
+        contact: localStorage.getItem("contactNumber")
       },
     }).then((res) => {
       console.log(details);
@@ -105,7 +122,6 @@ const IndExp = (params) => {
       for (let i = 1; i <= res.data.customItems.length; i++) {
         temp.push(false);
       }
-      console.log(temp.length);
       setCheckArray(temp);
       setTotalPrice(Number(res.data.basePrice));
     });
@@ -136,8 +152,8 @@ const IndExp = (params) => {
     axios
       .post(
         "https://api.cloudinary.com/v1_1/" +
-          process.env.REACT_APP_cloudName +
-          "/image/upload",
+        process.env.REACT_APP_cloudName +
+        "/image/upload",
         formData
       )
       .then((res) => {
@@ -168,7 +184,7 @@ const IndExp = (params) => {
   };
 
   return (
-    <div style={{ backgroundColor:"#F7F7F7",paddingBottom: "50px", overflowX: "hidden" }}>
+    <div style={{ backgroundColor: "#F7F7F7", paddingBottom: "50px", overflowX: "hidden" }}>
       <h1
         style={{
           paddingBottom: "0px",
@@ -186,7 +202,7 @@ const IndExp = (params) => {
           <Col sm={12} md={12} lg={10}>
             <Carousel variant="dark">
               {localStorage.getItem("email") ===
-              "tg.official.1001@gmail.com" ? (
+                "tg.official.1001@gmail.com" ? (
                 <Carousel.Item>
                   <img
                     onClick={() => setImageBackdrop(true)}
@@ -235,18 +251,18 @@ const IndExp = (params) => {
               ) : null}
               {details
                 ? details.imageUrl.map((img) => {
-                    return (
-                      <Carousel.Item>
-                        <Image
-                          fluid
-                          style={{ height: "450px" }}
-                          className="d-block w-100"
-                          src={img}
-                        />
-                        <Carousel.Caption></Carousel.Caption>
-                      </Carousel.Item>
-                    );
-                  })
+                  return (
+                    <Carousel.Item>
+                      <Image
+                        fluid
+                        style={{ height: "450px" }}
+                        className="d-block w-100"
+                        src={img}
+                      />
+                      <Carousel.Caption></Carousel.Caption>
+                    </Carousel.Item>
+                  );
+                })
                 : null}
             </Carousel>
           </Col>
@@ -258,7 +274,7 @@ const IndExp = (params) => {
         <Col
           lg={7}
           style={{
-            backgroundColor:"white",
+            backgroundColor: "white",
             textAlign: "center",
             padding: "10px",
             margin: "10px",
@@ -273,66 +289,71 @@ const IndExp = (params) => {
             }}
           >
             <p>
-              <span style={{ fontWeight: "700",fontSize:"40px" }}>Description:</span>
+              <span style={{ fontWeight: "700", fontSize: "40px" }}>Description:</span>
               <br />
               <pre style={{ fontSize: "1.2rem", color: "#595c5a" }}>
                 {details ? details.description : null}
               </pre>
             </p>
-            <pre style={{ fontSize:"30px",fontWeight: "700" }}>
-              BasePrice: 
+            <pre style={{ fontSize: "30px", fontWeight: "700" }}>
+              BasePrice:
             </pre>
-            <pre style={{ fontSize:"30px",fontWeight: "700" }}>
+            <pre style={{ fontSize: "30px", fontWeight: "700" }}>
               Date: 25th December 2021
             </pre>
-            <pre style={{fontSize:"40px", color: "#595c5a"}}>
-            ₹ {details ? details.basePrice : null}
+            <pre style={{ fontSize: "40px", color: "#595c5a" }}>
+              ₹ {details ? details.basePrice : null}
             </pre>
           </div>
           <hr />
-          <h3>Customizable Items</h3>
           <ul className="toppings-list">
-            {details
+            {details && localStorage.getItem("email") !== "tg.official.1001@gmail.com"
               ? details.customItems.map((currentItem, index) => {
-                  return (
-                    <div>
-                      <li key={index}>
-                        <div className="toppings-list-item">
-                          <div className="left-section">
-                            <input
-                              type="checkbox"
-                              id={`custom-checkbox-${index}`}
-                              name={currentItem.name}
-                              value="1"
-                              onClick={() => priceHandler(index)}
-                            />
-                            <label htmlFor={`custom-checkbox-${index}`}>
-                              {currentItem.name}
-                            </label>
-                          </div>
-                          <div className="right-section">
-                            <label htmlFor={`custom-checkbox-${index}`}>
-                              {currentItem.price}
-                            </label>
-                          </div>
+                return (
+                  <div>
+                    <li key={index}>
+                      <div className="toppings-list-item">
+                        <div className="left-section">
+                          <input
+                            type="checkbox"
+                            id={`custom-checkbox-${index}`}
+                            name={currentItem.name}
+                            value="1"
+                            onClick={() => priceHandler(index)}
+                          />
+                          <label htmlFor={`custom-checkbox-${index}`}>
+                            {currentItem.name}
+                          </label>
                         </div>
-                      </li>
-                    </div>
-                  );
-                })
+                        <div className="right-section">
+                          <label htmlFor={`custom-checkbox-${index}`}>
+                            {currentItem.price}
+                          </label>
+                        </div>
+                      </div>
+                    </li>
+                  </div>
+                );
+              })
               : null}
-            <li>
-              <div className="toppings-list-item">
-                <div className="left-section">Total:</div>
-                <div className="right-section">{totalPrice}</div>
-              </div>
-            </li>
+            {localStorage.getItem("email") !== "tg.official.1001@gmail.com" ?
+              <li>
+                <div className="toppings-list-item">
+                  <div className="left-section">Total:</div>
+                  <div className="right-section">{totalPrice}</div>
+                </div>
+              </li>
+              : null}
+
           </ul>
           {localStorage.getItem("email") !== "tg.official.1001@gmail.com" ? (
-            <Button onClick={() => setModalShow(true)}>Register</Button>
+            isRegistered ?
+              <Button disabled={true} onClick={() => setModalShow(true)}>Registered</Button>
+              :
+              <Button onClick={() => setModalShow(true)}>Register</Button>
           ) : (
             <>
-              <Button onClick={() => setRequestBackdrop(true)}>
+              <Button style={{ margin: "10px" }} onClick={() => setRequestBackdrop(true)}>
                 Pending Requests
               </Button>
 
@@ -357,31 +378,6 @@ const IndExp = (params) => {
                   <AdminApproval expId={params.match.params.id} />
                 </Paper>
               </Backdrop>
-              <Backdrop
-                sx={{
-                  color: "#fff",
-                  zIndex: (theme) => theme.zIndex.drawer + 1,
-                }}
-                open={reviewBackdrop}
-              >
-                <Paper elevation={24} style={{ width: "55%" }}>
-                  <img
-                    style={{ float: "right", margin: "5px" }}
-                    onClick={() => setReviewBackdrop(false)}
-                    alt="Please Wait..."
-                    src={
-                      "https://img.icons8.com/" +
-                      "ios" +
-                      "/35/000000/cancel.png"
-                    }
-                  />
-                  <ExpReviews
-                    reviewHandler={newReviewHandler}
-                    reviewBackdrop={() => reviewBackdropHandler()}
-                    expId={params.match.params.id}
-                  />
-                </Paper>
-              </Backdrop>
             </>
           )}
 
@@ -393,7 +389,7 @@ const IndExp = (params) => {
         <Col
           lg={4}
           style={{
-            backgroundColor:"white",
+            backgroundColor: "white",
             textAlign: "center",
             padding: "10px",
             margin: "10px",
@@ -402,6 +398,31 @@ const IndExp = (params) => {
         >
           <ShowReviews newReview={newReview} expId={params.match.params.id} />
           <Button onClick={() => setReviewBackdrop(true)}>Add Review</Button>
+          <Backdrop
+            sx={{
+              color: "#fff",
+              zIndex: (theme) => theme.zIndex.drawer + 1,
+            }}
+            open={reviewBackdrop}
+          >
+            <Paper elevation={24} style={{ width: "55%" }}>
+              <img
+                style={{ float: "right", margin: "5px" }}
+                onClick={() => setReviewBackdrop(false)}
+                alt="Please Wait..."
+                src={
+                  "https://img.icons8.com/" +
+                  "ios" +
+                  "/35/000000/cancel.png"
+                }
+              />
+              <ExpReviews
+                reviewHandler={newReviewHandler}
+                reviewBackdrop={() => reviewBackdropHandler()}
+                expId={params.match.params.id}
+              />
+            </Paper>
+          </Backdrop>
         </Col>
       </Row>
     </div>

@@ -23,6 +23,7 @@ toast.configure();
         localStorage.removeItem("name");
         localStorage.removeItem("logged", false);
         localStorage.removeItem("email");
+        localStorage.removeItem("contactNumber");
         window.location.href = "http://localhost:3000";
 
     });

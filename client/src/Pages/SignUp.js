@@ -133,7 +133,7 @@ const SignUp = (props) => {
             required
           />
           <TextField
-            type="number"
+            type="string"
             style={{ marginTop: "20px", marginBottom: "15px" }}
             placeholder="Enter phone number"
             value={details.contactNumber}

@@ -2,7 +2,7 @@ import express from "express";
 
 const router = express.Router();
 
-import {showReviews, submitReview, declineRequest, approveRequest, registerUser,getPendingRequests, uploadExpedition, getExpedition, getIndExp, uploadExpImage, requestAdminExp} from "../controllers/expedition.js";
+import {isRegistered, showReviews, submitReview, declineRequest, approveRequest, registerUser,getPendingRequests, uploadExpedition, getExpedition, getIndExp, uploadExpImage, requestAdminExp} from "../controllers/expedition.js";
 
 router.post("/expedition/uploadExpedition", uploadExpedition);
 router.post("/expedition/uploadExpImage", uploadExpImage);
@@ -15,5 +15,6 @@ router.post("/expedition/declineRequest/:id", declineRequest);
 router.post("/expedition/submitReview", submitReview);
 router.get("/expedition/showReviews/:id", showReviews);
 router.get("/expedition/:id", getIndExp);
+router.post("/expedition/isRegistered", isRegistered);
 
 export default router;

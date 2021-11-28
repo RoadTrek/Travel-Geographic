@@ -52,7 +52,7 @@ export default function Expedition(props) {
     const name = event.target.name;
     const value = event.target.value;
 
-    setDetails(function(prev) {
+    setDetails(function (prev) {
       const newVal = {
         ...prev,
         [name]: value,
@@ -96,8 +96,8 @@ export default function Expedition(props) {
     axios
       .post(
         "https://api.cloudinary.com/v1_1/" +
-          process.env.REACT_APP_cloudName +
-          "/image/upload",
+        process.env.REACT_APP_cloudName +
+        "/image/upload",
         formData
       )
       .then(async (res) => {
@@ -343,7 +343,7 @@ export default function Expedition(props) {
                     onClick={handleSubmit}
                     style={{ textAlign: "center" }}
                     variant="dark"
-                    // type="submit"
+                  // type="submit"
                   >
                     Post
                   </Butt>
@@ -360,14 +360,14 @@ export default function Expedition(props) {
             <Row>
               <h1 className="headingStyle">Past Expeditions</h1>
               <div
-              style={{
-                borderRadius: "50%",
-                backgroundColor: "black",
-                height: "1px",
-                width: "100%",
-                marginBottom: "50px",
-              }}
-            ></div>
+                style={{
+                  borderRadius: "50%",
+                  backgroundColor: "black",
+                  height: "1px",
+                  width: "100%",
+                  marginBottom: "50px",
+                }}
+              ></div>
               {expDetail.map((exp) => {
                 return new Date(exp.endingDate) < new Date() ? (
                   <>
@@ -389,14 +389,14 @@ export default function Expedition(props) {
                         style={
                           exp._id === mouseCard
                             ? {
-                                width: "100%",
-                                boxShadow:
-                                  "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px",
-                              }
+                              width: "100%",
+                              boxShadow:
+                                "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px",
+                            }
                             : {
-                                width: "100%",
-                                boxShadow: "rgba(0, 0, 0, 0.08) 0px 4px 12px",
-                              }
+                              width: "100%",
+                              boxShadow: "rgba(0, 0, 0, 0.08) 0px 4px 12px",
+                            }
                         }
                         sx={{ maxWidth: 345 }}
                       >
@@ -407,7 +407,7 @@ export default function Expedition(props) {
                         />
                         <CardContent>
                           <Typography
-                            style={{ fontFamily: "'Goudy Bookletter 1911', serif",textAlign: "center", fontWeight: "600" }}
+                            style={{ fontFamily: "'Goudy Bookletter 1911', serif", textAlign: "center", fontWeight: "600" }}
                             gutterBottom
                             variant="h5"
                             component="div"
@@ -415,7 +415,7 @@ export default function Expedition(props) {
                           >
                             {exp.name}
                           </Typography>
-                          <Typography style={{fontFamily: "'Open Sans', sans-serif"}} variant="body2" color="text.secondary">
+                          <Typography style={{ fontFamily: "'Open Sans', sans-serif" }} variant="body2" color="text.secondary">
                             {exp.description.length > 150 ? (
                               <>
                                 {exp.description.substring(0, 150) + "..."}
@@ -423,7 +423,7 @@ export default function Expedition(props) {
                                   <Button
                                     onClick={() => viewMoreHandler(exp._id)}
                                     size="small"
-                                    style={{fontFamily: "'Open Sans', sans-serif"}}
+                                    style={{ fontFamily: "'Open Sans', sans-serif" }}
                                   >
                                     Read More
                                   </Button>
@@ -436,10 +436,10 @@ export default function Expedition(props) {
                             )}
                           </Typography>
                           <br />
-                          <Typography style={{fontFamily: "'Goudy Bookletter 1911', serif",fontWeight:"700"}} variant="h5" color="text.secondary">
+                          <Typography style={{ fontFamily: "'Goudy Bookletter 1911', serif", fontWeight: "700" }} variant="h5" color="text.secondary">
                             Base Price : ₹{exp.basePrice}
                           </Typography>
-                          <Typography style={{fontFamily: "'Goudy Bookletter 1911', serif",fontWeight:"700"}} variant="h6" color="text.secondary">
+                          <Typography style={{ fontFamily: "'Goudy Bookletter 1911', serif", fontWeight: "700" }} variant="h6" color="text.secondary">
                             Registration Ended
                           </Typography>
                         </CardContent>
@@ -500,14 +500,14 @@ export default function Expedition(props) {
                       style={
                         exp._id === mouseCard
                           ? {
-                              width: "100%",
-                              boxShadow:
-                                "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px",
-                            }
+                            width: "100%",
+                            boxShadow:
+                              "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px",
+                          }
                           : {
-                              width: "100%",
-                              boxShadow: "rgba(0, 0, 0, 0.08) 0px 4px 12px",
-                            }
+                            width: "100%",
+                            boxShadow: "rgba(0, 0, 0, 0.08) 0px 4px 12px",
+                          }
                       }
                       sx={{ maxWidth: 345 }}
                     >
@@ -518,25 +518,26 @@ export default function Expedition(props) {
                       />
                       <CardContent>
                         <Typography
-                          style={{ fontFamily: "'Goudy Bookletter 1911', serif",textAlign: "center", fontWeight: "600" }}
+                          style={{ fontFamily: "'Goudy Bookletter 1911', serif", textAlign: "center", fontWeight: "600" }}
                           gutterBottom
                           variant="h5"
                           component="div"
                         >
                           {exp.name}
                         </Typography>
-                        <Typography style={{fontFamily: "'Open Sans', sans-serif"}} variant="body2" color="text.secondary">
+                        <Typography style={{ fontFamily: "'Open Sans', sans-serif" }} variant="body2" color="text.secondary">
                           {exp.description.length > 150 ? (
                             <>
                               {exp.description.substring(0, 150) + "..."}
                               {localStorage.getItem("email") !== null ? (
                                 <Button
-                                style={{fontFamily: "'Open Sans', sans-serif"}}
+                                  style={{ fontFamily: "'Open Sans', sans-serif" }}
                                   onClick={() => viewMoreHandler(exp._id)}
                                   size="small"
                                 >
                                   Read More
                                 </Button>
+
                               ) : (
                                 <></>
                               )}
@@ -546,10 +547,10 @@ export default function Expedition(props) {
                           )}
                         </Typography>
                         <br />
-                        <Typography style={{fontFamily: "'Goudy Bookletter 1911', serif",fontWeight:"700"}} variant="h5" color="text.secondary">
+                        <Typography style={{ fontFamily: "'Goudy Bookletter 1911', serif", fontWeight: "700" }} variant="h5" color="text.secondary">
                           Base Price : ₹{exp.basePrice}
                         </Typography>
-                        <Typography style={{fontFamily: "'Goudy Bookletter 1911', serif",fontWeight:"700"}} variant="h6" color="text.secondary">
+                        <Typography style={{ fontFamily: "'Goudy Bookletter 1911', serif", fontWeight: "700" }} variant="h6" color="text.secondary">
                           Registration ends on :{" "}
                           {exp.endingDate.substring(0, 10)}
                         </Typography>

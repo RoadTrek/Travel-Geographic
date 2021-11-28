@@ -129,3 +129,9 @@ export const showReviews = (req, res, err) => {
     }
   })
 }
+
+export const isRegistered = (req,res,err) => {
+  requestExp.find(req.body, (err,data) => {
+    res.status(200).json(data);
+  })
+}

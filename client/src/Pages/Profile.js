@@ -78,7 +78,7 @@ const Profile = () => {
       withCredentials: true,
       url:
         "http://localhost:8080/user/getData/" + localStorage.getItem("email"),
-    }).then(async (res) => {
+    }).then((res) => {
       console.log(res.data.image);
 
       setDetails(res.data.image);

@@ -53,6 +53,7 @@ const Login = (props) => {
           localStorage.setItem("name", res.data.detail.name);
           localStorage.setItem("logged", true);
           localStorage.setItem("email", res.data.detail.email);
+          localStorage.setItem("contactNumber", res.data.contactNumber);
           props.history.push("/");
         } else {
           toast.error(res.data.msg, {

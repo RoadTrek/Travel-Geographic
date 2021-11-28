@@ -68,7 +68,7 @@ const AdminApproval = (params) => {
                 defaultActiveKey="0"
               >
                 <Accordion.Item eventKey="0">
-                  <Accordion.Header>{request.userEmail}</Accordion.Header>
+                  <Accordion.Header style = {{color: "black"}}>Email: {request.userEmail} <br/> <br/>  Contact: {request.contact}</Accordion.Header>
                   {request
                     ? request.customItemSelected.map((item) => {
                       return (
@@ -81,9 +81,9 @@ const AdminApproval = (params) => {
                     })
                     : null}
                 </Accordion.Item>
-                <Accordion.Item style={{ display: "flex" }}>
-                  <Button onClick={() => approveRequest(request, index)} style={{ marginLeft: "60%" }} variant='primary'>Approve</Button>
-                  <Button onClick={() => declineRequest(request, index)} variant='primary'>Decline</Button>
+                <Accordion.Item style={{ textAlign: "center" }}>
+                  <Button style = {{margin:"10px"}} onClick={() => approveRequest(request, index)} variant='primary'>Approve</Button>
+                  <Button style = {{margin:"10px"}} onClick={() => declineRequest(request, index)} variant='primary'>Decline</Button>
                 </Accordion.Item>
               </Accordion>
             </div>
