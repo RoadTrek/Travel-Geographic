@@ -5,7 +5,8 @@ import sponser1 from "../Image/sponser1.jpeg";
 import sponser2 from "../Image/sponser2.jpeg";
 import { Parallax } from "react-parallax";
 import {Link} from 'react-router-dom';
-import {Button } from 'react-bootstrap'
+import {Button } from 'react-bootstrap';
+
 function Home() {
   const insideStyles = {
     padding: 20,
@@ -31,14 +32,14 @@ function Home() {
             top: "50%",
             objectFit: "cover",
             transform: "translate(-50%, -50%)",
-            zIndex: 0,
+            zIndex: "0",
           }}
         >
           <source src={sachin} type="video/mp4" />
         </video>
       </div>
 
-      <div id="text_div center_all">
+      <div style={{backgroundColor:"black"}}id="text_div center_all">
         <div className="center_all">
           <h3
             style={{
@@ -74,7 +75,7 @@ function Home() {
           </h1>
         </div>
       </div>
-      <div style={{ position: "absolute", marginTop: "480px" }}>
+      <div style={{ position: "absolute", marginTop: "480px",zIndex:"-1" }}>
         <div
           style={{
             position: "relative",

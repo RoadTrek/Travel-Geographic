@@ -27,11 +27,11 @@ export const loginUser = (req, res, err) => {
                 if (foundUser.email === "tg.official.1001@gmail.com") {
                   const token = jwt.sign({ _id: foundUser._id, type: 1 }, key);
                   req.session.value = token;
-                  res.status(200).json(foundUser);
+                  res.status(200).json({detail:foundUser,msg:"Successfully logged in."});
                 } else {
                   const token = jwt.sign({ _id: foundUser._id, type: 2 }, key);
                   req.session.value = token;
-                  res.status(200).json(foundUser);
+                  res.status(200).json({detail:foundUser,msg:"Successfully logged in."});
                 }
               } else {
                 res.status(201).json({ msg: "Enter correct password" });
@@ -39,7 +39,7 @@ export const loginUser = (req, res, err) => {
             }
           );
         } else {
-          res.status(201).json({ msg: "email id does not exist" });
+          res.status(201).json({ msg: "Email id does not exist.Please Signup first" });
         }
       }
     }

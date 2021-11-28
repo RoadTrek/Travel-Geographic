@@ -16,7 +16,7 @@ mic.interimResults = true;
 mic.lang = "en-US";
 
 function ChatBotComp() {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [chatMessages, setChatMessages] = useState([]);
   const [userMessage, setUserMessage] = useState("");
@@ -126,7 +126,7 @@ function ChatBotComp() {
           position: "fixed",
           width: "400px",
           height: "70%",
-          zIndex: 1000,
+          zIndex: "1",
           outline: "none",
           boxShadow:
             "rgb(204, 219, 232) 6px 6px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset",

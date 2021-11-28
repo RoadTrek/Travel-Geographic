@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import {Redirect} from "react-router-dom";
+import React from "react";
 import axios from "axios";
 import {
   Grid,
@@ -11,7 +10,11 @@ import {
   Link,
 } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const Login = (props) => {
+  toast.configure();
   const paperStyle = {
     padding: 20,
     height: "60%",
@@ -25,7 +28,6 @@ const Login = (props) => {
     password: "",
   });
 
-  const[redirect,setRedirect]=useState();
   const handleSubmit = () => {
     console.log("inside login");
     axios({
@@ -37,40 +39,43 @@ const Login = (props) => {
       },
     })
       .then((res) => {
-          if(res.status===200){
-              localStorage.setItem('name', res.data.name);
-              localStorage.setItem('logged', true);
-              localStorage.setItem('email', res.data.email);
-              props.history.push('/');
-              // setRedirect(1);
-          }
-          else{
-              console.log("wrong details");
-          }
         console.log(res.data);
-    })
+        if (res.status === 200) {
+          toast.success(res.data.msg, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          localStorage.setItem("name", res.data.detail.name);
+          localStorage.setItem("logged", true);
+          localStorage.setItem("email", res.data.detail.email);
+          props.history.push("/");
+        } else {
+          toast.error(res.data.msg, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+        }
+      })
       .catch((err) => {
-          console.log(err);
+        console.log(err);
       });
-      
   };
-  // if(redirect===1){
-  //   return <Redirect to="/" />;
-  // }
-  // if(redirect===0){
-  //     //if user enters wrong email or password
-  //     return (
-  //         <div>
-  //            <h1>Enter correct details.</h1> 
-  //         </div>
-  //     )
-  // }
 
   function handleChange(event) {
     const name = event.target.name;
     const value = event.target.value;
     if (name === "password") {
-      setDetails(function (prev) {
+      setDetails(function(prev) {
         const newVal = {
           ...prev,
           [name]: value,
@@ -78,7 +83,7 @@ const Login = (props) => {
         return newVal;
       });
     } else {
-      setDetails(function (prev) {
+      setDetails(function(prev) {
         const newVal = {
           ...prev,
           email: value,
@@ -90,11 +95,30 @@ const Login = (props) => {
 
   return (
     <div>
+      <div>
+        <img
+          style={{
+            position: "absolute",
+            width: "100%",
+            left: "50%",
+            top: "50%",
+            transform: "translate(-50%, -50%)",
+            zIndex: "-0",
+            marginTop: "30px",
+          }}
+          alt=""
+          src="https://i.ibb.co/pbYcZSG/login-background.jpg"
+        />
+      </div>
       <Grid
         style={{
+          position: "relative",
+          right: 0,
+          bottom: 0,
+          left: 0,
+          zIndex: 20,
           paddingBottom: "0px",
-          background: "white",
-          marginTop: "125px",
+          marginTop: "120px",
         }}
       >
         <Paper elevation={10} style={paperStyle}>

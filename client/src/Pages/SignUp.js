@@ -10,7 +10,6 @@ import {
 } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import "react-phone-number-input/style.css";
-import PhoneInput from "react-phone-number-input";
 import axios from "axios";
 const SignUp = (props) => {
   const paperStyle = {
@@ -18,6 +17,7 @@ const SignUp = (props) => {
     height: "60%",
     width: "26%",
     margin: "20px auto",
+    zIndex:20
   };
   const avatarStyle = { backgroundColor: "#1bbd7e" };
   const btnstyle = { margin: "8px 0" };
@@ -27,7 +27,6 @@ const SignUp = (props) => {
     name: "",
     contactNumber: "",
   });
-  const [contactNumber, setContactNumber] = useState();
   const [message, setMessage] = useState("");
   const handleSubmit = () => {
     console.log("inside signup");
@@ -66,14 +65,33 @@ const SignUp = (props) => {
       return newVal;
     });
   }
-
+  const url = "https://i.ibb.co/R6v9V0W/sign-up-background.jpg";
   return (
     <div>
+      <div>
+        <img
+          style={{
+            position: "absolute",
+            width: "100%",
+            left: "50%",
+            top: "50%",
+            transform: "translate(-50%, -50%)",
+            zIndex: "-0",
+          }}
+          alt=""
+          src={url}
+        />
+      </div>
       <Grid
         style={{
+          position:"absolute",
+          right:0,
+          bottom:0,
+          left:0,
           paddingBottom: "0px",
-          background: "white",
+          background: "transparent",
           marginTop: "110px",
+          zIndex:20
         }}
       >
         <Paper elevation={10} style={paperStyle}>
@@ -81,7 +99,7 @@ const SignUp = (props) => {
             <Avatar style={avatarStyle}>
               <LockOutlinedIcon />
             </Avatar>
-            <h2>Sign Up</h2>
+            <h2 >Sign Up</h2>
           </Grid>
           <TextField
             name="name"

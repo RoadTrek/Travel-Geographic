@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./Home.css";
 import {
   Card,
   CardMedia,
@@ -173,7 +174,15 @@ export default function Expedition(props) {
           ></div>
         </div>
       </div>
-      <div style={{ marginTop: "580px" }}>
+      <div style={{ position: "absolute", zIndex: -1, marginTop: "500px" }}>
+        <div
+          style={{
+            position: "relative",
+            backgroundColor: "black",
+            width: "100vw",
+            height: "16vh",
+          }}
+        ></div>
         {localStorage.getItem("email") === "tg.official.1001@gmail.com" ? (
           <div
             style={{
@@ -348,11 +357,20 @@ export default function Expedition(props) {
 
         <Container style={{ marginTop: "30px" }}>
           <div>
-          <Row>
-            <h1>Past</h1>
-            {expDetail.map((exp) => {
-              return new Date(exp.endingDate) < new Date() ? (
-                <>
+            <Row>
+              <h1 className="headingStyle">Past Expeditions</h1>
+              <div
+              style={{
+                borderRadius: "50%",
+                backgroundColor: "black",
+                height: "1px",
+                width: "100%",
+                marginBottom: "50px",
+              }}
+            ></div>
+              {expDetail.map((exp) => {
+                return new Date(exp.endingDate) < new Date() ? (
+                  <>
                     <Col
                       lg={12}
                       xl={6}
@@ -389,52 +407,81 @@ export default function Expedition(props) {
                         />
                         <CardContent>
                           <Typography
-                            style={{ textAlign: "center", fontWeight: "700" }}
+                            style={{ fontFamily: "'Goudy Bookletter 1911', serif",textAlign: "center", fontWeight: "600" }}
                             gutterBottom
                             variant="h5"
                             component="div"
+
                           >
                             {exp.name}
                           </Typography>
-                          <Typography variant="body2" color="text.secondary">
-                            {exp.description.substring(0, 150) + "..."}
+                          <Typography style={{fontFamily: "'Open Sans', sans-serif"}} variant="body2" color="text.secondary">
+                            {exp.description.length > 150 ? (
+                              <>
+                                {exp.description.substring(0, 150) + "..."}
+                                {localStorage.getItem("email") !== null ? (
+                                  <Button
+                                    onClick={() => viewMoreHandler(exp._id)}
+                                    size="small"
+                                    style={{fontFamily: "'Open Sans', sans-serif"}}
+                                  >
+                                    Read More
+                                  </Button>
+                                ) : (
+                                  <></>
+                                )}
+                              </>
+                            ) : (
+                              exp.description
+                            )}
+                          </Typography>
+                          <br />
+                          <Typography style={{fontFamily: "'Goudy Bookletter 1911', serif",fontWeight:"700"}} variant="h5" color="text.secondary">
+                            Base Price : ₹{exp.basePrice}
+                          </Typography>
+                          <Typography style={{fontFamily: "'Goudy Bookletter 1911', serif",fontWeight:"700"}} variant="h6" color="text.secondary">
+                            Registration Ended
+                          </Typography>
+                        </CardContent>
+                        {localStorage.getItem("email") !== null ? (
+                          <CardActions>
                             <Button
                               onClick={() => viewMoreHandler(exp._id)}
                               size="small"
                             >
-                              Read More
+                              Learn More
                             </Button>
-                          </Typography>
-                          <br />
-                          <Typography variant="h5" color="text.secondary">
-                            Base Price : ₹{exp.basePrice}
-                          </Typography>
-                        </CardContent>
-                        <CardActions>
-                          <Button
-                            onClick={() => viewMoreHandler(exp._id)}
-                            size="small"
-                          >
-                            Learn More
-                          </Button>
-                        </CardActions>
+                          </CardActions>
+                        ) : (
+                          <></>
+                        )}
                       </Card>
                     </Col>
-                </>
-              ) : (
-                <></>
-              );
-            })}
+                  </>
+                ) : (
+                  <></>
+                );
+              })}
             </Row>
           </div>
           <div>
-            <h1>Upcoming</h1>
+            <h1 style={{ marginTop: "50px" }} className="headingStyle">
+              Upcoming Expeditions
+            </h1>
+            <div
+              style={{
+                borderRadius: "50%",
+                backgroundColor: "black",
+                height: "1px",
+                width: "100%",
+                marginBottom: "50px",
+              }}
+            ></div>
             <Row>
-            {expDetail.map((exp) => {
-              return new Date(exp.endingDate) < new Date() ? (
-                <></>
-              ) : (
-                
+              {expDetail.map((exp) => {
+                return new Date(exp.endingDate) < new Date() ? (
+                  <></>
+                ) : (
                   <Col
                     lg={12}
                     xl={6}
@@ -471,40 +518,58 @@ export default function Expedition(props) {
                       />
                       <CardContent>
                         <Typography
-                          style={{ textAlign: "center", fontWeight: "700" }}
+                          style={{ fontFamily: "'Goudy Bookletter 1911', serif",textAlign: "center", fontWeight: "600" }}
                           gutterBottom
                           variant="h5"
                           component="div"
                         >
                           {exp.name}
                         </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          {exp.description.substring(0, 150) + "..."}
+                        <Typography style={{fontFamily: "'Open Sans', sans-serif"}} variant="body2" color="text.secondary">
+                          {exp.description.length > 150 ? (
+                            <>
+                              {exp.description.substring(0, 150) + "..."}
+                              {localStorage.getItem("email") !== null ? (
+                                <Button
+                                style={{fontFamily: "'Open Sans', sans-serif"}}
+                                  onClick={() => viewMoreHandler(exp._id)}
+                                  size="small"
+                                >
+                                  Read More
+                                </Button>
+                              ) : (
+                                <></>
+                              )}
+                            </>
+                          ) : (
+                            exp.description
+                          )}
+                        </Typography>
+                        <br />
+                        <Typography style={{fontFamily: "'Goudy Bookletter 1911', serif",fontWeight:"700"}} variant="h5" color="text.secondary">
+                          Base Price : ₹{exp.basePrice}
+                        </Typography>
+                        <Typography style={{fontFamily: "'Goudy Bookletter 1911', serif",fontWeight:"700"}} variant="h6" color="text.secondary">
+                          Registration ends on :{" "}
+                          {exp.endingDate.substring(0, 10)}
+                        </Typography>
+                      </CardContent>
+                      {localStorage.getItem("email") !== null ? (
+                        <CardActions>
                           <Button
                             onClick={() => viewMoreHandler(exp._id)}
                             size="small"
                           >
-                            Read More
+                            Learn More
                           </Button>
-                        </Typography>
-                        <br />
-                        <Typography variant="h5" color="text.secondary">
-                          Base Price : ₹{exp.basePrice}
-                        </Typography>
-                      </CardContent>
-                      <CardActions>
-                        <Button
-                          onClick={() => viewMoreHandler(exp._id)}
-                          size="small"
-                        >
-                          Learn More
-                        </Button>
-                      </CardActions>
+                        </CardActions>
+                      ) : (
+                        <></>
+                      )}
                     </Card>
                   </Col>
-                
-              );
-            })}
+                );
+              })}
             </Row>
           </div>
         </Container>

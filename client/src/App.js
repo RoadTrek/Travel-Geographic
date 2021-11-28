@@ -19,7 +19,7 @@ import Logout from './Pages/Logout';
 function App() {
 	return (
 		<div>
-			<ChatBot style = {{zIndex: "1", position: "absolute"}} />
+			<ChatBot/>
 			<Router>
 				<div style = {{paddingBottom: "80px"}}><NavbarComp /></div>
 				<Switch>
